@@ -28,7 +28,9 @@ export class LoginComponent {
             showConfirmButton: true
           });
           localStorage.setItem('token', response.token);
-          this.router.navigate(['/dashboard']);
+          localStorage.setItem('usuario', JSON.stringify(response.usuario));
+          localStorage.setItem('nit', JSON.stringify(response.usuario.cedula.toString()));
+          this.router.navigate(['/auth/home']);
         } else {
           Swal.fire({
             icon: 'error',
