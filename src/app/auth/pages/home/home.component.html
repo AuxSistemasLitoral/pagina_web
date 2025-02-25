@@ -1,0 +1,29 @@
+<div class="container">
+    <!-- 🟢 Barra de usuario -->
+    <header class="header">
+        <h2>Bienvenido, <span>{{ usuario.nombre }}</span></h2>  
+        
+        <label for="sucursal">Sucursal:</label>
+        <select id="sucursal">
+            <option *ngFor="let sucursal of sucursales" [value]="sucursal.id_cliente">
+                {{ sucursal.nombre_sucursal }}
+            </option>
+        </select>
+
+        <div class="user-menu">            
+            <button (click)="toggleMenu()" class="user-button">
+                {{ usuario.perfil_id }} ⏷
+            </button>
+            <div *ngIf="menuAbierto" class="menu">
+                <button (click)="cerrarSesion()">Cerrar sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 🟡 Contenido Principal -->
+    
+    <!-- 🔵 Footer -->
+    <footer class="footer">
+        <p>© 2025 - Footer | Síguenos en redes</p>
+    </footer>
+</div>
