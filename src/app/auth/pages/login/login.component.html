@@ -2,12 +2,13 @@
     <h2>Iniciar Sesión</h2>
     <form (ngSubmit)="login()">
       <label for="usuario">Usuario:</label>
-      <input type="text" id="usuario" [(ngModel)]="usuario" name="usuario" required>
+      <input type="text" id="usuario" [(ngModel)]="usuario" name="usuario" required placeholder="Ingrese su usuario">
       
-      <label for="clave">Contraseña:</label>
-      <input type="password" id="clave" [(ngModel)]="clave" name="clave" required>
+      <label for="clave">Clave:</label>
+      <input type="password" id="clave" [(ngModel)]="clave" name="clave" required placeholder="Ingresa su contraseña">
   
       <button type="submit">Ingresar</button>
     </form>
+    <a href="">¿ Olvidaste tu contraseña ?</a>
   </div>
   
