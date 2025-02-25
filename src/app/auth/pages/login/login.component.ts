@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth.service';
 import Swal from 'sweetalert2';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,6 +13,7 @@ export class LoginComponent {
   clave: string = '';
 
   constructor(private authService: AuthService, private router: Router) { }
+
   login() {
     this.authService.login(this.usuario, this.clave).subscribe({
       next: (response) => {
@@ -22,21 +22,27 @@ export class LoginComponent {
         if (response.success) {
           Swal.fire({
             icon: 'success',
-            title: 'Ingreso exitoso',
-            text: 'Bienvenido a nuestro portal web',
-            timer: 2000,
-            showConfirmButton: true
+            title: '¡Bienvenido!',
+            text: 'Has ingresado exitosamente.',
+            background: '#1e1e1e',
+            color: '#ffffff',
+            confirmButtonColor: '#4caf50',
+            confirmButtonText: '¡Genial!',
+            timer: 3000,
+            showConfirmButton: true,
           });
           localStorage.setItem('token', response.token);
           this.router.navigate(['/dashboard']);
         } else {
           Swal.fire({
             icon: 'error',
+            iconColor: '#b71c1c', // Rojo más oscuro
             title: 'Error',
             text: 'Credenciales inválidas',
-            background: '#222',
-            color: '#fff',
-            confirmButtonColor: '#ff5733',
+            background: '#2c2c2c',
+            color: '#ffffff',
+            confirmButtonColor: '#b71c1c', // Rojo más oscuro
+            confirmButtonText: 'Intentar de nuevo',
           });
         }
       },
@@ -44,13 +50,15 @@ export class LoginComponent {
         console.error('Error en login', error);
         Swal.fire({
           icon: 'error',
+          iconColor: '#b71c1c', // Rojo más oscuro
           title: 'Error',
-          text: 'Ocurrió un error al iniciar sesión'
+          text: 'Ocurrió un error al iniciar sesión',
+          background: '#2c2c2c',
+          color: '#ffffff',
+          confirmButtonColor: '#b71c1c', // Rojo más oscuro
+          confirmButtonText: 'Intentar de nuevo',
         });
       }
     });
   }
-
-
-
 }
