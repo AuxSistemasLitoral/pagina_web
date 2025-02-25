@@ -1,13 +1,24 @@
+
 .login-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   max-width: 18%;
-  min-width: 200px;
-  margin: 10% auto;
+  min-width: 230px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
-  flex-wrap: wrap;
+  background-color: white;
+}
+
+.flexbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 input {
@@ -28,9 +39,43 @@ button {
   border-radius: 5px;
   cursor: pointer;
   margin-bottom: 20px;
-  margin: top 10px;
 }
 
 h2 {
   margin-bottom: 20px;
+}
+
+a {
+  margin-bottom: 20px;
+}
+
+/* ----- MEDIA QUERIES ----- */
+
+/* 📱 Celulares (menos de 600px) */
+@media (max-width: 600px) {
+  .login-container {
+    width: 90%; /* Ocupar casi todo el ancho */
+    max-width: 230px;
+    padding: 15px;
+  }
+
+  input, button {
+    padding: 12px;
+  }
+}
+
+/* 📲 Tablets (601px a 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .login-container {
+    width: 50%;
+    max-width: 230px;
+  }
+}
+
+/* 🖥️ PC (mayor a 1024px) */
+@media (min-width: 1025px) {
+  .login-container {
+    width: 25%;
+    max-width: 230px;
+  }
 }
