@@ -22,17 +22,18 @@ export class LoginComponent {
         if (response.success) {
           Swal.fire({
             icon: 'success',
-            title: '¡Bienvenido!',
-            text: 'Has ingresado exitosamente.',
+            title: 'Ingreso exitoso',
+            text: 'Bienvenido a nuestro portal web',
+            timer: 1500,
+            showConfirmButton: true,
             background: '#1e1e1e',
             color: '#ffffff',
             confirmButtonColor: '#4caf50',
             confirmButtonText: '¡Genial!',
-            timer: 3000,
-            showConfirmButton: true,
           });
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('usuario', JSON.stringify(response.usuario));
+          // localStorage.setItem('token', response.token);
+          // localStorage.setItem('usuario', JSON.stringify(response.usuario));
+          this.authService.guardarSesion(response.token, response.usuario);
           localStorage.setItem('nit', JSON.stringify(response.usuario.cedula.toString()));
           this.router.navigate(['/auth/home']);
         } else {

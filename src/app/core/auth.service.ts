@@ -20,4 +20,11 @@ export class AuthService {
     return this.http.post(this.apiSucursal, { nit }); 
     
   }
+
+  guardarSesion(token: string, usuario: any) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+    localStorage.setItem('nit', JSON.stringify(usuario.cedula.toString()));
+  }
+
 }
