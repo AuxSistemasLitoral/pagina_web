@@ -1,14 +1,26 @@
-<div class="login-container flexbox">
-    <h2>Iniciar Sesión</h2>
-    <form (ngSubmit)="login()">
-      <label for="usuario">Usuario:</label>
-      <input type="text" id="usuario" [(ngModel)]="usuario" name="usuario" required placeholder="Ingrese su usuario">
+
+<div class="log" style="background: url('../../../assets/icons/') no-repeat center center; background-size: cover;">
+  <div class="login-wrapper flexbox">
+    <div class="login-content flexbox">
+      <div class="login-container">
+        <div class="logo-content">
+          <img src="../../../assets/icons/icon.png" alt="Logo" class="logo-content">
+        </div>
+        <h2>Iniciar Sesión</h2>
+        <form (ngSubmit)="login()">
+          <label for="usuario">Usuario:</label>
+          <input type="text" id="usuario" [(ngModel)]="usuario" name="usuario" required placeholder="Ingrese su usuario">
+          
+          <label for="clave">Clave:</label>
+          <input type="password" id="clave" [(ngModel)]="clave" name="clave" required placeholder="Ingresa su contraseña">
       
-      <label for="clave">Clave:</label>
-      <input type="password" id="clave" [(ngModel)]="clave" name="clave" required placeholder="Ingresa su contraseña">
-  
-      <button type="submit">Ingresar</button>
-    </form>
-    <a href="">¿ Olvidaste tu contraseña ?</a>
+          <button type="submit">Ingresar</button>
+        </form>
+        <a href="">¿ Olvidaste tu contraseña ?</a>
+      </div>
+      <div class="image-container">
+        <img src="../../../assets/icons/" alt="">
+      </div>
+    </div>
   </div>
-  
+</div>
