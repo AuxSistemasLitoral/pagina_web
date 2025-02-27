@@ -1,42 +1,74 @@
 <app-header></app-header>
 
-<div>
-    <div>
-        <h4>Cartera</h4>
+<div class="container">
+
+    <div class="card" routerLink="/pedidos">
+        <h3>Pedidos</h3>
+        <img src="../../../../assets/icons/shopping-cart.jpg" alt="Pedidos">
+        <p>Revisa y administra los pedidos realizados.</p>
+    </div>   
+
+    <div class="card" routerLink="/cartera">
+        <h3>Cartera</h3>
+        <img src="../../../../assets/icons/credit-card.png" alt="Cartera">        
+        <p>Consulta tu crédito aprobado y gestiona la cartera.</p>
+    </div>    
+
+    <div class="card" routerLink="/seguimiento-pedidos">
+        <h3>Seguimiento de pedidos</h3>
+        <img src="../../../../assets/icons/seguimiento_pedido.jpg" alt="Seguimiento">
+        <p>Monitorea el estado de los pedidos en tiempo real.</p>
+    </div>
+
+    <div class="card" routerLink="/informes">
+        <h3>Informes</h3>
+        <img src="../../../../assets/icons/reporte_ventas.jpg" alt="Informes">
+        <p>Accede a reportes detallados de ventas y clientes.</p>
+    </div>
+
+    <div class="card" routerLink="/ruta-vendedores">
+        <h3>Ruta Vendedores</h3>
+        <img src="../../../../assets/icons/ruta_vendedores.jpg" alt="Ruta Vendedores">
+        <p>Visualiza la ruta de vendedores en campo.</p>
     </div>
 </div>
-
-<div>
-    <div>
-        <h4>Pedidos</h4>
-    </div>
-</div>
-
-<div>
-    <div>
-        <h4>Seguimiento de pedidos</h4>
-    </div>
-</div>
-
-<div>
-    <div>
-        <h4>Cartera</h4>
-    </div>
-</div>
-
-<div>
-    <div>
-        <h4>Informes</h4>
-    </div>
-</div>
-
-<div>
-    <div>
-        <h4>Ruta Vendedores</h4>
-    </div>
-</div>
-
-
-
 
 <app-footer></app-footer>
+
+
+<!-- <app-header></app-header>
+
+<div class="container">
+    <mat-card class="card" routerLink="/cartera">
+        <img mat-card-image src="assets/images/cartera.png" alt="Cartera">
+        <mat-card-title>Cartera</mat-card-title>
+        <mat-card-content>Consulta y gestiona la cartera de clientes.</mat-card-content>
+    </mat-card>
+
+    <mat-card class="card" routerLink="/pedidos">
+        <img mat-card-image src="assets/images/pedidos.png" alt="Pedidos">
+        <mat-card-title>Pedidos</mat-card-title>
+        <mat-card-content>Revisa y administra los pedidos de los clientes.</mat-card-content>
+    </mat-card>
+
+    <mat-card class="card" routerLink="/seguimiento-pedidos">
+        <img mat-card-image src="assets/images/seguimiento.png" alt="Seguimiento">
+        <mat-card-title>Seguimiento de pedidos</mat-card-title>
+        <mat-card-content>Monitorea el estado de los pedidos en tiempo real.</mat-card-content>
+    </mat-card>
+
+    <mat-card class="card" routerLink="/informes">
+        <img mat-card-image src="assets/images/informes.png" alt="Informes">
+        <mat-card-title>Informes</mat-card-title>
+        <mat-card-content>Accede a reportes detallados de ventas y clientes.</mat-card-content>
+    </mat-card>
+
+    <mat-card class="card" routerLink="/ruta-vendedores">
+        <img mat-card-image src="assets/images/ruta.png" alt="Ruta Vendedores">
+        <mat-card-title>Ruta Vendedores</mat-card-title>
+        <mat-card-content>Visualiza la ruta de vendedores en campo.</mat-card-content>
+    </mat-card>
+</div>
+
+<app-footer></app-footer> -->
+

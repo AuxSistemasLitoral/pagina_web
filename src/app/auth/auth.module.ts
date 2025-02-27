@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './pages/login/login.component';
 import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     AuthRoutingModule,
-    FormsModule
+    FormsModule,
+    MatCardModule
   ]
 })
 export class AuthModule { }

@@ -31,10 +31,10 @@ export class LoginComponent {
             confirmButtonColor: '#4caf50',
             confirmButtonText: '¡Genial!',
           });
-          // localStorage.setItem('token', response.token);
-          // localStorage.setItem('usuario', JSON.stringify(response.usuario));
           this.authService.guardarSesion(response.token, response.usuario);
           localStorage.setItem('nit', JSON.stringify(response.usuario.cedula.toString()));
+          const TokenDecodificado = this.authService.decodificarToken();
+           console.log('token dedodificado',TokenDecodificado);
           this.router.navigate(['/auth/home']);
         } else {
           Swal.fire({

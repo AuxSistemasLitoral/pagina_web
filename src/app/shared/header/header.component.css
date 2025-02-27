@@ -23,8 +23,10 @@ html, body {
 }
 
 .header {
-    background-color: rgb(40, 167, 69);
-    color: white;
+    background-color: #1c2331;
+    /* background-color: #32ad05; */
+    /* background-color: rgb(40, 167, 69); */
+    color: rgb(40, 167, 69);
     padding: 8px 16px;
     display: flex;
     justify-content: space-between;
@@ -45,7 +47,7 @@ html, body {
 }
 
 .logout-button {
-    background-color: #023703;
+    background-color:  rgb(40, 167, 69); 
     color: white;
     width: 40px;
     height: 40px;
