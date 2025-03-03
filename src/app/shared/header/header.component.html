@@ -1,4 +1,38 @@
- <header class="header">
-        <h2>Bienvenido, <span>{{ usuario.nombre }}</span></h2>  
+<header class="header">
+    <div class="left">
+        <h3>Hola, <span>{{ usuario.nombre }}</span></h3>
+        <h3 *ngIf="selectedVendedor">Tu vendedor es: <span>{{ selectedVendedor }}</span></h3>
+    </div>
+    
+    <div class="right">
+        <ng-container *ngIf="!isHome">
+            <select id="sucursal" class="sucursal-select" (change)="onSucursalChange($event)">
+                <option value="" disabled selected>SUCURSAL</option>
+                <option *ngFor="let sucursal of sucursales" [value]="sucursal.sucursal">
+                    {{ sucursal.nombre_sucursal }}
+                </option>
+            </select>
+        </ng-container>
         <button (click)="cerrarSesion()" class="logout-button">⏻</button>
-    </header>
+    </div>
+</header>
+
+
+<!-- <header class="header">
+    <div class="left">
+        <h2>Hola, <span>{{ usuario.nombre }}</span></h2>
+        <h2 *ngIf="selectedVendedor">Vendedor es: <span>{{ selectedVendedor }}</span></h2>
+    </div>
+    
+    <div class="right">
+        <ng-container *ngIf="!isHome">
+            <select id="sucursal" class="sucursal-select" (change)="onSucursalChange($event)">
+                <option value="" disabled selected>SUCURSAL</option>
+                <option *ngFor="let sucursal of sucursales" [value]="sucursal.sucursal">
+                    {{ sucursal.nombre_sucursal }}
+                </option>
+            </select>
+        </ng-container>
+        <button (click)="cerrarSesion()" class="logout-button">⏻</button>
+    </div>
+</header> -->

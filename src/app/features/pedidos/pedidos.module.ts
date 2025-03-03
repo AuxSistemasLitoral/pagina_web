@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { PedidosRoutingModule } from './pedidos-routing.module';
 import { PedidosComponent } from './pedidos.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { PedidosComponent } from './pedidos.component';
   ],
   imports: [
     CommonModule,
-    PedidosRoutingModule
+    PedidosRoutingModule,
+    SharedModule
   ]
 })
 export class PedidosModule { }

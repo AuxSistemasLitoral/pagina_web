@@ -11,6 +11,9 @@ export class HeaderComponent {
   usuario: any = {};
   menuAbierto: boolean = false; 
   sucursales: any[] = [];
+  isHome: boolean = false;
+  selectedSucursal: any;
+  selectedVendedor: string = '';
 
   constructor(
     private router: Router,
@@ -19,6 +22,7 @@ export class HeaderComponent {
   ngOnInit(){    
     this.obtenerUsuario();
     this.verificarSesion();
+    this.isHome = this.router.url === '/auth/home';
     const nit = localStorage.getItem('nit');   
 
     if(nit){
@@ -60,8 +64,7 @@ export class HeaderComponent {
     if (!token) {
       this.router.navigate(['/auth/login']);
     }
-  }
-  
+  } 
 
   
   cerrarSesion(){
@@ -74,4 +77,19 @@ export class HeaderComponent {
     this.menuAbierto = !this.menuAbierto;
   }
 
+  onSucursalChange(event: Event) {
+    console.log('Entró a onSucursalChange');
+    const selectedSucursalId = (event.target as HTMLSelectElement).value;
+    console.log('ID sucursal seleccionada:', selectedSucursalId);
+  
+    // Buscar la sucursal seleccionada en la lista de sucursales
+    const selectedSucursal = this.sucursales.find(suc => suc.sucursal === selectedSucursalId);
+  
+    if (selectedSucursal) {
+      this.selectedVendedor = selectedSucursal.nombre_vendedor;
+      console.log('Vendedor seleccionado:', this.selectedVendedor);
+    }
+  }
+  
+  
 }

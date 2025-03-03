@@ -22,30 +22,48 @@ html, body {
     left: 0;
 }
 
-.header {
+/* .left {
+    flex: 1;
+} */
+
+.right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+
+header {
     background-color: #1c2331;
-    /* background-color: #32ad05; */
-    /* background-color: rgb(40, 167, 69); */
     color: rgb(40, 167, 69);
     padding: 8px 16px;
     display: flex;
+    flex-direction: row; /* Explícitamente establecer en fila */
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    flex-wrap: nowrap; /* Evitar que los elementos se envuelvan */
 }
 
+.left {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Espacio entre "Hola" y "Tu vendedor es" */
+    flex-wrap: nowrap; /* Evitar que los elementos se envuelvan */
+}
+
+/* Modificar el h2 para que se muestre en línea en pantallas grandes */
 .header h2 {
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    display: inline-flex; /* Cambiado a inline-flex */
+    align-items: center;
 }
 
 .header span {
-    font-size: 14px;
+    /* font-size: 14px; */
     font-weight: normal;
+    margin-left: 5px; /* Pequeño espacio después de "Hola," y "Tu vendedor es:" */
 }
-
 .logout-button {
     background-color:  rgb(40, 167, 69); 
     color: white;
@@ -62,7 +80,7 @@ html, body {
 }
 
 .logout-button:hover {
-    background-color: #1E3A8A;
+    background-color: #f60f03;
 }
 
 .content {
@@ -78,4 +96,100 @@ html, body {
     padding: 16px;
     width: 100%;
     margin-top: auto;
+}
+
+.right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .sucursal-select {
+    padding: 8px;
+    border: 2px solid rgb(40, 167, 69);
+    border-radius: 20px;
+    background-color: #1c2331;
+    color: rgb(40, 167, 69);
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;    
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sucursal-select:hover {
+    border-color: #0071a5;
+}
+
+/* PANTALLAS MEDIANAS*/
+@media screen and (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .left {
+        width: 100%;
+        text-align: left;
+    }
+    
+    .right {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 5px;
+    }
+    
+    .sucursal-select {
+        flex-grow: 1;
+        max-width: calc(100% - 50px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .header h2 {
+        font-size: 16px;
+    }
+    
+    .header span {
+        font-size: 12px;
+    }
+    
+    .sucursal-select {
+        font-size: 11px;
+        padding: 5px;
+        min-width: 120px;
+    }
+    
+    .logout-button {
+        width: 32px;
+        height: 32px;
+        font-size: 11px;
+    }
+}
+
+/* Agregar reglas para dispositivos muy pequeños */
+@media screen and (max-width: 360px) {
+    .header {
+        padding: 6px;
+    }
+    
+    .header h2 {
+        font-size: 14px;
+    }
+    
+    .header span {
+        font-size: 11px;
+        display: block;
+        margin-top: 2px;
+    }
+    
+    .right {
+        gap: 4px;
+    }
+    
+    .sucursal-select {
+        min-width: 100px;
+    }
 }
