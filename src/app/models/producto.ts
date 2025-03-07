@@ -14,7 +14,7 @@ export interface ListaPrecio {
     disponible: string;
     bodega: string;
     bod_id: string;
-    Descuento: string;
+    descuento: number;
     lista_precio: ListaPrecio[];  
   }
   

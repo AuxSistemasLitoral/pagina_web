@@ -44,7 +44,7 @@
   
   .producto-card h3 {
     color: #2c3e50;
-    font-size: 18px;
+    font-size: 14px;
     margin-bottom: 8px;
   }
   
@@ -52,5 +52,53 @@
     font-size: 14px;
     color: #555;
     margin: 4px 0;
+    
   }
+
+  .productos-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .producto-card {
+    width: 250px;
+    border: 1px solid  #05983d; 
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    position: relative;
+  }
+  
+  .producto-card.con-descuento {
+    border: 3px solid #05983d; 
+  }
+  
+  .descuento-label {
+    background-color: #05983d;
+    color: black;
+    font-weight: bold;
+    padding: 5px 10px;
+    top: 10px;
+    right: 10px;
+    border-radius: 5px;
+  }
+  
+  .terminos{
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: bold;
+    color: black;
+  }
+
+  .producto-imagen {
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    max-height: 150px; /* Ajusta la altura máxima */
+    object-fit: contain; /* La imagen se ajusta sin recortarse */
+    display: block;
+    margin: 0 auto; /* Centra la imagen si es más pequeña que el contenedor */
+    background-color: white; /* Fondo blanco en caso de imágenes transparentes */
+}
+
   

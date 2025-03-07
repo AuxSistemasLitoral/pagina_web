@@ -40,22 +40,21 @@ export class PedidosComponent implements OnInit {
     this.dataSubscription.unsubscribe();
   }
   
-
   obtenerProductos() {
     if (this.usuario && this.listaprecio) {
       this.cargando = true;
-      console.log('Llamando a getProducts con:', this.usuario, this.listaprecio); 
+      console.log('Llamando a getProducts con:', this.usuario, this.listaprecio);
   
       this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
-        (response: Producto[]) => {  
-          // Convertir lista_precio si es un string
+        (response: any[]) => {
           this.productos = response.map(producto => ({
             ...producto,
-            lista_precio: typeof producto.lista_precio === 'string' 
-              ? JSON.parse(producto.lista_precio) 
-              : producto.lista_precio
+            descuento: Number(producto.descuento) || 0,
+            lista_precio: Array.isArray(producto.lista_precio)
+              ? producto.lista_precio
+              : JSON.parse(producto.lista_precio || '[]')
           }));
-  
+          this.productos.sort((a, b) => b.descuento - a.descuento);
           console.log('Productos procesados:', this.productos);
           this.cargando = false;
         },
@@ -68,6 +67,35 @@ export class PedidosComponent implements OnInit {
       console.warn('Para visualizar los productos debes elegir una sucursal');
     }
   }
+  
+
+  // obtenerProductos() {
+  //   if (this.usuario && this.listaprecio) {
+  //     this.cargando = true;
+  //     console.log('Llamando a getProducts con:', this.usuario, this.listaprecio); 
+  
+  //     this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
+  //       (response: Producto[]) => { 
+  //         this.productos = response.map(producto => ({
+  //           ...producto,
+  //           descuento: Number(producto.Descuento),
+  //           lista_precio: typeof producto.lista_precio === 'string' 
+  //             ? JSON.parse(producto.lista_precio) 
+  //             : producto.lista_precio
+  //         }));
+  
+  //         console.log('Productos procesados:', this.productos);
+  //         this.cargando = false;
+  //       },
+  //       (error) => {
+  //         console.error('Error obteniendo los productos', error);
+  //         this.cargando = false;
+  //       }
+  //     );
+  //   } else {
+  //     console.warn('Para visualizar los productos debes elegir una sucursal');
+  //   }
+  // }
   
   
 

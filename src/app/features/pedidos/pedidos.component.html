@@ -7,12 +7,30 @@
 </div>
 
 <div class="productos-container">
-  <div class="producto-card" *ngFor="let producto of productos">
+  <div 
+    class="producto-card" 
+    *ngFor="let producto of productos"
+    [class.con-descuento]="producto.descuento > 0">
+    <img 
+      [src]="'assets/img/' + producto.referencia + '.png'" 
+      [alt]="'Imagen de ' + producto.nombre"
+      class="producto-imagen"
+      onerror="this.src='assets/img/default.png'"
+    >    
     <h3>{{ producto.nombre }}</h3>
     <p><strong>Referencia:</strong> {{ producto.referencia }}</p>
+    <p><strong>Unidades por empaque:</strong> {{ producto.factor }}</p>
     <p><strong>Precio:</strong> {{ producto.lista_precio[0]?.precio | currency }}</p>
     <p><strong>Disponibles:</strong> {{ producto.disponible }}</p>
+
+    <div *ngIf="producto.descuento > 0" class="descuento-label">
+      🔥 Valida con tu asesor el descuento.  
+      <p class="terminos">Aplican términos y condiciones.</p>
+    </div>  
+   
   </div>
 </div>
+
+
 
 <app-footer></app-footer>
