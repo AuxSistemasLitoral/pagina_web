@@ -4,192 +4,218 @@
     box-sizing: border-box;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-/* .left {
-    flex: 1;
-} */
-
-.right {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-
-header {
+.header {
     background-color: #1c2331;
-    color: rgb(40, 167, 69);
-    padding: 8px 16px;
+    color: #fff;
     display: flex;
-    flex-direction: row; /* Explícitamente establecer en fila */
-    justify-content: space-between;
     align-items: center;
     width: 100%;
-    flex-wrap: nowrap; /* Evitar que los elementos se envuelvan */
+    height: 70px;
+    padding: 0 15px;
 }
 
-.left {
+.brand-section {
     display: flex;
     align-items: center;
-    gap: 15px; /* Espacio entre "Hola" y "Tu vendedor es" */
-    flex-wrap: nowrap; /* Evitar que los elementos se envuelvan */
+    margin-right: 20px;
 }
 
-/* Modificar el h2 para que se muestre en línea en pantallas grandes */
-.header h2 {
-    margin: 0;
-    display: inline-flex; /* Cambiado a inline-flex */
-    align-items: center;
-}
-
-.header span {
-    /* font-size: 14px; */
-    font-weight: normal;
-    margin-left: 5px; /* Pequeño espacio después de "Hola," y "Tu vendedor es:" */
-}
-.logout-button {
-    background-color:  rgb(40, 167, 69); 
-    color: white;
+.app-logo {
     width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
+    height: 40px;   
+    border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.divider {
+    height: 40px;
+    width: 1px;
+    background-color: #444;
+    margin-left: 20px;
+}
+
+.user-info-section {
+    flex: 1;
+    margin: 0 15px;
+}
+
+.user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    color: rgb(40, 167, 69);
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.badge-ase{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: bold;
     font-size: 14px;
+    color: white;
+}
+
+.badges-container {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.info-badge {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+    border-radius: 15px;
+    padding: 4px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    gap: 5px;
+}
+
+.badge-icon {
+    font-size: 12px;
+}
+
+.vendor-badge {
+    color: white;
+    font-weight: bold;
+}
+
+.credit-badge {
+    color: rgb(40, 167, 69);
+    font-weight: bold;
+}
+
+.actions-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.branch-selector {
+    display: flex;
+    align-items: center;
+    background-color: rgba(40, 167, 69, 0.1);
+    border-radius: 20px;
+    padding: 5px 10px;
+    border: 1px solid rgb(40, 167, 69);
+}
+
+.location-icon {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.branch-selector select {
+    background-color: transparent;
+    border: none;
+    color: rgb(40, 167, 69);
+    font-size: 14px;
+    outline: none;
+    padding: 5px;
+    width: auto;
+    cursor: pointer;
+}
+
+.branch-selector select option {
+    background-color: #1c2331;
+    color: white;
+}
+
+.logout-button {
+    width: 40px;
+    height: 40px;
+    background-color: rgb(40, 167, 69);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.2s;
 }
 
 .logout-button:hover {
     background-color: #f60f03;
 }
 
-.content {
-    flex: 1;
-    overflow-y: auto;
-    width: 100%;
-}
-
-.footer {
-    background-color: #053baf;
-    color: white;
-    text-align: center;
-    padding: 16px;
-    width: 100%;
-    margin-top: auto;
-}
-
-.right {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  .sucursal-select {
-    padding: 8px;
-    border: 2px solid rgb(40, 167, 69);
-    border-radius: 20px;
-    background-color: #1c2331;
-    color: rgb(40, 167, 69);
-    font-size: 14px;
-    cursor: pointer;
-    outline: none;    
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.sucursal-select:hover {
-    border-color: #0071a5;
-}
-
-/* PANTALLAS MEDIANAS*/
 @media screen and (max-width: 768px) {
     .header {
+        height: auto;
         flex-direction: column;
-        padding: 10px;
-        gap: 8px;
+        padding: 10px;        
     }
     
-    .left {
-        width: 100%;
-        text-align: left;
-    }
-    
-    .right {
+    .brand-section {
         width: 100%;
         justify-content: space-between;
-        margin-top: 5px;
+        margin-right: 0;
+        margin-bottom: 10px;
     }
     
-    .sucursal-select {
-        flex-grow: 1;
-        max-width: calc(100% - 50px);
+    .divider {
+        display: none;
+    }
+    
+    .user-info-section {
+        width: 100%;
+        margin: 10px 0;
+        font-size: 4;
+    }
+    
+    .user-name {
+        font-size: 16px;
+    }
+    
+    .badges-container {
+        margin-top: 8px;
+    }
+    
+    .actions-section {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+    
+    .branch-selector {
+        flex: 1;
+        margin-right: 10px;
     }
 }
 
 @media screen and (max-width: 480px) {
-    .header h2 {
-        font-size: 16px;
+    .user-name {
+        font-size: 15px;
     }
     
-    .header span {
+    .info-badge {
         font-size: 12px;
+        padding: 3px 8px;
     }
     
-    .sucursal-select {
-        font-size: 11px;
-        padding: 5px;
-        min-width: 120px;
+    .branch-selector {
+        padding: 3px 8px;
+    }
+    
+    .branch-selector select {
+        font-size: 12px;
+        max-width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .logout-button {
-        width: 32px;
-        height: 32px;
-        font-size: 11px;
-    }
-}
-
-/* Agregar reglas para dispositivos muy pequeños */
-@media screen and (max-width: 360px) {
-    .header {
-        padding: 6px;
-    }
-    
-    .header h2 {
+        width: 36px;
+        height: 36px;
         font-size: 14px;
-    }
-    
-    .header span {
-        font-size: 11px;
-        display: block;
-        margin-top: 2px;
-    }
-    
-    .right {
-        gap: 4px;
-    }
-    
-    .sucursal-select {
-        min-width: 100px;
     }
 }

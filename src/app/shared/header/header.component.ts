@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
+import { SharedDataService } from '../../core/shared-data.service';
 
 @Component({
   selector: 'app-header',
@@ -13,11 +14,15 @@ export class HeaderComponent {
   sucursales: any[] = [];
   isHome: boolean = false;
   selectedSucursal: any;
-  selectedVendedor: string = '';
+  asesor: string = '';
+
+  id: string = '';
+  cupo: number = 0;
 
   constructor(
     private router: Router,
-    private authService: AuthService ){}
+    private authService: AuthService,
+    private sharedDataService: SharedDataService ){}
 
   ngOnInit(){    
     this.obtenerUsuario();
@@ -86,10 +91,34 @@ export class HeaderComponent {
     const selectedSucursal = this.sucursales.find(suc => suc.sucursal === selectedSucursalId);
   
     if (selectedSucursal) {
-      this.selectedVendedor = selectedSucursal.nombre_vendedor;
-      console.log('Vendedor seleccionado:', this.selectedVendedor);
+      this.asesor = selectedSucursal.asesor;     
+      this.id = selectedSucursal.id_cliente;
+      const usuario = selectedSucursal.usuario;
+      const listaprecio = selectedSucursal.listaprecio;
+      this.sharedDataService.setUsuario(usuario);
+      this.sharedDataService.setListaPrecio(listaprecio);
+      console.log('Vendedor seleccionado:', this.asesor, 'el id del cliente', this.id);
+      console.log('Datos guardados en el servicio:', usuario, listaprecio);
+      this.sharedDataService.notifyDataReady();
+       
+      this.authService.obtenerCupo(this.id).subscribe( 
+        (response)=> {
+          if(response && response.cupo !== undefined){
+            this.cupo = response.cupo;
+            console.log('cupo para el cliente', this.cupo);
+          }else{
+            console.log('el cliente no tiene cupo');
+          }
+        },
+        (error)=> {
+          console.error('error obtiendo el cupo', error);
+        }
+      )
     }
   }
+
+
   
+
   
 }

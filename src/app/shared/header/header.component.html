@@ -1,38 +1,42 @@
 <header class="header">
-    <div class="left">
-        <h3>Hola, <span>{{ usuario.nombre }}</span></h3>
-        <h3 *ngIf="selectedVendedor">Tu vendedor es: <span>{{ selectedVendedor }}</span></h3>
+    <div class="brand-section">
+        <a href="http://localhost:4200/auth/home" target="_blank">
+            <img src="../../../assets/icons/icon.png" alt="Ubicación" class="app-logo">
+        </a>
+
+        <div class="divider"></div>
     </div>
     
-    <div class="right">
+    
+    <div class="user-info-section">       
+        <div class="user-details">
+            <div class="user-name">{{ usuario.nombre }}</div>
+            <div class="badges-container">
+                <ng-container *ngIf="!isHome">
+                <div class="info-badge vendor-badge" *ngIf="asesor">
+                    <i class="badge-ase">ASESOR:</i>
+                    <span>{{ asesor }}</span>
+                </div>
+                <div class="info-badge credit-badge">
+                    <i class="badge-icon">TU CUPO ES</i>
+                    <span>{{ cupo | currency:'':'symbol':'1.0-0' }}</span>
+                </div>
+                 </ng-container>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions-section">
         <ng-container *ngIf="!isHome">
-            <select id="sucursal" class="sucursal-select" (change)="onSucursalChange($event)">
-                <option value="" disabled selected>SUCURSAL</option>
-                <option *ngFor="let sucursal of sucursales" [value]="sucursal.sucursal">
-                    {{ sucursal.nombre_sucursal }}
-                </option>
-            </select>
+            <div class="branch-selector">
+                <select id="sucursal" (change)="onSucursalChange($event)">
+                    <option value="" disabled selected>Seleccionar sucursal</option>
+                    <option *ngFor="let sucursal of sucursales" [value]="sucursal.sucursal">
+                        {{ sucursal.nombre_sucursal }}
+                    </option>
+                </select>
+            </div>
         </ng-container>
-        <button (click)="cerrarSesion()" class="logout-button">⏻</button>
+        <button (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
     </div>
 </header>
-
-
-<!-- <header class="header">
-    <div class="left">
-        <h2>Hola, <span>{{ usuario.nombre }}</span></h2>
-        <h2 *ngIf="selectedVendedor">Vendedor es: <span>{{ selectedVendedor }}</span></h2>
-    </div>
-    
-    <div class="right">
-        <ng-container *ngIf="!isHome">
-            <select id="sucursal" class="sucursal-select" (change)="onSucursalChange($event)">
-                <option value="" disabled selected>SUCURSAL</option>
-                <option *ngFor="let sucursal of sucursales" [value]="sucursal.sucursal">
-                    {{ sucursal.nombre_sucursal }}
-                </option>
-            </select>
-        </ng-container>
-        <button (click)="cerrarSesion()" class="logout-button">⏻</button>
-    </div>
-</header> -->
