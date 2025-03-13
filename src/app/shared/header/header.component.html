@@ -13,7 +13,7 @@
             <div class="user-name">{{ usuario.nombre }}</div>
             <div class="badges-container">
                 <ng-container *ngIf="!isHome">
-                <div class="info-badge vendor-badge" *ngIf="asesor">
+                <div class="info-badge" *ngIf="asesor">
                     <i class="badge-ase">ASESOR:</i>
                     <span>{{ asesor }}</span>
                 </div>
@@ -32,7 +32,7 @@
                 <select id="sucursal" (change)="onSucursalChange($event)">
                     <option value="" disabled selected>Seleccionar sucursal</option>
                     <option *ngFor="let sucursal of sucursales" [value]="sucursal.sucursal">
-                        {{ sucursal.nombre_sucursal }}
+                        {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
                     </option>
                 </select>
             </div>

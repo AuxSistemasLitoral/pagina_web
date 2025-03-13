@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiBaseUrl: 'http://Muriel:8000'
+    apiBaseUrl: 'http://Muriel:8000/'
   };

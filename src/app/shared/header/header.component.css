@@ -82,11 +82,6 @@
     font-size: 12px;
 }
 
-.vendor-badge {
-    color: white;
-    font-weight: bold;
-}
-
 .credit-badge {
     color: rgb(40, 167, 69);
     font-weight: bold;
@@ -98,14 +93,30 @@
     gap: 15px;
 }
 
-.branch-selector {
+.branch-selector select {
     display: flex;
     align-items: center;
     background-color: rgba(40, 167, 69, 0.1);
     border-radius: 20px;
     padding: 5px 10px;
     border: 1px solid rgb(40, 167, 69);
+    width: 100%;  /* Ocupa todo el espacio disponible */
+    min-width: 250px;  /* Evita que sea demasiado pequeño */
+    max-width: 400px;  /* Evita que sea demasiado grande */
+    white-space: nowrap;  /* Evita que el texto salte de línea */
+    overflow: hidden;
+    text-overflow: ellipsis;  /* Agrega "..." si el texto es muy largo */
 }
+/* 
+.branch-selector select {
+    width: 100%; 
+    min-width: 250px;  
+    max-width: 400px; 
+    white-space: nowrap;  
+    overflow: hidden;
+    text-overflow: ellipsis;  
+}  
+ */
 
 .location-icon {
     margin-right: 5px;
@@ -180,14 +191,17 @@
     }
     
     .actions-section {
-        width: 100%;
-        justify-content: space-between;
-        margin-top: 10px;
+        flex-direction: column; 
+        align-items: stretch;
+        gap: 10px;
     }
-    
+
     .branch-selector {
-        flex: 1;
-        margin-right: 10px;
+        width: 100%; 
+    }
+
+    .branch-selector select {
+        width: 100%; 
     }
 }
 
@@ -217,5 +231,17 @@
         width: 36px;
         height: 36px;
         font-size: 14px;
+    }
+}
+
+
+@media screen and (max-width: 480px) { 
+    .actions-section {
+        gap: 5px;
+    }
+
+    .branch-selector select {
+        font-size: 14px;  /* Reduce el tamaño de la fuente en móviles */
+        min-width: auto;
     }
 }

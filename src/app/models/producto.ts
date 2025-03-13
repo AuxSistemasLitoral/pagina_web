@@ -6,6 +6,7 @@ export interface ListaPrecio {
   }
   
   export interface Producto {
+    cantidad: any;
     id: string;
     nombre: string;
     referencia: string;
@@ -16,5 +17,6 @@ export interface ListaPrecio {
     bod_id: string;
     descuento: number;
     lista_precio: ListaPrecio[];  
+    proveedor?: string;
   }
   
