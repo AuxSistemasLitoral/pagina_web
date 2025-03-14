@@ -1,192 +1,226 @@
 /* Spinner de carga */
 .loader-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 20px 0;
-  }
-  
-  .spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-  }
-  .proveedores-container {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    background: white;
-    padding: 10px 0;
-  }
-  
-  .proveedores-scroll {
-    display: flex;
-    gap: 30px;
-    animation: scrollProveedores 20s linear infinite;
-    width: max-content;
-  }
-  
-  .proveedor-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-width: 150px;
-  }
-
-  .proveedor-item img{
-    width: 120px;
-    height: auto;
-    object-fit: contain;
-    /*background-color: white;*/
-  }
-  
-  @keyframes scrollProveedores {
-    from {
-      transform: translateX(0%);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  } 
-
-  .proveedores-scroll{
-    animation: scrollProveedores 60s linear infinite ;
-  }
-
-  .proveedores-container:hover .proveedores-scroll {
-    animation-play-state: paused;
-  }
-
-
-  .proveedor-item img {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    image-rendering: auto;
-  }
-  
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  /* Contenedor de productos */
-  .productos-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-    padding: 20px;
-  }
-  
-  /*Tarjetas de producto */
-  .producto-card {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .producto-card:hover {
-    transform: scale(1.05);
-  }
-  
-  .producto-card h3 {
-    color: #2c3e50;
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-  
-  .producto-card p {
-    font-size: 14px;
-    color: #555;
-    margin: 4px 0;
-    
-  }
-
-  .productos-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  
-  .producto-card {
-    width: 250px;
-    border: 1px solid  #05983d; 
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    position: relative;
-  }
-  
-  .producto-card.con-descuento {
-    border: 3px solid #05983d; 
-  }
-  
-  .descuento-label {
-    background-color: #05983d;
-    color: black;
-    font-weight: bold;
-    padding: 5px 10px;
-    top: 10px;
-    right: 10px;
-    border-radius: 5px;
-  }
-  
-  .terminos{
-    font-size: 12px;
-    margin-top: 5px;
-    font-weight: bold;
-    color: black;
-  }
-
-  .producto-imagen {
-    width: 100%; /* Ocupa todo el ancho del contenedor */
-    max-height: 150px; 
-    object-fit: contain; /* La imagen se ajusta sin recortarse */
-    display: block;
-    margin: 0 auto; 
-    background-color: white; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
 }
 
-  /* Estilo para el contenedor de cantidad y botón */
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.proveedores-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background: white;
+  padding: 10px 0;
+  cursor: grab;
+}
+
+.proveedores-scroll {
+  display: flex;
+  gap: 30px;
+  width: max-content;
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+  animation: scrollProveedores 60s linear infinite;
+}
+
+.proveedores-container:active {
+  cursor: grabbing;
+}
+
+/* ANIMACIÓN PARA DESPLAZAMIENTO AUTOMÁTICO */
+@keyframes scrollProveedores {
+  from {
+      transform: translateX(0%);
+  }
+  to {
+      transform: translateX(-50%);
+  }
+}
+
+/* DETENER LA ANIMACIÓN CUANDO EL USUARIO INTERACTÚA */
+.proveedores-container:active .proveedores-scroll,
+.proveedores-container:hover .proveedores-scroll {
+  animation-play-state: paused;
+}
+
+
+
+.proveedor-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+}
+
+.proveedor-item img {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  background-color: white;
+}
+
+@keyframes scrollProveedores {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.proveedores-scroll {
+  animation: scrollProveedores 60s linear infinite;
+}
+
+.proveedores-container:hover .proveedores-scroll {
+  animation-play-state: paused;
+}
+
+
+.proveedor-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Contenedor de productos */
+.productos-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+/*Tarjetas de producto */
+.producto-card {
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.producto-card:hover {
+  transform: scale(1.05);
+}
+
+.producto-card h3 {
+  color: #2c3e50;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.producto-card p {
+  font-size: 14px;
+  color: #555;
+  margin: 4px 0;
+
+}
+
+.productos-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.producto-card {
+  width: 250px;
+  border: 1px solid #05983d;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  position: relative;
+}
+
+.producto-card.con-descuento {
+  border: 3px solid #05983d;
+}
+
+.descuento-label {
+  background-color: #05983d;
+  color: black;
+  font-weight: bold;
+  padding: 5px 10px;
+  top: 10px;
+  right: 10px;
+  border-radius: 5px;
+}
+
+.terminos {
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: bold;
+  color: black;
+}
+
+.producto-imagen {
+  width: 100%;
+  /* Ocupa todo el ancho del contenedor */
+  max-height: 150px;
+  object-fit: contain;
+  /* La imagen se ajusta sin recortarse */
+  display: block;
+  margin: 0 auto;
+  background-color: white;
+}
+
+/* Estilo para el contenedor de cantidad y botón */
 .cantidad-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
 }
 
 /* Estilo para el campo de cantidad */
 .cantidad-input {
-    width: 60px;
-    padding: 5px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 16px;
+  width: 60px;
+  padding: 5px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 16px;
 }
 
 /* Estilo para el botón de agregar */
 .agregar-btn {
-    background-color: #05983d;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s;
+  background-color: #05983d;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 .agregar-btn:hover {
-    background-color: #e65c00;
+  background-color: #e65c00;
 }

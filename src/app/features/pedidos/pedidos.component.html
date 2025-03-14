@@ -1,11 +1,22 @@
 <app-header></app-header>
 
-<div class="proveedores-container">
+<div #scrollContainer class="proveedores-container">
   <div class="proveedores-scroll">
-    <div 
-      class="proveedor-item" 
-      *ngFor="let proveedor of proveedoresDuplicados"
-      (click)="filtrarPorProveedor(proveedor.proveedor)">
+    <!-- Lista original -->
+    <div class="proveedor-item"
+         *ngFor="let proveedor of proveedoresDuplicados"
+         (click)="filtrarPorProveedor(proveedor.proveedor)">
+      <img 
+        [src]="'assets/prov/' + (proveedor.proveedor ? proveedor.proveedor.toUpperCase() : 'default') + '.png'" 
+        [alt]="proveedor.proveedor || 'Proveedor sin nombre'"
+        (error)="imagenError($event, proveedor.proveedor)">
+      <span>{{ proveedor.proveedor }}</span>
+    </div>
+
+    <!-- Clon de los proveedores para el loop infinito -->
+    <div class="proveedor-item"
+         *ngFor="let proveedor of proveedoresDuplicados"
+         (click)="filtrarPorProveedor(proveedor.proveedor)">
       <img 
         [src]="'assets/prov/' + (proveedor.proveedor ? proveedor.proveedor.toUpperCase() : 'default') + '.png'" 
         [alt]="proveedor.proveedor || 'Proveedor sin nombre'"
@@ -15,9 +26,7 @@
   </div>
 </div>
 
-<ng-template #noProductos>
-  <p>No hay productos disponibles para este proveedor.</p>
-</ng-template>
+
 
 
 <div *ngIf="cargando" class="loader-container">
@@ -26,16 +35,9 @@
 </div>
 
 <div class="productos-container">
-  <div 
-    class="producto-card" 
-    *ngFor="let producto of productos"
-    [class.con-descuento]="producto.descuento > 0">
-    <img 
-      [src]="'assets/img/' + producto.referencia + '.png'" 
-      [alt]="'Imagen de ' + producto.nombre"
-      class="producto-imagen"
-      onerror="this.src='assets/img/default.png'"
-    >    
+  <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">
+    <img [src]="'assets/img/' + producto.referencia + '.png'" [alt]="'Imagen de ' + producto.nombre"
+      class="producto-imagen" onerror="this.src='assets/img/default.png'">
     <h3>{{ producto.nombre }}</h3>
     <p><strong>Referencia:</strong> {{ producto.referencia }}</p>
     <p><strong>Unidades por empaque:</strong> {{ producto.factor }}</p>
@@ -43,10 +45,10 @@
     <p><strong>Disponible:</strong> {{ producto.disponible }}</p>
 
     <div *ngIf="producto.descuento > 0" class="descuento-label">
-      🔥 Valida con tu asesor el descuento.  
+      🔥 Valida con tu asesor el descuento.
       <p class="terminos">Aplican términos y condiciones.</p>
-    </div>  
-    
+    </div>
+
     <div class="cantidad-container">
       <input type="number" min="1" class="cantidad-input" placeholder="Cantidad">
       <button class="agregar-btn" (click)="agregarAlCarrito(producto)">🛒 Agregar</button>

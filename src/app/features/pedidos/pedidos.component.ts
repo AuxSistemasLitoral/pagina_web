@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { PedidoService } from '../../core/pedido.service';
 import { SharedDataService } from 'src/app/core/shared-data.service';
 import { Subscription } from 'rxjs';
@@ -12,19 +12,27 @@ import Swal from 'sweetalert2';
   styleUrls: ['./pedidos.component.css']
 })
 export class PedidosComponent implements OnInit, OnDestroy {
+
+  @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
   productos: Producto[] = [];
-  proveedores: Proveedor[]= [];
+  proveedores: Proveedor[] = [];
   productosFiltrados: any[] = [];
-  cargando : boolean = false;
+  cargando: boolean = false;
   usuario: string = '';
   listaprecio: string = '';
   proveedoresDuplicados: Proveedor[] = [];
   private dataSubscription!: Subscription;
 
+  isDragging = false;
+  startX = 0;
+  scrollLeft = 0;
+  animationRunning = true;
+
   constructor(
     private pedidoService: PedidoService,
-    private sharedDataService: SharedDataService
-  ){}
+    private sharedDataService: SharedDataService,
+    private renderer: Renderer2
+  ) { }
 
   ngOnInit(): void {
     this.obtenerProveedores();
@@ -41,16 +49,55 @@ export class PedidosComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  ngAfterViewInit() {
+    const container = this.scrollContainer.nativeElement;
+    
+    // Mouse presionado
+    this.renderer.listen(container, 'mousedown', (e: MouseEvent) => {
+      this.isDragging = true;
+      container.classList.add('active');
+      this.startX = e.pageX - container.offsetLeft;
+      this.scrollLeft = container.scrollLeft;
+      this.animationRunning = false; // Pausar la animación
+      container.style.animationPlayState = 'paused';
+    });
+
+    // Mouse suelto
+    this.renderer.listen(container, 'mouseup', () => {
+      this.isDragging = false;
+      container.classList.remove('active');
+      this.animationRunning = true; // Reanudar la animación
+      container.style.animationPlayState = 'running';
+    });
+
+    // Mouse sale del área
+    this.renderer.listen(container, 'mouseleave', () => {
+      this.isDragging = false;
+      this.animationRunning = true; // Reanudar la animación
+      container.style.animationPlayState = 'running';
+    });
+
+    // Movimiento del mouse
+    this.renderer.listen(container, 'mousemove', (e: MouseEvent) => {
+      if (!this.isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - this.startX) * 1.5; // Velocidad del arrastre
+      container.scrollLeft = this.scrollLeft - walk;
+    });
+  }
   
+
   ngOnDestroy(): void {
     this.dataSubscription.unsubscribe();
   }
-  
+
   obtenerProductos() {
     if (this.usuario && this.listaprecio) {
       this.cargando = true;
       console.log('Llamando a getProducts con:', this.usuario, this.listaprecio);
-  
+
       this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
         (response: any[]) => {
           this.productos = response.map(producto => ({
@@ -79,13 +126,13 @@ export class PedidosComponent implements OnInit, OnDestroy {
     this.pedidoService.getProveedores().subscribe({
       next: (data) => {
         this.proveedores = data;
-        this.proveedoresDuplicados = [...this.proveedores, ...this.proveedores]; 
-        console.log('Proveedores obtenidos:', this.proveedores); 
+        this.proveedoresDuplicados = [...this.proveedores, ...this.proveedores];
+        console.log('Proveedores obtenidos:', this.proveedores);
       },
       error: (err) => console.error('Error obteniendo proveedores', err)
     });
-  }  
-  
+  }
+
   filtrarPorProveedor(proveedor: string) {
     if (!this.listaprecio) {
       Swal.fire({
@@ -99,16 +146,15 @@ export class PedidosComponent implements OnInit, OnDestroy {
       });
       return;
     }
-  
+
     console.log(`Filtrando productos para proveedor: ${proveedor} y listaPrecio: ${this.listaprecio}`);
-  
-    this.cargando = true; 
-  
+
+    this.cargando = true;
+
     this.pedidoService.getProductosProveedor(proveedor, this.listaprecio, this.usuario).subscribe(
       (productos) => {
         console.log('Productos obtenidos para el proveedor:', productos);
-  
-        // Verificar si la respuesta está vacía
+
         if (!productos || productos.length === 0) {
           Swal.fire({
             icon: 'info',
@@ -120,14 +166,14 @@ export class PedidosComponent implements OnInit, OnDestroy {
             confirmButtonText: 'Entendido',
           });
         }
-  
+
         this.productos = productos.map((producto) => ({
           ...producto,
-          lista_precio: typeof producto.lista_precio === 'string' 
-            ? JSON.parse(producto.lista_precio) 
+          lista_precio: typeof producto.lista_precio === 'string'
+            ? JSON.parse(producto.lista_precio)
             : producto.lista_precio
         }));
-  
+
         this.cargando = false;
       },
       (error) => {
@@ -136,24 +182,22 @@ export class PedidosComponent implements OnInit, OnDestroy {
       }
     );
   }
-  
-  
+
   imagenError(event: any, proveedorNombre: string) {
-    event.target.src = 'assets/prov/default.png'; 
+    event.target.src = 'assets/prov/default.png';
     console.warn(`Imagen no encontrada para ${proveedorNombre}, usando imagen por defecto.`);
   }
-  
 
   agregarAlCarrito(producto: Producto) {
     if (!producto.cantidad || producto.cantidad <= 0) {
       alert("Por favor, ingresa una cantidad válida.");
       return;
-    }    
+    }
     console.log("Producto agregado:", producto);
     alert(`Se agregó ${producto.cantidad} unidad(es) de ${producto.nombre} al carrito.`);
   }
-  
 
-  
+
+
 
 }
