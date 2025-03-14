@@ -1,0 +1,21 @@
+/* Contenedor principal que asegura que el footer se posicione correctamente */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ocupa toda la pantalla */
+}
+
+/* Hace que el contenido crezca y empuje el footer */
+.main-content {
+    flex: 1;
+}
+
+.app-container { 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+}
+
+.main-content {
+    flex: 1; 
+}

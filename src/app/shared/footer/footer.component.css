@@ -4,10 +4,10 @@
     font-weight: 400;
     padding: 16px;
     width: 100%;
-    bottom: 0;
-    margin-bottom: 0;
-    padding: 0;
     box-sizing: border-box;
+    position: relative; /* Antes estaba fixed */
+    bottom: 0;
+    margin-top: auto; /* Empuja el footer hacia abajo si hay poco contenido */
 }
 
 .footer-container {
@@ -56,31 +56,13 @@
     transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-@media (max-width: 995px) {
-    .footer-container {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-        padding: 15px; /* Ajuste de padding */
-    }
+body, html {
+    height: 100%;
+    margin: 0;
+}
 
-    .footer-left img {
-        width: 80px;
-    }
-
-    .footer-center a img {
-        width: 24px;
-        height: 24px;
-    }
-
-    .footer-right p {
-        font-size: 14px;
-    }
-
-    .social-icon {
-        width: 24px;
-        height: 24px;
-    }
+.main-content{
+    flex: 1;
 }
 
 @media (max-width: 768px) {
@@ -145,7 +127,6 @@
 @media (min-width: 996px) {
     .footer {
         padding: 12px;
-        position: fixed;
         bottom: 0;
     }
 
@@ -175,7 +156,6 @@
 
 @media (min-height: 1080px) {
     .footer {
-        position: fixed;
         flex: 1;
         bottom: 0;
         left: 0;

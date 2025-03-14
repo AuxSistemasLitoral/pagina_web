@@ -27,6 +27,8 @@ export class PedidosComponent implements OnInit, OnDestroy {
   startX = 0;
   scrollLeft = 0;
   animationRunning = true;
+  scrollSpeed = 0.3; // Velocidad del scroll automático
+  interval: any;
 
   constructor(
     private pedidoService: PedidoService,
@@ -52,42 +54,66 @@ export class PedidosComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
     const container = this.scrollContainer.nativeElement;
-    
-    // Mouse presionado
+
+    // Iniciar desplazamiento automático
+    this.startAutoScroll();
+
+    // Evento de mouse para arrastrar
     this.renderer.listen(container, 'mousedown', (e: MouseEvent) => {
       this.isDragging = true;
       container.classList.add('active');
       this.startX = e.pageX - container.offsetLeft;
       this.scrollLeft = container.scrollLeft;
-      this.animationRunning = false; // Pausar la animación
-      container.style.animationPlayState = 'paused';
+      this.stopAutoScroll(); // Pausar la animación
     });
 
-    // Mouse suelto
     this.renderer.listen(container, 'mouseup', () => {
       this.isDragging = false;
       container.classList.remove('active');
-      this.animationRunning = true; // Reanudar la animación
-      container.style.animationPlayState = 'running';
+      this.startAutoScroll(); // Reanudar la animación
     });
 
-    // Mouse sale del área
     this.renderer.listen(container, 'mouseleave', () => {
       this.isDragging = false;
-      this.animationRunning = true; // Reanudar la animación
-      container.style.animationPlayState = 'running';
+      this.startAutoScroll(); // Reanudar la animación
     });
 
-    // Movimiento del mouse
     this.renderer.listen(container, 'mousemove', (e: MouseEvent) => {
       if (!this.isDragging) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
-      const walk = (x - this.startX) * 1.5; // Velocidad del arrastre
+      const walk = (x - this.startX) * 2; // Velocidad de arrastre
       container.scrollLeft = this.scrollLeft - walk;
     });
+
+    // Evento para reiniciar el scroll al llegar al final
+    this.renderer.listen(container, 'scroll', () => {
+      const scrollMax = container.scrollWidth / 2; // Límite antes de reiniciar
+      if (container.scrollLeft >= scrollMax) {
+        container.scrollLeft = 0; // Reiniciar al inicio sin que se note
+      }
+    });
   }
-  
+
+  // Inicia el desplazamiento automático
+  startAutoScroll() {
+    if (this.interval) return; // Evita duplicar intervalos
+    const container = this.scrollContainer.nativeElement;
+    this.interval = setInterval(() => {
+      container.scrollLeft += this.scrollSpeed;
+      const scrollMax = container.scrollWidth / 2;
+      if (container.scrollLeft >= scrollMax) {
+        container.scrollLeft = 0;
+      }
+    }, 30);
+  }
+
+  // Detiene el desplazamiento automático
+  stopAutoScroll() {
+    clearInterval(this.interval);
+    this.interval = null;
+  }
+
 
   ngOnDestroy(): void {
     this.dataSubscription.unsubscribe();

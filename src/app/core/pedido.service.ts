@@ -44,8 +44,8 @@ export class PedidoService {
 
   getProductosProveedor(proveedor: string, listaPrecio: string, usuario: string): Observable<Producto[]> {
     const url = this.getUrl(this.endpoinds.productosProveedor);
-    const body = { proveedor, listaPrecio, usuario };  // 👀 Verifica que los nombres sean EXACTOS
-    return this.http.post<Producto[]>(url, body);  // No envolver body en {}
+    const body = { proveedor, listaPrecio, usuario }; 
+    return this.http.post<Producto[]>(url, body); 
   }
   
   
