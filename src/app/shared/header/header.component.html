@@ -1,6 +1,6 @@
 <header class="header">
     <div class="brand-section">
-        <a href="http://localhost:4200/auth/home" target="_blank">
+        <a (click)="goToHome()">
             <img src="../../../assets/icons/icon.png" alt="Ubicación" class="app-logo">
         </a>
 
@@ -10,23 +10,25 @@
     
     <div class="user-info-section">       
         <div class="user-details">
-            <div class="user-name">{{ usuario.nombre }}</div>
-            <div class="badges-container">
-                <ng-container *ngIf="!isHome">
-                <div class="info-badge" *ngIf="asesor">
-                    <i class="badge-ase">ASESOR:</i>
-                    <span>{{ asesor }}</span>
-                </div>
-                <div class="info-badge credit-badge">
-                    <i class="badge-icon">TU CUPO ES</i>
+            <div class="user-header">
+                <div class="user-header" >{{ usuario.nombre }}</div>
+                <div class="user-header" *ngIf="!isLogin">
+                    <i>TU CUPO DISPONIBLE ES: </i>
                     <span>{{ cupo | currency:'':'symbol':'1.0-0' }}</span>
                 </div>
-                 </ng-container>
+            </div>
+            <div class="badges-container" *ngIf="!isHome">
+                <div class="user-name" *ngIf="asesor">
+                    <i>ASESOR:</i>
+                    <span>{{ asesor }}</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="actions-section">
+    
+    
+    <div class="actions-section" [ngClass]="{ 'hidden': isLogin }">
         <ng-container *ngIf="!isHome">
             <div class="branch-selector">
                 <select id="sucursal" (change)="onSucursalChange($event)">
@@ -36,7 +38,9 @@
                     </option>
                 </select>
             </div>
+            
         </ng-container>
         <button (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
     </div>
+    
 </header>

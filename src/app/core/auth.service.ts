@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { fromEvent, interval, map, Observable, of, switchMap, Subscription, catchError } from 'rxjs';
+import { fromEvent, interval, map, Observable, of, Subscription, catchError, BehaviorSubject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environments.prod';
+import { Usuario } from '../models/usuario';
+import { Sucursal } from '../models/sucursal';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private baseUrl = environment.apiBaseUrl;
+  private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
+  usuario$ = this.usuarioSubject.asObservable();
+
+  private sucursalesSubject = new BehaviorSubject<Sucursal[]>([]);
+  sucursales$ = this.sucursalesSubject.asObservable();
 
   private endpoints = {
     login: '/login.php',
@@ -33,19 +40,45 @@ export class AuthService {
     return `${this.baseUrl}${endpoint}`;
   }
 
-  login(usuario: string, clave: string): Observable<any>{
-    return this.http.post(this.getUrl(this.endpoints.login), {usuario, clave})
+  // login(usuario: string, clave: string): Observable<any>{
+  //   return this.http.post(this.getUrl(this.endpoints.login), {usuario, clave})
+  // }
+
+  login(usuario: string, clave: string): Observable<{ success: boolean; usuario: Usuario; token: string }> {
+    return this.http.post<{ success: boolean; usuario: Usuario; token: string }>(
+      this.getUrl(this.endpoints.login), 
+      { usuario, clave }
+    );
   }
 
-  getSucursales(nit: string): Observable<any>{
-    return this.http.post(this.getUrl(this.endpoints.sucursal),{nit})
-
+  getSucursales(nit: string): Observable<Sucursal[]> {
+    return this.http.post<Sucursal[]>(this.getUrl(this.endpoints.sucursal), { nit });
   }
 
-  guardarSesion(token: string, usuario: any) {
+  // getSucursales(nit: string): Observable<any>{
+  //   return this.http.post(this.getUrl(this.endpoints.sucursal),{nit})
+
+  // }
+
+  obtenerUsuarioDesdeStorage() {
+    const usuarioStorage = localStorage.getItem('usuario');
+    if (usuarioStorage) {
+        const usuario = JSON.parse(usuarioStorage);
+        this.usuarioSubject.next(usuario); 
+        this.getSucursales(usuario.cedula.toString()).subscribe(sucursales => {
+            this.sucursalesSubject.next(sucursales); //  Notifica a los componentes
+        });
+    }
+}
+
+
+  guardarSesion(token: string, usuario: Usuario) {
     localStorage.setItem('token', token);
     localStorage.setItem('usuario', JSON.stringify(usuario));
-    localStorage.setItem('nit', JSON.stringify(usuario.cedula.toString()));
+    this.usuarioSubject.next(usuario);
+    this.getSucursales(usuario.cedula.toString()).subscribe(sucursales => {
+      this.sucursalesSubject.next(sucursales); // Notifica a HeaderComponent
+    });
     this.lastActivity = Date.now();
     this.startTokenValidation();
   }

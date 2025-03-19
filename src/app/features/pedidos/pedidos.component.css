@@ -31,7 +31,7 @@
   width: max-content;
   transition: transform 0.2s ease-out;
   will-change: transform;
- /* animation: scrollProveedores 60s linear infinite;*/
+  /* animation: scrollProveedores 60s linear infinite;*/
 }
 
 .proveedores-container:active {
@@ -41,10 +41,11 @@
 /* ANIMACIÓN PARA DESPLAZAMIENTO AUTOMÁTICO */
 @keyframes scrollProveedores {
   from {
-      transform: translateX(0%);
+    transform: translateX(0%);
   }
+
   to {
-      transform: translateX(-50%);
+    transform: translateX(-50%);
   }
 }
 

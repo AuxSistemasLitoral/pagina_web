@@ -48,43 +48,27 @@
 
 .user-name {
     color: rgb(40, 167, 69);
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-.badge-ase{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-weight: bold;
+.user-header {
+    display: flex;        /* Alinea los elementos en la misma línea */
+    align-items: center;  /* Asegura que estén alineados verticalmente */
+    gap: 15px;           /* Espacio entre el nombre del usuario y el cupo */
+    white-space: nowrap; /* Evita que el cupo pase a la siguiente línea */
+    color: rgb(40, 167, 69);
     font-size: 14px;
-    color: white;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
+
 
 .badges-container {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-}
-
-.info-badge {
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    color: white;
-    font-weight: bold;
-    border-radius: 15px;
-    padding: 4px 10px;
-    background-color: rgba(255, 255, 255, 0.1);
-    gap: 5px;
-}
-
-.badge-icon {
-    font-size: 12px;
-}
-
-.credit-badge {
-    color: rgb(40, 167, 69);
-    font-weight: bold;
 }
 
 .actions-section {
@@ -107,16 +91,7 @@
     overflow: hidden;
     text-overflow: ellipsis;  /* Agrega "..." si el texto es muy largo */
 }
-/* 
-.branch-selector select {
-    width: 100%; 
-    min-width: 250px;  
-    max-width: 400px; 
-    white-space: nowrap;  
-    overflow: hidden;
-    text-overflow: ellipsis;  
-}  
- */
+
 
 .location-icon {
     margin-right: 5px;
@@ -158,6 +133,11 @@
     background-color: #f60f03;
 }
 
+.hidden {
+    display: none;
+}
+
+
 @media screen and (max-width: 768px) {
     .header {
         height: auto;
@@ -180,11 +160,8 @@
         width: 100%;
         margin: 10px 0;
         font-size: 4;
-    }
-    
-    .user-name {
-        font-size: 16px;
-    }
+    }  
+   
     
     .badges-container {
         margin-top: 8px;
@@ -205,15 +182,7 @@
     }
 }
 
-@media screen and (max-width: 480px) {
-    .user-name {
-        font-size: 15px;
-    }
-    
-    .info-badge {
-        font-size: 12px;
-        padding: 3px 8px;
-    }
+@media screen and (max-width: 480px) { 
     
     .branch-selector {
         padding: 3px 8px;
