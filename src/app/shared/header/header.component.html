@@ -24,11 +24,9 @@
                 </div>
             </div>
         </div>
-    </div>
-
+    </div>    
     
-    
-    <div class="actions-section" [ngClass]="{ 'hidden': isLogin }">
+    <!-- <div class="actions-section" [ngClass]="{ 'hidden': isLogin }">
         <ng-container *ngIf="!isHome">
             <div class="branch-selector">
                 <select id="sucursal" (change)="onSucursalChange($event)">
@@ -40,7 +38,24 @@
             </div>
             
         </ng-container>
-        <button (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
+        <button *ngIf="!isLogin" (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
+    </div> -->
+
+    <div class="actions-section" [ngClass]="{ 'hidden': isLogin }">
+        <ng-container *ngIf="!isHome">
+            <div class="branch-selector">
+                <select id="sucursal" (change)="onSucursalChange($event)" [(ngModel)]="selectedSucursal">
+                    <option [ngValue]="null" disabled>Seleccionar sucursal</option>
+                    <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucursal">
+                        {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
+                    </option>
+                </select>
+            </div>
+        </ng-container>
+        <button *ngIf="!isLogin" (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
     </div>
+    
+
+
     
 </header>

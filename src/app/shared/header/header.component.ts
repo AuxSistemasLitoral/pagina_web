@@ -28,23 +28,7 @@ export class HeaderComponent {
     private authService: AuthService,
     private sharedDataService: SharedDataService,
     private cdRef: ChangeDetectorRef ){}
-
-  // ngOnInit(){
-  //   this.obtenerUsuario();
-  //   this.obtenerSucursales();
-  //   this.verificarSesion();
-  //   this.isHome = this.router.url === '/auth/home';   
-
-  //   this.router.events.subscribe(() => {
-  //     this.isLogin = this.router.url === '/auth/login'; 
-
-  // });
-
-  //   this.selectedSucursal = localStorage.getItem('selectedSucursal') 
-  //   ? JSON.parse(localStorage.getItem('selectedSucursal') as string) 
-  //   : null;
-    
-  // }   
+   
 
   ngOnInit() {
     //  Escuchar cambios en el usuario y actualizar automáticamente
@@ -64,7 +48,8 @@ export class HeaderComponent {
     this.isHome = this.router.url === '/auth/home';   
 
     this.router.events.subscribe(() => {
-      this.isLogin = this.router.url === '/auth/login'; 
+      this.isLogin = this.router.url === '/auth/login';
+      this.cdRef.detectChanges();
     });
 
     // Mantener la sucursal seleccionada si ya había una en localStorage
@@ -113,14 +98,12 @@ export class HeaderComponent {
   cerrarSesion() {
     localStorage.removeItem('usuario');
     localStorage.removeItem('nit');
-    localStorage.removeItem('selectedSucursal');
-    
+    localStorage.removeItem('selectedSucursal');    
     this.usuario = {}; 
     this.sucursales = [];
     this.selectedSucursal = null;
     this.asesor = '';
     this.cupo = 0;
-
     this.router.navigate(['/auth/login']);
     this.cdRef.detectChanges(); 
 }
