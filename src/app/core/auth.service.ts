@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { fromEvent, interval, map, Observable, of, Subscription, catchError, BehaviorSubject } from 'rxjs';
+import { fromEvent, interval, map, Observable, of, Subscription, catchError, BehaviorSubject, tap, throwError } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environments.prod';
@@ -20,9 +20,10 @@ export class AuthService {
 
   private endpoints = {
     login: '/login.php',
-    sucursal: '/cliente_sucursal.php',
+    sucursal: '/sucursal_cupo.php',
+    // sucursal: '/cliente_sucursal.php',
     refresh: '/proteger.php',
-    cupo: '/cupo_cliente.php'
+   // cupo: '/cupo_cliente.php'
   };
 
   private inactivityTime = 10 * 60 * 1000;
@@ -40,10 +41,6 @@ export class AuthService {
     return `${this.baseUrl}${endpoint}`;
   }
 
-  // login(usuario: string, clave: string): Observable<any>{
-  //   return this.http.post(this.getUrl(this.endpoints.login), {usuario, clave})
-  // }
-
   login(usuario: string, clave: string): Observable<{ success: boolean; usuario: Usuario; token: string }> {
     return this.http.post<{ success: boolean; usuario: Usuario; token: string }>(
       this.getUrl(this.endpoints.login), 
@@ -53,20 +50,16 @@ export class AuthService {
 
   getSucursales(nit: string): Observable<Sucursal[]> {
     return this.http.post<Sucursal[]>(this.getUrl(this.endpoints.sucursal), { nit });
-  }
-
-  // getSucursales(nit: string): Observable<any>{
-  //   return this.http.post(this.getUrl(this.endpoints.sucursal),{nit})
-
-  // }
+  } 
 
   obtenerUsuarioDesdeStorage() {
     const usuarioStorage = localStorage.getItem('usuario');
     if (usuarioStorage) {
         const usuario = JSON.parse(usuarioStorage);
         this.usuarioSubject.next(usuario); 
-        this.getSucursales(usuario.cedula.toString()).subscribe(sucursales => {
-            this.sucursalesSubject.next(sucursales); //  Notifica a los componentes
+        this.getSucursales(usuario.cedula.toString()).subscribe(sucursales => {             
+            this.sucursalesSubject.next(sucursales);
+            console.log('surcursales', this.sucursalesSubject) //  Notifica a los componentes
         });
     }
 }
@@ -195,12 +188,6 @@ export class AuthService {
     this.stopTokenValidation();
     localStorage.clear();
     this.router.navigate(['/login']);
-  }
-
-  obtenerCupo(id: string): Observable<any> {
-    console.log('entro a obtener cupu')
-    return this.http.post(this.getUrl(this.endpoints.cupo), { id }, {
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
+  } 
+   
 }

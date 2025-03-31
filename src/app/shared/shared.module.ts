@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormsModule } from '@angular/forms';
+import { SharedService } from './shared.service';
 
 @NgModule({
   declarations: [
@@ -15,8 +16,8 @@ import { FormsModule } from '@angular/forms';
   ],
   exports: [
     HeaderComponent,
-    FooterComponent,
-    
-  ]
+    FooterComponent,    
+  ],
+  providers: [SharedService]
 })
 export class SharedModule { }

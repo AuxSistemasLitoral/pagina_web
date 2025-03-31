@@ -1,11 +1,18 @@
 
 <div class="container">
-
-    <div class="card" routerLink="/pedidos">
+    
+        <div class="card" (click)="irAPedidos()">
         <h3>Pedidos</h3>
         <img src="../../../../assets/icons/shopping-cart.jpg" alt="Pedidos">
         <p>Revisa y administra los pedidos realizados.</p>
-    </div>   
+      </div>
+      
+
+    <!-- <div class="card" routerLink="/pedidos" *ngIf="dias === 1">
+        <h3>Pedidos</h3>
+        <img src="../../../../assets/icons/shopping-cart.jpg" alt="Pedidos">
+        <p>Revisa y administra los pedidos realizados.</p>
+    </div>    -->
 
     <div class="card" routerLink="/cartera">
         <h3>Cartera</h3>

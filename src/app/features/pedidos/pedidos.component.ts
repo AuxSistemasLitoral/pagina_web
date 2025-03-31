@@ -1,10 +1,12 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2 } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2 } from '@angular/core';
 import { PedidoService } from '../../core/pedido.service';
 import { SharedDataService } from 'src/app/core/shared-data.service';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { Producto } from 'src/app/models/producto';
 import { Proveedor } from 'src/app/models/proveedor';
 import Swal from 'sweetalert2';
+import { SharedService } from 'src/app/shared/shared.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pedidos',
@@ -21,41 +23,54 @@ export class PedidosComponent implements OnInit, OnDestroy {
   usuario: string = '';
   listaprecio: string = '';
   proveedoresDuplicados: Proveedor[] = [];
+ // dias: number = 0;
   private dataSubscription!: Subscription;
-
+  private diasSubscription!: Subscription;
+  //mostrandoMensajeCartera: boolean = false;
+  //modalAbierto: boolean = false;
   isDragging = false;
   startX = 0;
   scrollLeft = 0;
   animationRunning = true;
-  scrollSpeed = 0.3; // Velocidad del scroll automático
+  scrollSpeed = 0.3; 
   interval: any;
+ 
 
   constructor(
     private pedidoService: PedidoService,
     private sharedDataService: SharedDataService,
-    private renderer: Renderer2
-  ) { }
-
-  ngOnInit(): void {
-    this.obtenerProveedores();
+    private renderer: Renderer2,
+    private sharedService: SharedService,
+    private router: Router,
+  ) { }  
+      
+  cargarDatos(): void {  
     this.dataSubscription = this.sharedDataService.getDataReadyObservable().subscribe((ready) => {
       if (ready) {
         this.usuario = this.sharedDataService.getUsuario();
-        this.listaprecio = this.sharedDataService.getListaPrecio();
-        console.log('Usuario en pedidos:', this.usuario);
-        console.log('Lista de precios en pedidos:', this.listaprecio);
-        if (!this.listaprecio) {
-          console.error("⚠️ Error: listaPrecio no tiene valor en ngOnInit");
-        }
+        this.listaprecio = this.sharedDataService.getListaPrecio();  
+        this.obtenerProveedores();
         this.obtenerProductos();
+      } else {
+        console.warn('⏳ Datos aún no listos, esperando...');
       }
     });
+  } 
+  
+  
+  ngOnInit(): void {   
+      this.obtenerProveedores();
+        this.dataSubscription = this.sharedDataService.getDataReadyObservable().subscribe((ready) => {
+          if (ready) {
+            this.usuario = this.sharedDataService.getUsuario();
+            this.listaprecio = this.sharedDataService.getListaPrecio();
+            this.obtenerProductos();
+           }          
+        });
   }
 
   ngAfterViewInit() {
-    const container = this.scrollContainer.nativeElement;
-
-    // Iniciar desplazamiento automático
+    const container = this.scrollContainer.nativeElement;  
     this.startAutoScroll();
 
     // Evento de mouse para arrastrar
@@ -114,39 +129,37 @@ export class PedidosComponent implements OnInit, OnDestroy {
     this.interval = null;
   }
 
-
   ngOnDestroy(): void {
-    this.dataSubscription.unsubscribe();
+    if (this.diasSubscription) this.diasSubscription.unsubscribe();
+    if (this.dataSubscription) this.dataSubscription.unsubscribe();
   }
 
   obtenerProductos() {
     if (this.usuario && this.listaprecio) {
-      this.cargando = true;
-      console.log('Llamando a getProducts con:', this.usuario, this.listaprecio);
-
-      this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
-        (response: any[]) => {
-          this.productos = response.map(producto => ({
-            ...producto,
-            proveedor: producto.proveedor || 'Desconocido',
-            descuento: Number(producto.descuento) || 0,
-            lista_precio: Array.isArray(producto.lista_precio)
-              ? producto.lista_precio
-              : JSON.parse(producto.lista_precio || '[]')
-          }));
-          this.productos.sort((a, b) => b.descuento - a.descuento);
-          console.log('Productos procesados:', this.productos);
-          this.cargando = false;
-        },
-        (error) => {
-          console.error('Error obteniendo los productos', error);
-          this.cargando = false;
-        }
-      );
+        this.cargando = true;
+        this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
+            (response: any[]) => {
+                this.productos = response.map(producto => ({
+                    ...producto,
+                    proveedor: producto.proveedor || 'Desconocido',
+                    descuento: Number(producto.descuento) || 0,
+                    lista_precio: Array.isArray(producto.lista_precio)
+                        ? producto.lista_precio
+                        : JSON.parse(producto.lista_precio || '[]')
+                }));
+                this.productos.sort((a, b) => b.descuento - a.descuento);
+                this.cargando = false;
+            },
+            (error) => {
+                console.error('Error obteniendo los productos', error);
+               // this.cargando = false;
+            }
+        );
     } else {
-      console.warn('Para visualizar los productos debes elegir una sucursal');
+        console.warn('Para visualizar los productos debes elegir una sucursal');
     }
-  }
+}
+
 
   obtenerProveedores() {
     this.pedidoService.getProveedores().subscribe({
@@ -172,10 +185,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
       });
       return;
     }
-
-    console.log(`Filtrando productos para proveedor: ${proveedor} y listaPrecio: ${this.listaprecio}`);
-
-    this.cargando = true;
+   // console.log(`Filtrando productos para proveedor: ${proveedor} y listaPrecio: ${this.listaprecio}`);
 
     this.pedidoService.getProductosProveedor(proveedor, this.listaprecio, this.usuario).subscribe(
       (productos) => {
@@ -199,7 +209,6 @@ export class PedidosComponent implements OnInit, OnDestroy {
             ? JSON.parse(producto.lista_precio)
             : producto.lista_precio
         }));
-
         this.cargando = false;
       },
       (error) => {
@@ -209,11 +218,43 @@ export class PedidosComponent implements OnInit, OnDestroy {
     );
   }
 
-  imagenError(event: any, proveedorNombre: string) {
-    event.target.src = 'assets/prov/default.png';
-    console.warn(`Imagen no encontrada para ${proveedorNombre}, usando imagen por defecto.`);
-  }
+getProveedorImageUrl(proveedorNombre: string): string {
+  if (!proveedorNombre) return 'assets/prov/default.png';
+  const nombreFormateado = proveedorNombre
+    .toUpperCase()
+    .replace(/\s+/g, '_')
+    .replace(/[^A-Z0-9_]/g, '');    
+  return `assets/prov/${nombreFormateado}.png`;
+}
 
+getProductImageUrl(referencia: string): string { 
+  return `assets/img/${referencia}.png`;
+}
+
+handleProductImageError(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.onerror = null; 
+  img.src = 'assets/img/default.png';
+}
+
+
+trackByProveedor(index: number, proveedor: Proveedor): string {
+  return proveedor.proveedor || index.toString();
+}
+
+  imagenError(event: Event, proveedorNombre: string) {
+    const imgElement = event.target as HTMLImageElement;    
+    
+    imgElement.onerror = null; 
+    imgElement.src = 'assets/prov/default.png';
+    if (!this.erroresImagenReportados.has(proveedorNombre)) {
+      console.warn(`Imagen no encontrada para ${proveedorNombre}, usando imagen por defecto.`);
+      this.erroresImagenReportados.add(proveedorNombre);
+    }
+  } 
+ 
+  private erroresImagenReportados = new Set<string>();
+  
   agregarAlCarrito(producto: Producto) {
     if (!producto.cantidad || producto.cantidad <= 0) {
       alert("Por favor, ingresa una cantidad válida.");
@@ -223,7 +264,5 @@ export class PedidosComponent implements OnInit, OnDestroy {
     alert(`Se agregó ${producto.cantidad} unidad(es) de ${producto.nombre} al carrito.`);
   }
 
-
-
-
 }
+

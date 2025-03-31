@@ -12,10 +12,10 @@
         <div class="user-details">
             <div class="user-header">
                 <div class="user-header" >{{ usuario.nombre }}</div>
-                <div class="user-header" *ngIf="!isLogin">
-                    <i>TU CUPO DISPONIBLE ES: </i>
-                    <span>{{ cupo | currency:'':'symbol':'1.0-0' }}</span>
-                </div>
+                <div class="user-header" *ngIf="!isLogin && selectedSucursal && disponible !== null">
+                    <i>TU DISPONIBLE ES: </i>
+                    <span>{{ disponible | currency:'':'symbol':'1.0-0' }}</span>
+                </div>                
             </div>
             <div class="badges-container" *ngIf="!isHome">
                 <div class="user-name" *ngIf="asesor">
@@ -24,27 +24,12 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div> 
     
-    <!-- <div class="actions-section" [ngClass]="{ 'hidden': isLogin }">
+    <div class="actions-section" [ngClass]="{ 'hidden': isLogin }" >
         <ng-container *ngIf="!isHome">
             <div class="branch-selector">
-                <select id="sucursal" (change)="onSucursalChange($event)">
-                    <option value="" disabled selected>Seleccionar sucursal</option>
-                    <option *ngFor="let sucursal of sucursales" [value]="sucursal.sucursal">
-                        {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
-                    </option>
-                </select>
-            </div>
-            
-        </ng-container>
-        <button *ngIf="!isLogin" (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
-    </div> -->
-
-    <div class="actions-section" [ngClass]="{ 'hidden': isLogin }">
-        <ng-container *ngIf="!isHome">
-            <div class="branch-selector">
-                <select id="sucursal" (change)="onSucursalChange($event)" [(ngModel)]="selectedSucursal">
+                <select id="sucursal" (change)="onSucursalChange()" [(ngModel)]="selectedSucursal">
                     <option [ngValue]="null" disabled>Seleccionar sucursal</option>
                     <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucursal">
                         {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
@@ -59,3 +44,5 @@
 
     
 </header>
+
+

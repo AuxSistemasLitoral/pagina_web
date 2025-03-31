@@ -1,43 +1,41 @@
 
-
 <div #scrollContainer class="proveedores-container">
   <div class="proveedores-scroll">
-    <!-- Lista original -->
+    <!-- Usa ngFor solo una vez con el trackBy para mejor rendimiento -->
     <div class="proveedor-item"
-         *ngFor="let proveedor of proveedoresDuplicados"
+         *ngFor="let proveedor of proveedoresDuplicados; trackBy: trackByProveedor"
          (click)="filtrarPorProveedor(proveedor.proveedor)">
       <img 
-        [src]="'assets/prov/' + (proveedor.proveedor ? proveedor.proveedor.toUpperCase() : 'default') + '.png'" 
+        [src]="getProveedorImageUrl(proveedor.proveedor)" 
         [alt]="proveedor.proveedor || 'Proveedor sin nombre'"
-        (error)="imagenError($event, proveedor.proveedor)">
-      <span>{{ proveedor.proveedor }}</span>
-    </div>
-
-    <!-- Clon de los proveedores para el loop infinito -->
-    <div class="proveedor-item"
-         *ngFor="let proveedor of proveedoresDuplicados"
-         (click)="filtrarPorProveedor(proveedor.proveedor)">
-      <img 
-        [src]="'assets/prov/' + (proveedor.proveedor ? proveedor.proveedor.toUpperCase() : 'default') + '.png'" 
-        [alt]="proveedor.proveedor || 'Proveedor sin nombre'"
-        (error)="imagenError($event, proveedor.proveedor)">
+        (error)="imagenError($event, proveedor.proveedor)"
+        loading="lazy"> <!-- Mejora de performance -->
       <span>{{ proveedor.proveedor }}</span>
     </div>
   </div>
 </div>
 
 
-
-
-<div *ngIf="cargando" class="loader-container">
-  <div class="spinner"></div>
-  <p>Cargando productos...</p>
+<div *ngIf="cargando" >
+  <span class="visually-hidden">Cargando...</span>
 </div>
+<!-- <div *ngIf="mostrandoMensajeCartera" class="modal-backdrop"> -->
+  <!-- <div  class="modal-backdrop">
+  <div class="modal-content">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Estamos validando la cartera y la disponibilidad de cupo. Por favor espera...</p>
+  </div>
+</div> -->
+
 
 <div class="productos-container">
-  <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">
-    <img [src]="'assets/img/' + producto.referencia + '.png'" [alt]="'Imagen de ' + producto.nombre"
-      class="producto-imagen" onerror="this.src='assets/img/default.png'">
+  <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">   
+     <img [src]="getProductImageUrl(producto.referencia)"    
+     [alt]="'Imagen de ' + producto.nombre"
+     class="producto-imagen"
+     (error)="handleProductImageError($event)">
     <h3>{{ producto.nombre }}</h3>
     <p><strong>Referencia:</strong> {{ producto.referencia }}</p>
     <p><strong>Unidades por empaque:</strong> {{ producto.factor }}</p>
