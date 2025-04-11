@@ -22,7 +22,7 @@
 
 .app-logo {
     width: 40px;
-    height: 40px;   
+    height: 40px;
     border-radius: 50px;
     display: flex;
     align-items: center;
@@ -39,11 +39,17 @@
 .user-info-section {
     flex: 1;
     margin: 0 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .user-details {
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .user-name {
@@ -54,18 +60,18 @@
 }
 
 .user-header {
-    display: flex;        /* Alinea los elementos en la misma línea */
-    align-items: center;  /* Asegura que estén alineados verticalmente */
-    gap: 15px;           /* Espacio entre el nombre del usuario y el cupo */
-    white-space: nowrap; /* Evita que el cupo pase a la siguiente línea */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap;
     color: rgb(40, 167, 69);
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
+    justify-content: center;
 }
 
-
-.badges-container {
+.badges-container { 
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
@@ -84,16 +90,15 @@
     border-radius: 20px;
     padding: 5px 10px;
     border: 1px solid rgb(40, 167, 69);
-    width: 100%;  /* Ocupa todo el espacio disponible */
-    min-width: 250px;  /* Evita que sea demasiado pequeño */
-    max-width: 400px;  /* Evita que sea demasiado grande */
-    white-space: nowrap;  /* Evita que el texto salte de línea */
+    width: 100%;
+    min-width: 250px;
+    max-width: 400px;
+    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;  /* Agrega "..." si el texto es muy largo */
+    text-overflow: ellipsis;
 }
 
-
-.location-icon {
+.location-icon { 
     margin-right: 5px;
     font-size: 14px;
 }
@@ -138,56 +143,69 @@
 }
 
 
-@media screen and (max-width: 768px) {
-    .header {
-        height: auto;
-        flex-direction: column;
-        padding: 10px;        
-    }
-    
-    .brand-section {
-        width: 100%;
-        justify-content: space-between;
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
-    
-    .divider {
-        display: none;
-    }
-    
-    .user-info-section {
-        width: 100%;
-        margin: 10px 0;
-        font-size: 4;
-    }  
-   
-    
-    .badges-container {
-        margin-top: 8px;
-    }
-    
-    .actions-section {
+@media screen and (max-width: 768px) { 
+    .header { 
+        height: auto; 
         flex-direction: column; 
-        align-items: stretch;
-        gap: 10px;
-    }
+        padding: 10px; 
+        position: relative;
+    } 
 
-    .branch-selector {
+    .brand-section { 
         width: 100%; 
-    }
+        justify-content: space-between; 
+        margin-right: 0; 
+        margin-bottom: 10px; 
+    } 
 
-    .branch-selector select {
+    .divider { 
+        display: none; 
+    } 
+
+    .user-info-section { 
         width: 100%; 
+        margin: 10px 0; 
+        font-size: 4; 
     }
-}
 
-@media screen and (max-width: 480px) { 
+    .user-header {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .badges-container { 
+        margin-top: 8px; 
+    } 
+
+    .actions-section { 
+        flex-direction: column;
+        align-items: stretch; 
+        gap: 10px; 
+    } 
+ 
+    .branch-selector { 
+        width: 100%;  
+    } 
+ 
+    .branch-selector select { 
+        width: 100%;
+    } 
     
+    .logout-button {
+        align-self: center;
+        margin-top: 10px;
+        position: absolute;
+        top: 10px;
+        right: 15px;
+    }
+} 
+ 
+@media screen and (max-width: 480px) {
     .branch-selector {
         padding: 3px 8px;
     }
-    
+
     .branch-selector select {
         font-size: 12px;
         max-width: 120px;
@@ -195,7 +213,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     .logout-button {
         width: 36px;
         height: 36px;
@@ -203,14 +221,13 @@
     }
 }
 
-
-@media screen and (max-width: 480px) { 
+@media screen and (max-width: 480px) {
     .actions-section {
         gap: 5px;
     }
 
     .branch-selector select {
-        font-size: 14px;  /* Reduce el tamaño de la fuente en móviles */
+        font-size: 14px;
         min-width: auto;
     }
 }

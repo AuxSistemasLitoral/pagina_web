@@ -5,9 +5,9 @@
     padding: 16px;
     width: 100%;
     box-sizing: border-box;
-    position: relative; /* Antes estaba fixed */
-    bottom: 0;
-    margin-top: auto; /* Empuja el footer hacia abajo si hay poco contenido */
+    position: relative;
+    bottom: 0; 
+    margin-top: auto;
 }
 
 .footer-container {
@@ -17,11 +17,11 @@
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 10px; /* Añadido padding */
+    padding: 10px;
 }
 
 .footer-left img {
-    width: 100px; 
+    width: 100px;
     height: auto;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .footer-center a img {
-    width: 30px; 
+    width: 30px;
     height: 30px;
     transition: transform 0.3s ease-in-out;
 }
@@ -51,7 +51,7 @@
 }
 
 .social-icon {
-    width: 32px; 
+    width: 32px;
     height: 32px;
     transition: transform 0.3s ease, filter 0.3s ease;
 }
@@ -61,8 +61,12 @@ body, html {
     margin: 0;
 }
 
-.main-content{
+.main-content {
     flex: 1;
+}
+
+.footer-left, .footer-center, .footer-right {
+    margin: 0 15px;
 }
 
 @media (max-width: 768px) {
@@ -70,7 +74,11 @@ body, html {
         flex-direction: column;
         text-align: center;
         gap: 10px;
-        padding: 15px; /* Ajuste de padding */
+        padding: 15px;
+    }
+
+    .footer-left, .footer-center, .footer-right {
+        margin: 10px 0;
     }
 
     .footer-left, .footer-center, .footer-right {
@@ -102,7 +110,11 @@ body, html {
 
 @media (max-width: 480px) {
     .footer-container {
-        padding: 10px; /* Ajuste de padding */
+        padding: 10px;
+    }
+
+    .footer-left, .footer-center, .footer-right {
+        margin: 8px 0;
     }
 
     .footer-left img {
@@ -124,6 +136,12 @@ body, html {
     }
 }
 
+@media (max-width: 996px) and (min-width: 701px) {
+    .footer-right p {
+        font-size: 10px;
+    }
+}
+
 @media (min-width: 996px) {
     .footer {
         padding: 12px;
@@ -132,7 +150,7 @@ body, html {
 
     .footer-container {
         gap: 20px;
-        padding: 20px; /* Ajuste de padding */
+        padding: 20px;
     }
 
     .footer-left img {
