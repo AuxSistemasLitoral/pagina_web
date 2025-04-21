@@ -32,7 +32,7 @@
                 <select id="sucursal" (change)="onSucursalChange()" [(ngModel)]="selectedSucursal">
                     <option [ngValue]="null" disabled>Seleccionar sucursal</option>
                     <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucursal">
-                        {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
+                        {{ sucursal.sucursal }} - {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
                     </option>
                 </select>
             </div>
