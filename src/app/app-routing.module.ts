@@ -21,7 +21,7 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DiasGuard } from './core/dias.guard'; 
+//import { DiasGuard } from './core/dias.guard'; // Asegúrate de que la ruta sea correcta
 
 const routes: Routes = [ 
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },  
@@ -29,7 +29,7 @@ const routes: Routes = [
   { 
     path: 'pedidos', 
     loadChildren: () => import('./features/pedidos/pedidos.module').then(m => m.PedidosModule), 
-    canActivate: [DiasGuard] 
+    //canActivate: [DiasGuard] // Protege la carga del módulo
   },
   { path: 'cartera', loadChildren: () => import('./features/cartera/cartera.module').then(m => m.CarteraModule) },
   { path: 'informes', loadChildren: () => import('./features/informes/informes.module').then(m => m.InformesModule) },

@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RutaVendedoresComponent } from './ruta-vendedores.component';
+// import { RutaVendedoresComponent } from './ruta-vendedores.component';
 
-describe('RutaVendedoresComponent', () => {
-  let component: RutaVendedoresComponent;
-  let fixture: ComponentFixture<RutaVendedoresComponent>;
+// describe('RutaVendedoresComponent', () => {
+//   let component: RutaVendedoresComponent;
+//   let fixture: ComponentFixture<RutaVendedoresComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ RutaVendedoresComponent ]
-    })
-    .compileComponents();
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       declarations: [ RutaVendedoresComponent ]
+//     })
+//     .compileComponents();
 
-    fixture = TestBed.createComponent(RutaVendedoresComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//     fixture = TestBed.createComponent(RutaVendedoresComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

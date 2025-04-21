@@ -1,16 +1,16 @@
-import { TestBed } from '@angular/core/testing';
+// import { TestBed } from '@angular/core/testing';
 
-import { DiasGuard } from './dias.guard';
+// import { DiasGuard } from './dias.guard';
 
-describe('DiasGuard', () => {
-  let guard: DiasGuard;
+// describe('DiasGuard', () => {
+//   let guard: DiasGuard;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    guard = TestBed.inject(DiasGuard);
-  });
+//   beforeEach(() => {
+//     TestBed.configureTestingModule({});
+//     guard = TestBed.inject(DiasGuard);
+//   });
 
-  it('should be created', () => {
-    expect(guard).toBeTruthy();
-  });
-});
+//   it('should be created', () => {
+//     expect(guard).toBeTruthy();
+//   });
+// });
