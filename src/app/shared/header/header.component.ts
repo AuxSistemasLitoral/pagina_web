@@ -4,6 +4,8 @@ import { AuthService } from 'src/app/core/auth.service';
 import { SharedDataService } from '../../core/shared-data.service';
 import { environment } from 'src/environments/environments.prod';
 import { SharedService } from '../shared.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-header',
@@ -23,15 +25,19 @@ export class HeaderComponent {
   id: string = '';
   cupo: number | null = null;
   disponible: number = 0;
+
+
   constructor(
     private router: Router,
     private authService: AuthService,
     private sharedDataService: SharedDataService,
     private cdRef: ChangeDetectorRef,
-    private sharedService: SharedService) { }
+    private sharedService: SharedService,
+    private dialog: MatDialog
+  ) { }
 
 
-  ngOnInit() { 
+  ngOnInit() {
     //  Escuchar cambios en el usuario y actualizar automáticamente
     this.authService.usuario$.subscribe(usuario => {
       this.usuario = usuario;
@@ -57,6 +63,34 @@ export class HeaderComponent {
     this.selectedSucursal = localStorage.getItem('selectedSucursal')
       ? JSON.parse(localStorage.getItem('selectedSucursal') as string)
       : null;
+
+    this.authService.disponible$.subscribe(valor => {
+      this.disponible = valor;
+      console.log('Disponible en HeaderComponent:', valor);
+    });
+
+    this.authService.dias$.subscribe(dias => {
+      console.log('Cambio en días:', dias);
+      if (dias === 0) {
+        this.authService.mostrarDialogo('NO PUEDES REALIZAR PEDIDOS EN ESTA SUCURSAL PORQUE LA CARTERA NO ESTA AL DÍA.');
+        this.router.navigate(['/auth/home']);
+      }
+    });
+
+
+    this.authService.mostrarDialogo$.subscribe(mensaje => {
+      this.dialog.open(DialogComponent, {
+        data: { message: mensaje },
+        width: '400px',
+        maxWidth: '90vw',
+        position: {
+          top: '30vh',  
+        },
+        panelClass: 'alert-dialog-container',
+        disableClose: true,
+        autoFocus: true
+      });
+    });
   }
 
   obtenerSucursales() {
@@ -99,6 +133,7 @@ export class HeaderComponent {
     localStorage.removeItem('usuario');
     localStorage.removeItem('nit');
     localStorage.removeItem('selectedSucursal');
+    localStorage.removeItem('token');
     this.usuario = {};
     this.sucursales = [];
     this.selectedSucursal = null;
@@ -109,24 +144,22 @@ export class HeaderComponent {
   }
 
 
-  onSucursalChange() {   
-
+  onSucursalChange() {
     if (this.selectedSucursal) {
       const selectedSucursalData = this.sucursales.find(suc => suc.sucursal === this.selectedSucursal);
 
       if (selectedSucursalData) {
         this.asesor = selectedSucursalData.asesor;
         this.id = selectedSucursalData.id_cliente;
-
         this.sharedDataService.setUsuario(selectedSucursalData.usuario);
         this.sharedDataService.setListaPrecio(selectedSucursalData.listaprecio);
-        console.log('Sucursal seleccionada:', this.selectedSucursal);
-        console.log('Vendedor seleccionado:', this.asesor);
+        this.authService.setDisponible(selectedSucursalData.disponible);
+        this.authService.setDias(selectedSucursalData.dias);
         localStorage.setItem('selectedSucursal', JSON.stringify(this.selectedSucursal));
       }
     }
   }
-  
+
   goToHome() {
     const usuario = localStorage.getItem('usuario');
     if (usuario) {

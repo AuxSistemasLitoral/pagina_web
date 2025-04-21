@@ -19,25 +19,33 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.visually-hidden{
+  color: #000000;
+  font-size: 1.2em;
+  font-weight: bold;
 
+}
 
-/* Spinner de carga */
-.loader-container {
+.loading-container {
+  background-color: #05983d;
+  border-radius: 50px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  margin: 20px 0;
+  align-items: center;
+  box-shadow: 1px 10px 6px rgba(176, 239, 4, 0.1);
+  padding: 10px;
+  animation: fadeIn 1s ease-in-out;
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
+
 
 .proveedores-container {
   width: 100%;
@@ -54,14 +62,16 @@
   width: max-content;
   transition: transform 0.2s ease-out;
   will-change: transform;
-  /* animation: scrollProveedores 60s linear infinite;*/
+  /* animation: scrollProveedores 60s linear infinite;  */
+}
+.proveedores-scroll.animar {
+  animation: scrollProveedores 20s linear infinite;
 }
 
 .proveedores-container:active {
   cursor: grabbing;
 }
 
-/* ANIMACIÓN PARA DESPLAZAMIENTO AUTOMÁTICO */
 @keyframes scrollProveedores {
   from {
     transform: translateX(0%);
@@ -72,12 +82,10 @@
   }
 }
 
-/* DETENER LA ANIMACIÓN CUANDO EL USUARIO INTERACTÚA */
 .proveedores-container:active .proveedores-scroll,
 .proveedores-container:hover .proveedores-scroll {
   animation-play-state: paused;
 }
-
 
 
 .proveedor-item {
@@ -166,12 +174,6 @@
 
 }
 
-.productos-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
 .producto-card {
   width: 250px;
   border: 1px solid #05983d;
@@ -205,16 +207,14 @@
 
 .producto-imagen {
   width: 100%;
-  /* Ocupa todo el ancho del contenedor */
   max-height: 150px;
   object-fit: contain;
-  /* La imagen se ajusta sin recortarse */
   display: block;
   margin: 0 auto;
   background-color: white;
 }
 
-/* Estilo para el contenedor de cantidad y botón */
+
 .cantidad-container {
   display: flex;
   justify-content: space-between;

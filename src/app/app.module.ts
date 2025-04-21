@@ -9,6 +9,8 @@ import { RouterModule } from '@angular/router';
 import { RutaVendedoresComponent } from './features/ruta-vendedores/ruta-vendedores.component';
 import { SeguimientoPedidosComponent } from './features/seguimiento-pedidos/seguimiento-pedidos.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { MatCardModule } from '@angular/material/card';
     HttpClientModule,
     SharedModule,
     RouterModule,
-    MatCardModule
+    MatCardModule,
+    MatDialogModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

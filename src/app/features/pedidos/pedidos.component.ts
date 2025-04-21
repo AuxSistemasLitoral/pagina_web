@@ -5,8 +5,6 @@ import { Subscription, switchMap } from 'rxjs';
 import { Producto } from 'src/app/models/producto';
 import { Proveedor } from 'src/app/models/proveedor';
 import Swal from 'sweetalert2';
-import { SharedService } from 'src/app/shared/shared.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pedidos',
@@ -23,25 +21,20 @@ export class PedidosComponent implements OnInit, OnDestroy {
   usuario: string = '';
   listaprecio: string = '';
   proveedoresDuplicados: Proveedor[] = [];
- // dias: number = 0;
   private dataSubscription!: Subscription;
   private diasSubscription!: Subscription;
-  //mostrandoMensajeCartera: boolean = false;
-  //modalAbierto: boolean = false;
   isDragging = false;
   startX = 0;
   scrollLeft = 0;
   animationRunning = true;
   scrollSpeed = 0.3; 
   interval: any;
- 
+  animarProveedores = true; 
 
   constructor(
     private pedidoService: PedidoService,
     private sharedDataService: SharedDataService,
     private renderer: Renderer2,
-    private sharedService: SharedService,
-    private router: Router,
   ) { }  
       
   cargarDatos(): void {  
@@ -73,46 +66,44 @@ export class PedidosComponent implements OnInit, OnDestroy {
     const container = this.scrollContainer.nativeElement;  
     this.startAutoScroll();
 
-    // Evento de mouse para arrastrar
     this.renderer.listen(container, 'mousedown', (e: MouseEvent) => {
       this.isDragging = true;
       container.classList.add('active');
       this.startX = e.pageX - container.offsetLeft;
       this.scrollLeft = container.scrollLeft;
-      this.stopAutoScroll(); // Pausar la animación
+      this.stopAutoScroll();
     });
 
     this.renderer.listen(container, 'mouseup', () => {
       this.isDragging = false;
       container.classList.remove('active');
-      this.startAutoScroll(); // Reanudar la animación
+      this.startAutoScroll();
     });
 
     this.renderer.listen(container, 'mouseleave', () => {
       this.isDragging = false;
-      this.startAutoScroll(); // Reanudar la animación
+      this.startAutoScroll();
     });
 
     this.renderer.listen(container, 'mousemove', (e: MouseEvent) => {
       if (!this.isDragging) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
-      const walk = (x - this.startX) * 2; // Velocidad de arrastre
+      const walk = (x - this.startX) * 2; 
       container.scrollLeft = this.scrollLeft - walk;
     });
-
-    // Evento para reiniciar el scroll al llegar al final
+    
     this.renderer.listen(container, 'scroll', () => {
-      const scrollMax = container.scrollWidth / 2; // Límite antes de reiniciar
+      const scrollMax = container.scrollWidth / 2;
       if (container.scrollLeft >= scrollMax) {
-        container.scrollLeft = 0; // Reiniciar al inicio sin que se note
+        container.scrollLeft = 0;
       }
     });
   }
 
-  // Inicia el desplazamiento automático
+ 
   startAutoScroll() {
-    if (this.interval) return; // Evita duplicar intervalos
+    if (this.interval) return; 
     const container = this.scrollContainer.nativeElement;
     this.interval = setInterval(() => {
       container.scrollLeft += this.scrollSpeed;
@@ -122,8 +113,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
       }
     }, 30);
   }
-
-  // Detiene el desplazamiento automático
+ 
   stopAutoScroll() {
     clearInterval(this.interval);
     this.interval = null;
@@ -135,6 +125,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
   }
 
   obtenerProductos() {
+    this.animarProveedores = false;
     if (this.usuario && this.listaprecio) {
         this.cargando = true;
         this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
@@ -148,13 +139,27 @@ export class PedidosComponent implements OnInit, OnDestroy {
                         : JSON.parse(producto.lista_precio || '[]')
                 }));
                 this.productos.sort((a, b) => b.descuento - a.descuento);
+                if (this.productos.length === 0) {
+                  Swal.fire({
+                    icon: 'info',
+                    title: 'Sin productos',
+                    text: 'No hay productos disponibles en esta sucursal.',
+                    confirmButtonColor: '#05983d'
+                  });
+                }
                 this.cargando = false;
             },
             (error) => {
-                console.error('Error obteniendo los productos', error);
-               // this.cargando = false;
+              this.cargando = false;
+              console.error('Error obteniendo los productos', error);
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al obtener los productos.',
+                confirmButtonColor: '#e65c00'
+              });
             }
-        );
+          );
     } else {
         console.warn('Para visualizar los productos debes elegir una sucursal');
     }
@@ -162,6 +167,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
 
 
   obtenerProveedores() {
+    this.animarProveedores = false;
     this.pedidoService.getProveedores().subscribe({
       next: (data) => {
         this.proveedores = data;
@@ -185,7 +191,6 @@ export class PedidosComponent implements OnInit, OnDestroy {
       });
       return;
     }
-   // console.log(`Filtrando productos para proveedor: ${proveedor} y listaPrecio: ${this.listaprecio}`);
 
     this.pedidoService.getProductosProveedor(proveedor, this.listaprecio, this.usuario).subscribe(
       (productos) => {

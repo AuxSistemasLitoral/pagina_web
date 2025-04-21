@@ -1,7 +1,7 @@
 
 <div class="container">
     
-        <div class="card" (click)="irAPedidos()">
+    <div *ngIf="dias === 1" class="card" (click)="irAPedidos()">
         <h3>Pedidos</h3>
         <img src="../../../../assets/icons/shopping-cart.jpg" alt="Pedidos">
         <p>Revisa y administra los pedidos realizados.</p>
@@ -17,7 +17,7 @@
     <div class="card" routerLink="/cartera">
         <h3>Cartera</h3>
         <img src="../../../../assets/icons/credit-card.png" alt="Cartera">        
-        <p>Consulta tu crédito aprobado y gestiona la cartera.</p>
+        <p>Realiza pagos, consulta tu crédito aprobado y gestiona la cartera.</p>
     </div>    
 
     <div class="card" routerLink="/seguimiento-pedidos">

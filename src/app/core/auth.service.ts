@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { fromEvent, interval, map, Observable, of, Subscription, catchError, BehaviorSubject, tap, throwError } from 'rxjs';
+import { fromEvent, interval, map, Observable, of, Subscription, catchError, BehaviorSubject, Subject } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environments.prod';
@@ -10,6 +10,8 @@ import { Sucursal } from '../models/sucursal';
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthService {
   private baseUrl = environment.apiBaseUrl;
   private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
@@ -21,9 +23,7 @@ export class AuthService {
   private endpoints = {
     login: '/login.php',
     sucursal: '/sucursal_cupo.php',
-    // sucursal: '/cliente_sucursal.php',
     refresh: '/proteger.php',
-   // cupo: '/cupo_cliente.php'
   };
 
   private inactivityTime = 10 * 60 * 1000;
@@ -31,6 +31,30 @@ export class AuthService {
   private tokenCheckInterval: number = 60000; // Intervalo para verificar el token (1 minuto)
   private tokenValidationSubscription: Subscription | undefined;
 
+  private disponibleSubject = new BehaviorSubject<number>(0);
+  disponible$ = this.disponibleSubject.asObservable();
+
+  setDisponible(valor: number) {
+    console.log('Disponible en autService setDisponible:', valor);
+    this.disponibleSubject.next(valor);
+  }
+
+  private mostrarDialogoSubject = new Subject<string>();
+  mostrarDialogo$ = this.mostrarDialogoSubject.asObservable();
+
+  private diasSubject = new BehaviorSubject<number>(0);
+  dias$ = this.diasSubject.asObservable();
+
+  mostrarDialogo(mensaje: string) {
+    this.mostrarDialogoSubject.next(mensaje);
+  }
+
+  setDias(valor: number) {
+    console.log('Emitiendo valor de días:', valor); 
+    this.diasSubject.next(valor);
+  }
+
+ 
 
   constructor(private http: HttpClient, private router: Router) {
     this.detectarActividad();
@@ -52,6 +76,7 @@ export class AuthService {
     return this.http.post<Sucursal[]>(this.getUrl(this.endpoints.sucursal), { nit });
   } 
 
+
   obtenerUsuarioDesdeStorage() {
     const usuarioStorage = localStorage.getItem('usuario');
     if (usuarioStorage) {
@@ -59,10 +84,18 @@ export class AuthService {
         this.usuarioSubject.next(usuario); 
         this.getSucursales(usuario.cedula.toString()).subscribe(sucursales => {             
             this.sucursalesSubject.next(sucursales);
-            console.log('surcursales', this.sucursalesSubject) //  Notifica a los componentes
+            console.log('sucursales obtenidas', sucursales);
+
+            if (sucursales.length > 0) {
+                const sucursalSelect = sucursales[0];
+                this.setDisponible(sucursalSelect.disponible); 
+                console.log('disponible en el servicio obtenerUsuario', sucursalSelect.disponible);
+
+            }
         });
     }
 }
+
 
 
   guardarSesion(token: string, usuario: Usuario) {

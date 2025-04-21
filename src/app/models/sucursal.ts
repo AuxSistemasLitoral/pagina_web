@@ -7,4 +7,7 @@ export interface Sucursal {
     listaprecio: string;
     usuario: number;
     asesor: string;
+    cupo: number;
+    disponible: number;
+    dias: number;
 }

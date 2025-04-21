@@ -1,7 +1,6 @@
 
 <div #scrollContainer class="proveedores-container">
-  <div class="proveedores-scroll">
-    <!-- Usa ngFor solo una vez con el trackBy para mejor rendimiento -->
+  <div class="proveedores-scroll" [ngClass]="{'animar': animarProveedores}">
     <div class="proveedor-item"
          *ngFor="let proveedor of proveedoresDuplicados; trackBy: trackByProveedor"
          (click)="filtrarPorProveedor(proveedor.proveedor)">
@@ -9,25 +8,15 @@
         [src]="getProveedorImageUrl(proveedor.proveedor)" 
         [alt]="proveedor.proveedor || 'Proveedor sin nombre'"
         (error)="imagenError($event, proveedor.proveedor)"
-        loading="lazy"> <!-- Mejora de performance -->
-      <span>{{ proveedor.proveedor }}</span>
+        loading="lazy">
     </div>
   </div>
 </div>
 
 
-<div *ngIf="cargando" >
-  <span class="visually-hidden">Cargando...</span>
+<div *ngIf="cargando" class="loading-container" >
+  <span class="visually-hidden">CARGANDO PRODUCTOS...</span>
 </div>
-<!-- <div *ngIf="mostrandoMensajeCartera" class="modal-backdrop"> -->
-  <!-- <div  class="modal-backdrop">
-  <div class="modal-content">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
-    </div>
-    <p>Estamos validando la cartera y la disponibilidad de cupo. Por favor espera...</p>
-  </div>
-</div> -->
 
 
 <div class="productos-container">
@@ -43,8 +32,8 @@
     <p><strong>Disponible:</strong> {{ producto.disponible }}</p>
 
     <div *ngIf="producto.descuento > 0" class="descuento-label">
-      🔥 Valida con tu asesor el descuento.
-      <p class="terminos">Aplican términos y condiciones.</p>
+      🔥Producto con descuento, Valida con tu asesor.
+      <h5 class="terminos">Aplican términos y condiciones.</h5>
     </div>
 
     <div class="cantidad-container">
