@@ -268,16 +268,13 @@
 
 .producto-imagen {
   width: 100%;
-  /* Ocupa todo el ancho del contenedor */
   max-height: 150px;
   object-fit: contain;
-  /* La imagen se ajusta sin recortarse */
   display: block;
   margin: 0 auto;
   background-color: white;
 }
 
-/* Estilo para el contenedor de cantidad y botón */
 .cantidad-container {
   display: flex;
   justify-content: space-between;
