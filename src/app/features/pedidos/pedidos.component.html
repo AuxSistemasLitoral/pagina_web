@@ -1,4 +1,7 @@
 
+
+<!-- CONTENEDOR DE PROVEEDORES -->
+<div class="contenedor-titulo"><p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p></div>
 <div #scrollContainer class="proveedores-container">
   <div class="proveedores-scroll" [ngClass]="{'animar': animarProveedores}">
     <div class="proveedor-item"
@@ -13,30 +16,56 @@
   </div>
 </div>
 
-
-<div *ngIf="cargando" class="loading-container" >
-  <span class="visually-hidden">CARGANDO PRODUCTOS...</span>
+<!-- BANNER MODO CATÁLOGO -->
+<div *ngIf="modoCatalogo" class="catalogo-banner">
+  <p>🔍 Para comprar ulguno de estos productos por favor comunícate con tu asesor.</p>
+  <button class="volver-btn" (click)="obtenerProductos()">Regresa a tu compra</button>
 </div>
 
+<!-- INDICADOR DE CARGA -->
+<div *ngIf="cargando" class="loading-container">
+  <span class="visually-hidden">CARGANDO PRODUCTOS...</span> 
+</div>
 
+<!-- LISTADO DE PRODUCTOS -->
+<button id="botonIrArriba" (click)="scrollToTop()">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+    <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+  </svg>
+</button>
 <div class="productos-container">
   <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">   
-     <img [src]="getProductImageUrl(producto.referencia)"    
-     [alt]="'Imagen de ' + producto.nombre"
-     class="producto-imagen"
-     (error)="handleProductImageError($event)">
+    
+    <!-- Imagen del producto -->
+    <img [src]="getProductImageUrl(producto.referencia)"    
+         [alt]="'Imagen de ' + producto.nombre"
+         class="producto-imagen"
+         (error)="handleProductImageError($event)">
+
+    <!-- Info básica -->
     <h3>{{ producto.nombre }}</h3>
     <p><strong>Referencia:</strong> {{ producto.referencia }}</p>
     <p><strong>Unidades por empaque:</strong> {{ producto.factor }}</p>
-    <p><strong>Precio:</strong> {{ producto.lista_precio[0].precio | currency }}</p>
-    <p><strong>Disponible:</strong> {{ producto.disponible }}</p>
 
+    <!-- MODO COMPRA -->
+    <div *ngIf="!modoCatalogo">
+      <p><strong>Precio:</strong> {{ producto.lista_precio[0].precio | currency }}</p>
+      <p><strong>Disponible:</strong> {{ producto.disponible }}</p>
+    </div>
+
+    <!-- MODO CATÁLOGO -->
+    <div *ngIf="modoCatalogo">
+      <p class="vista-previa-msg">🛈 Solo vista previa del producto</p>
+    </div>
+
+    <!-- Etiqueta de descuento -->
     <div *ngIf="producto.descuento > 0" class="descuento-label">
       🔥Producto con descuento, Valida con tu asesor.
       <h5 class="terminos">Aplican términos y condiciones.</h5>
     </div>
 
-    <div class="cantidad-container">
+    <!-- Agregar al carrito solo si NO está en catálogo -->
+    <div class="cantidad-container" *ngIf="!modoCatalogo">
       <input type="number" min="1" class="cantidad-input" placeholder="Cantidad">
       <button class="agregar-btn" (click)="agregarAlCarrito(producto)">🛒 Agregar</button>
     </div>

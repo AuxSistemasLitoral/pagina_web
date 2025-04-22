@@ -12,62 +12,51 @@ html, body {
 }
 
 ::ng-deep .cdk-overlay-container {
-    z-index: 9999 !important;
+    z-index: 9999 ;
   }
   
   ::ng-deep .mdc-dialog__surface {
-    background-color: #fff !important;
-    border-radius: 10px !important;
-    padding: 20px !important;
-    max-width: 400px !important;
-    width: 100% !important;
+    background-color: #fff ;
+    border-radius: 10px ;
+    padding: 20px ;
+    max-width: 400px;
+    width: 100%;
     text-align: center;
   }
   
   ::ng-deep .mdc-dialog__title {
-    font-size: 24px !important;
-    font-weight: bold !important;
-    color: #333 !important;
+    font-size: 24px;
+    font-weight: bold ;
+    color: #333;
   }
   
   ::ng-deep .mdc-dialog__content {
-    font-size: 16px !important;
-    color: #555 !important;
+    font-size: 16px;
+    color: #555 ;
   }
   
   ::ng-deep .mdc-dialog__actions {
-    display: flex !important;
-    justify-content: center !important;
+    display: flex ;
+    justify-content: center;
   }
 
-  .alert-dialog-container .mat-dialog-actions button {
-    background-color: green !important;
-    color: white !important;
+  
+  .alert-dialog-container :host .mat-dialog-actions button {
+    background-color: green;
+    color: white;
     font-weight: bold !important;
-    font-weight: bold !important;
-    border-radius: 4px !important;
-    padding: 10px 20px !important;
-    border: none !important;
-    transition: background-color 0.3s !important;
+    border-radius: 4px;
+    padding: 10px 20px;
+    border: none;
+    transition: background-color 0.3s;
+    margin-left:0;
+    margin-right: 0;
   }
   
   .alert-dialog-container .mat-dialog-actions button:hover {
-    background-color: green !important;
-  }
-  
-  /* ::ng-deep .mdc-dialog__actions button {
-    background-color: #3f51b5 !important;
-    color: white !important;
-    font-weight: bold !important;
-    border-radius: 4px !important;
-    padding: 10px 20px !important;
-    border: none !important;
-    transition: background-color 0.3s !important;
-  }
-  
-  ::ng-deep .mdc-dialog__actions button:hover {
-    background-color: #309f4a !important;
-  } */
+    background-color: green;
+  } 
+
   
   ::ng-deep .custom-dialog-container .mdc-dialog__surface {
     background-color: #fff;
@@ -76,7 +65,7 @@ html, body {
   
   .cdk-overlay-container {
     position: fixed;
-    z-index: 9999 !important;
+    z-index: 9999;
     top: 0;
     left: 0;
     height: 100%;
@@ -117,5 +106,5 @@ html, body {
     height: 100%;
     width: 100%;
     justify-content: center;
-    align-items: center; /* Esto centra verticalmente */
+    align-items: center;
   }

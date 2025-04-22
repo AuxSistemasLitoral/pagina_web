@@ -41,10 +41,12 @@ export class PedidoService {
     console.log('URL de proveedores:', url);
     return this.http.post<Proveedor[]>(url, {}); 
   }
-
-  getProductosProveedor(proveedor: string, listaPrecio: string, usuario: string): Observable<Producto[]> {
+  
+  /* getProductosProveedor(proveedor: string, listaPrecio: string, usuario: string): Observable<Producto[]> { */
+  getProductosProveedor(proveedor: string): Observable<Producto[]> {
     const url = this.getUrl(this.endpoinds.productosProveedor);
-    const body = { proveedor, listaPrecio, usuario }; 
+    /* const body = { proveedor, listaPrecio, usuario };  */
+    const body = { proveedor }; 
     return this.http.post<Producto[]>(url, body); 
   }
   
