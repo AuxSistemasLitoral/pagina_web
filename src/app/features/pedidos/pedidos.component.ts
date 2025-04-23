@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2, HostListener } from '@angular/core';
 import { PedidoService } from '../../core/pedido.service';
 import { SharedDataService } from 'src/app/core/shared-data.service';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Producto } from 'src/app/models/producto';
 import { Proveedor } from 'src/app/models/proveedor';
 import Swal from 'sweetalert2';
@@ -32,6 +32,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
   animarProveedores = true;
 
   modoCatalogo: boolean = false;
+  showScrollButton: boolean = false;
 
   constructor(
     private pedidoService: PedidoService,
@@ -52,7 +53,17 @@ export class PedidosComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  @HostListener('window:scroll', [])
+   onWindowScroll() {
+    const scrollThreshold = 200;
+    if (window.scrollY > scrollThreshold) {
+      this.showScrollButton = true; 
+       console.log('Scroll >', scrollThreshold, '- show button'); 
+    } else {
+      this.showScrollButton = false; // Oculta el botón
+       console.log('Scroll <=', scrollThreshold, '- hide button'); 
+    }
+  }
 
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -66,6 +77,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
         this.usuario = this.sharedDataService.getUsuario();
         this.listaprecio = this.sharedDataService.getListaPrecio();
         this.obtenerProductos();
+        this.onWindowScroll();
       }
     });
   }
