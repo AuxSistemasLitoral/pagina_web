@@ -231,3 +231,173 @@
         min-width: auto;
     }
 }
+
+@media screen and (max-width: 820px) and (max-height: 1180px) {
+    .header,
+    .brand-section,
+    .user-info-section,
+    .user-header,
+    .badges-container,
+    .actions-section,
+    .branch-selector select,
+    .logout-button,
+    .user-name {
+        font-size: 10px;
+    }
+
+    .branch-selector select {
+        font-size: 10px;
+    }
+}
+
+.branch-selector {
+    width: auto;
+    max-width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-right: 50px;
+}
+
+.branch-selector select {
+    width: auto;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 2px 4px; 
+}
+
+.branch-selector select option {
+    width: auto;
+    max-width: 150px; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+@media screen and (max-width: 820px) and (min-width: 390px) {
+
+    .branch-selector {
+        margin: 0 50px;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 70px;
+        right: 15px;
+        background-color: #1c2331;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 20px;
+        padding: 15px;
+        border-radius: 10px;
+        z-index: 1000;
+    }
+
+    .menu-toggle:checked + .menu-icon + .nav-menu {
+        display: flex;
+    }
+
+    .nav-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    .nav-menu li {
+        width: 100%;
+        text-align: right;
+    }
+
+    .hamburger-disponible {
+        display: block;
+        color: rgb(40, 167, 69);
+        font-size: 14px;
+        font-weight: bold;
+        text-align: right;
+        margin-top: 10px;
+    }
+
+    .outside-disponible {
+        display: none;
+    }
+
+    .outside-logout {
+        display: none;
+    }
+
+    .hamburger-logout {
+        display: block;
+        text-align: right;
+        color: rgb(40, 167, 69);
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .hamburger-logout:hover {
+        color: #f60f03;
+    }
+    
+}
+
+@media screen and (min-width: 821px) {
+    .menu-icon {
+        display: none;
+    }
+
+    .nav-menu {
+        display: flex;
+        position: static;
+        flex-direction: row;
+        background: none;
+        padding: 0;
+    }
+
+    .outside-disponible {
+        display: block;
+    }
+
+    .hamburger-disponible {
+        display: none;
+    }
+
+    .outside-logout {
+        display: block;
+    }
+
+    .hamburger-logout {
+        display: none;
+    }
+    
+}
+
+

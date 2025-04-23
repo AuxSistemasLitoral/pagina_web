@@ -2,20 +2,19 @@
     <div class="brand-section">
         <a (click)="goToHome()">
             <img src="../../../assets/icons/icon.png" alt="Ubicación" class="app-logo">
-        </a>
-
+        </a> 
         <div class="divider"></div>
     </div>
-    
-    
-    <div class="user-info-section">       
+
+    <div class="user-info-section">
         <div class="user-details">
             <div class="user-header">
-                <div class="user-header" >{{ usuario.nombre }}</div>
-                <div class="user-header" *ngIf="!isLogin && selectedSucursal && disponible !== null">
+                <div class="user-header">{{ usuario.nombre }}</div>
+                <!-- Disponible fuera del menú hamburguesa -->
+                <div class="user-header outside-disponible" *ngIf="!isLogin && selectedSucursal && disponible !== null">
                     <i>TU DISPONIBLE ES: </i>
                     <span>{{ disponible | currency:'':'symbol':'1.0-0' }}</span>
-                </div>                
+                </div>
             </div>
             <div class="badges-container" *ngIf="!isHome">
                 <div class="user-name" *ngIf="asesor">
@@ -24,25 +23,37 @@
                 </div>
             </div>
         </div>
-    </div> 
-    
-    <div class="actions-section" [ngClass]="{ 'hidden': isLogin }" >
-        <ng-container *ngIf="!isHome">
-            <div class="branch-selector">
-                <select id="sucursal" (change)="onSucursalChange()" [(ngModel)]="selectedSucursal">
-                    <option [ngValue]="null" disabled>Seleccionar sucursal</option>
-                    <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucursal">
-                        {{ sucursal.sucursal }} - {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
-                    </option>
-                </select>
-            </div>
-        </ng-container>
-        <button *ngIf="!isLogin" (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
     </div>
-    
 
+    <!-- Select fuera del menú hamburguesa -->
+    <div class="branch-selector">
+        <select id="sucursal" (change)="onSucursalChange()" [(ngModel)]="selectedSucursal">
+            <option [ngValue]="null" disabled>Seleccionar sucursal</option>
+            <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucursal">
+                {{ sucursal.sucursal }} - {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
+            </option>
+        </select>
+    </div>
 
-    
-</header>
+    <!-- MENÚ HAMBURGUESA -->
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="menu-icon">&#9776;</label>
 
-
+    <nav class="nav-menu" [ngClass]="{ 'hidden': isLogin }">
+        <ul>
+            <!-- Disponible dentro del menú hamburguesa -->
+            <li class="menu-item hamburger-disponible" *ngIf="!isLogin && selectedSucursal && disponible !== null">
+                <i></i>
+                <span>{{ disponible | currency:'':'symbol':'1.0-0' }}</span>
+            </li>
+            <!-- Botón de cerrar sesión fuera del menú hamburguesa -->
+            <li class="menu-item outside-logout" *ngIf="!isLogin">
+                <button (click)="cerrarSesion()" class="logout-button" title="Cerrar sesión">⏻</button>
+            </li>
+            <!-- Texto "Cerrar sesión" dentro del menú hamburguesa -->
+            <li class="menu-item hamburger-logout" *ngIf="!isLogin">
+                <span class="logout-text" (click)="cerrarSesion()">CERRAR</span>
+            </li>
+        </ul>
+    </nav>
+</header> 
