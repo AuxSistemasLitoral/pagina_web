@@ -4,7 +4,7 @@
 }
 
 .mat-dialog-container {
-  background-color: #30a54b; 
+  background-color: #4e61a0; /* #3a834b;*/
   padding: 0; 
   border-radius: 20px; 
   box-shadow: 0 4px 8px rgb(0, 0, 0, 0.2);
@@ -18,67 +18,42 @@
   font-weight: bold;
   color: black;
   text-align: center;
-  background-color: #30a54b;
+  background-color: #4e61a0;
   margin-bottom: 10px;
 }
 
 .mat-dialog-content {
   font-size: 16px;
-  /* font-weight: bold; */
+  font-weight: bold; 
   color: black;
   text-align: center;
   padding: 20px 20px;
-  background-color: #30a54b;
+  background-color: #4e61a0;
 }
 
 .mat-dialog-actions {
   display: flex;
   justify-content: center;
-  /* text-align: center; */
   padding: 16px 0;
-  background-color: #30a54b;
+  background-color: #4e61a0;
 }
 
 .mat-dialog-actions button {
-  background-color: green ; /* O el color que desees para el botón */
+  background-color: green ; 
   color: white ;
-  font-weight: bold ; /* Aplica la negrita al texto del botón */
+  font-weight: bold ; 
   border-radius: 4px ;
   padding: 10px 20px ;
   border: none ;
   transition: background-color 0.3s ;
-  margin: 0 auto; /* Esto también ayuda a centrar un elemento flex si es el único hijo */
-  display: block; /* Asegura que el margen auto funcione si es necesario */
+  margin: 0 auto; 
+  display: block; 
 }
 
-button {
-  background-color: green ;
-  color: white ;
-  font-weight: bold ;
-  border-radius: 4px ;
-  padding: 10px 20px ;
-  border: none ;
-  transition: background-color 0.3s ;
+.mat-dialog-container .mat-dialog-title {
+  font-weight: 700;
 }
 
-button:hover {
-  background-color: red;
+.mat-dialog-container .mat-dialog-content p {
+  font-weight: 700;
 }
-
-/* :host .mat-dialog-actions button,
-:host [mat-dialog-actions] button {
-background-color: #3f51b5 ;
-color: white;
-font-weight: bold;
-border-radius: 4px;
-padding: 10px 20px;
-border: none;
-transition: background-color 0.3s;
-font-weight: bold;
-justify-content: center;
-}
-
-:host .mat-dialog-actions button:hover,
-:host [mat-dialog-actions] button:hover {
-background-color: #303f9f;
-} */

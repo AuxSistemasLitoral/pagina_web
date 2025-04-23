@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2,HostListener } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2, HostListener } from '@angular/core';
 import { PedidoService } from '../../core/pedido.service';
 import { SharedDataService } from 'src/app/core/shared-data.service';
-import { Subscription, switchMap } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Producto } from 'src/app/models/producto';
 import { Proveedor } from 'src/app/models/proveedor';
 import Swal from 'sweetalert2';
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class PedidosComponent implements OnInit, OnDestroy {
 
-  @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef; 
+  @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
   productos: Producto[] = [];
   proveedores: Proveedor[] = [];
   productosFiltrados: any[] = [];
@@ -27,59 +27,63 @@ export class PedidosComponent implements OnInit, OnDestroy {
   startX = 0;
   scrollLeft = 0;
   animationRunning = true;
-  scrollSpeed = 0.3; 
+  scrollSpeed = 0.3;
   interval: any;
-  animarProveedores = true; 
+  animarProveedores = true;
 
   modoCatalogo: boolean = false;
+  showScrollButton: boolean = false;
 
   constructor(
     private pedidoService: PedidoService,
     private sharedDataService: SharedDataService,
     private renderer: Renderer2,
-  ) { }  
-      
-  cargarDatos(): void {  
+  ) { }
+
+  cargarDatos(): void {
     this.dataSubscription = this.sharedDataService.getDataReadyObservable().subscribe((ready) => {
       if (ready) {
         this.usuario = this.sharedDataService.getUsuario();
-        this.listaprecio = this.sharedDataService.getListaPrecio();  
+        this.listaprecio = this.sharedDataService.getListaPrecio();
         this.obtenerProveedores();
         this.obtenerProductos();
       } else {
         console.warn('⏳ Datos aún no listos, esperando...');
       }
     });
-  } 
+  }
 
-  // @HostListener('window:scroll', [])
-  // onWindowScroll() {
-  //   console.log('Scroll detectado:', window.scrollY);
-  //   if (window.scrollY > 300) { 
-  //     document.body.classList.add('scroll-activo');
-  //   } else {
-  //     document.body.classList.remove('scroll-activo');
-  //   }
-  // }
+  @HostListener('window:scroll', [])
+   onWindowScroll() {
+    const scrollThreshold = 200;
+    if (window.scrollY > scrollThreshold) {
+      this.showScrollButton = true; 
+       console.log('Scroll >', scrollThreshold, '- show button'); 
+    } else {
+      this.showScrollButton = false; // Oculta el botón
+       console.log('Scroll <=', scrollThreshold, '- hide button'); 
+    }
+  }
 
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-  
-  
-  ngOnInit(): void {   
-      this.obtenerProveedores();
-        this.dataSubscription = this.sharedDataService.getDataReadyObservable().subscribe((ready) => {
-          if (ready) {
-            this.usuario = this.sharedDataService.getUsuario();
-            this.listaprecio = this.sharedDataService.getListaPrecio();
-            this.obtenerProductos();
-           }          
-        });
+
+
+  ngOnInit(): void {
+    this.obtenerProveedores();
+    this.dataSubscription = this.sharedDataService.getDataReadyObservable().subscribe((ready) => {
+      if (ready) {
+        this.usuario = this.sharedDataService.getUsuario();
+        this.listaprecio = this.sharedDataService.getListaPrecio();
+        this.obtenerProductos();
+        this.onWindowScroll();
+      }
+    });
   }
 
   ngAfterViewInit() {
-    const container = this.scrollContainer.nativeElement;  
+    const container = this.scrollContainer.nativeElement;
     this.startAutoScroll();
 
     this.renderer.listen(container, 'mousedown', (e: MouseEvent) => {
@@ -105,10 +109,10 @@ export class PedidosComponent implements OnInit, OnDestroy {
       if (!this.isDragging) return;
       e.preventDefault();
       const x = e.pageX - container.offsetLeft;
-      const walk = (x - this.startX) * 2; 
+      const walk = (x - this.startX) * 2;
       container.scrollLeft = this.scrollLeft - walk;
     });
-    
+
     this.renderer.listen(container, 'scroll', () => {
       const scrollMax = container.scrollWidth / 2;
       if (container.scrollLeft >= scrollMax) {
@@ -117,9 +121,9 @@ export class PedidosComponent implements OnInit, OnDestroy {
     });
   }
 
- 
+
   startAutoScroll() {
-    if (this.interval) return; 
+    if (this.interval) return;
     const container = this.scrollContainer.nativeElement;
     this.interval = setInterval(() => {
       container.scrollLeft += this.scrollSpeed;
@@ -129,7 +133,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
       }
     }, 30);
   }
- 
+
   stopAutoScroll() {
     clearInterval(this.interval);
     this.interval = null;
@@ -144,43 +148,43 @@ export class PedidosComponent implements OnInit, OnDestroy {
     this.modoCatalogo = false;
     this.animarProveedores = false;
     if (this.usuario && this.listaprecio) {
-        this.cargando = true;
-        this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
-            (response: any[]) => {
-                this.productos = response.map(producto => ({
-                    ...producto,
-                    proveedor: producto.proveedor || 'Desconocido',
-                    descuento: Number(producto.descuento) || 0,
-                    lista_precio: Array.isArray(producto.lista_precio)
-                        ? producto.lista_precio
-                        : JSON.parse(producto.lista_precio || '[]')
-                }));
-                this.productos.sort((a, b) => b.descuento - a.descuento);
-                if (this.productos.length === 0) {
-                  Swal.fire({
-                    icon: 'info',
-                    title: 'Sin productos',
-                    text: 'No hay productos disponibles en esta sucursal.',
-                    confirmButtonColor: '#05983d'
-                  });
-                }
-                this.cargando = false;
-            },
-            (error) => {
-              this.cargando = false;
-              console.error('Error obteniendo los productos', error);
-              Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Hubo un problema al obtener los productos.',
-                confirmButtonColor: '#e65c00'
-              });
-            }
-          );
+      this.cargando = true;
+      this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
+        (response: any[]) => {
+          this.productos = response.map(producto => ({
+            ...producto,
+            proveedor: producto.proveedor || 'Desconocido',
+            descuento: Number(producto.descuento) || 0,
+            lista_precio: Array.isArray(producto.lista_precio)
+              ? producto.lista_precio
+              : JSON.parse(producto.lista_precio || '[]')
+          }));
+          this.productos.sort((a, b) => b.descuento - a.descuento);
+          if (this.productos.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'Sin productos',
+              text: 'No hay productos disponibles en esta sucursal.',
+              confirmButtonColor: '#05983d'
+            });
+          }
+          this.cargando = false;
+        },
+        (error) => {
+          this.cargando = false;
+          console.error('Error obteniendo los productos', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al obtener los productos.',
+            confirmButtonColor: '#e65c00'
+          });
+        }
+      );
     } else {
-        console.warn('Para visualizar los productos debes elegir una sucursal');
+      console.warn('Para visualizar los productos debes elegir una sucursal');
     }
-}
+  }
 
 
   obtenerProveedores() {
@@ -208,12 +212,11 @@ export class PedidosComponent implements OnInit, OnDestroy {
       });
       return;
     }
-    
-    /*  this.pedidoService.getProductosProveedor(proveedor, this.listaprecio, this.usuario).subscribe( */
+       
     this.pedidoService.getProductosProveedor(proveedor).subscribe(
       (productos) => {
         console.log('Productos obtenidos para el proveedor:', productos);
-        this.modoCatalogo = true; 
+        this.modoCatalogo = true;
         if (!productos || productos.length === 0) {
           Swal.fire({
             icon: 'info',
@@ -241,43 +244,43 @@ export class PedidosComponent implements OnInit, OnDestroy {
     );
   }
 
-getProveedorImageUrl(proveedorNombre: string): string {
-  if (!proveedorNombre) return 'assets/prov/default.png';
-  const nombreFormateado = proveedorNombre
-    .toUpperCase()
-    .replace(/\s+/g, '_')
-    .replace(/[^A-Z0-9_]/g, '');    
-  return `assets/prov/${nombreFormateado}.png`;
-}
+  getProveedorImageUrl(proveedorNombre: string): string {
+    if (!proveedorNombre) return 'assets/prov/default.png';
+    const nombreFormateado = proveedorNombre
+      .toUpperCase()
+      .replace(/\s+/g, '_')
+      .replace(/[^A-Z0-9_]/g, '');
+    return `assets/prov/${nombreFormateado}.png`;
+  }
 
-getProductImageUrl(referencia: string): string { 
-  return `assets/img/${referencia}.png`;
-}
+  getProductImageUrl(referencia: string): string {
+    return `assets/img/${referencia}.png`;
+  }
 
-handleProductImageError(event: Event) {
-  const img = event.target as HTMLImageElement;
-  img.onerror = null; 
-  img.src = 'assets/img/default.png';
-}
+  handleProductImageError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.onerror = null;
+    img.src = 'assets/img/default.png';
+  }
 
 
-trackByProveedor(index: number, proveedor: Proveedor): string {
-  return proveedor.proveedor || index.toString();
-}
+  trackByProveedor(index: number, proveedor: Proveedor): string {
+    return proveedor.proveedor || index.toString();
+  }
 
   imagenError(event: Event, proveedorNombre: string) {
-    const imgElement = event.target as HTMLImageElement;    
-    
-    imgElement.onerror = null; 
+    const imgElement = event.target as HTMLImageElement;
+
+    imgElement.onerror = null;
     imgElement.src = 'assets/prov/default.png';
     if (!this.erroresImagenReportados.has(proveedorNombre)) {
       console.warn(`Imagen no encontrada para ${proveedorNombre}, usando imagen por defecto.`);
       this.erroresImagenReportados.add(proveedorNombre);
     }
-  } 
- 
+  }
+
   private erroresImagenReportados = new Set<string>();
-  
+
   agregarAlCarrito(producto: Producto) {
     if (!producto.cantidad || producto.cantidad <= 0) {
       alert("Por favor, ingresa una cantidad válida.");

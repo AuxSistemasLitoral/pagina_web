@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environments.prod';
 import { Pedido } from '../models/pedido';
 import { Proveedor } from '../models/proveedor';
-import { ListaPrecio, Producto } from '../models/producto';
+import { Producto } from '../models/producto';
 
 @Injectable({
   providedIn: 'root'
@@ -42,10 +42,9 @@ export class PedidoService {
     return this.http.post<Proveedor[]>(url, {}); 
   }
   
-  /* getProductosProveedor(proveedor: string, listaPrecio: string, usuario: string): Observable<Producto[]> { */
+  
   getProductosProveedor(proveedor: string): Observable<Producto[]> {
     const url = this.getUrl(this.endpoinds.productosProveedor);
-    /* const body = { proveedor, listaPrecio, usuario };  */
     const body = { proveedor }; 
     return this.http.post<Producto[]>(url, body); 
   }

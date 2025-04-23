@@ -1,5 +1,3 @@
-
-
 <!-- CONTENEDOR DE PROVEEDORES -->
 <div class="contenedor-titulo"><p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p></div>
 <div #scrollContainer class="proveedores-container">
@@ -28,11 +26,14 @@
 </div>
 
 <!-- LISTADO DE PRODUCTOS -->
-<button id="botonIrArriba" (click)="scrollToTop()">
+<button id="botonIrArriba" (click)="scrollToTop()"  *ngIf="showScrollButton">
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
     <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
   </svg>
+  <span>VOLVER ARRIBA</span> 
+  <!-- <span class="visually-hidden-boton">VOLVER ARRIBA</span> -->
 </button>
+
 <div class="productos-container">
   <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">   
     
