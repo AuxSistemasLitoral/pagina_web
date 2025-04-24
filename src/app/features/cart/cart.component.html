@@ -1,0 +1,29 @@
+<h2>Tu Carrito de Compras</h2>
+
+<div *ngIf="cartItems$ | async as items">
+  <p *ngIf="items.length === 0" class="empty-cart-message">Tu carrito está vacío.</p>
+
+  <div *ngIf="items.length > 0" class="cart-items-list">
+    <div class="cart-item" *ngFor="let item of items">
+      <div class="item-info">
+        <span class="item-name">{{ item.nombre }}</span>
+        <span class="item-price">{{ item.precio | currency }}</span>
+        <span class="item-factor">x {{ item.factor }}</span> </div>
+
+      <div class="item-controls">
+        <input type="number"
+               min="1"
+               class="quantity-input"
+               [value]="item.cantidad"
+               (change)="updateQuantity(item, $event)"> <button class="remove-item-btn" (click)="removeItem(item.product_id, item.bodega)">
+          Eliminar
+          </button>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+       <p>Total del Carrito: {{ calculateCartTotal(items) | currency }}</p>
+       </div>
+
+  </div>
+</div>

@@ -9,13 +9,14 @@ import { RouterModule } from '@angular/router';
 import { RutaVendedoresComponent } from './features/ruta-vendedores/ruta-vendedores.component';
 import { SeguimientoPedidosComponent } from './features/seguimiento-pedidos/seguimiento-pedidos.component';
 import { MatCardModule } from '@angular/material/card';
-
+import { CartModule } from './features/cart/cart.module';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     RutaVendedoresComponent,
-    SeguimientoPedidosComponent
+    SeguimientoPedidosComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -23,7 +24,8 @@ import { MatCardModule } from '@angular/material/card';
     HttpClientModule,
     SharedModule,
     RouterModule,
-    MatCardModule
+    MatCardModule,
+    CartModule,    
   ],
   providers: [],
   bootstrap: [AppComponent]

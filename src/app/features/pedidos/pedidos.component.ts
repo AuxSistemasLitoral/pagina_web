@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Producto } from 'src/app/models/producto';
 import { Proveedor } from 'src/app/models/proveedor';
 import Swal from 'sweetalert2';
+import { ShoppingCartService } from 'src/app/core/shopping-cart.service';
 
 @Component({
   selector: 'app-pedidos',
@@ -38,6 +39,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
     private pedidoService: PedidoService,
     private sharedDataService: SharedDataService,
     private renderer: Renderer2,
+    private cartService : ShoppingCartService
   ) { }
 
   cargarDatos(): void {
@@ -281,13 +283,28 @@ export class PedidosComponent implements OnInit, OnDestroy {
 
   private erroresImagenReportados = new Set<string>();
 
-  agregarAlCarrito(producto: Producto) {
-    if (!producto.cantidad || producto.cantidad <= 0) {
-      alert("Por favor, ingresa una cantidad válida.");
+  agregarAlCarrito(producto: Producto, cantidadInput: string) {
+    const cantidad = parseInt(cantidadInput, 10); 
+    
+    if (isNaN(cantidad) || cantidad <= 0) {
+      Swal.fire({
+        icon: 'warning', 
+        title: 'Cantidad Inválida',
+        text: 'Por favor, ingresa una cantidad válida mayor a 0.',
+        confirmButtonColor: '#3498db' 
+      });
       return;
     }
-    console.log("Producto agregado:", producto);
-    alert(`Se agregó ${producto.cantidad} unidad(es) de ${producto.nombre} al carrito.`);
+    this.cartService.addItem(producto, cantidad);
+    Swal.fire({
+      icon: 'success',
+      title: '¡Agregado!',
+      text: `Se agregó ${cantidad} unidad(es) de ${producto.nombre} al carrito.`,
+      timer: 2000, 
+      timerProgressBar: true,
+      showConfirmButton: false 
+    });
+   
   }
 
 }

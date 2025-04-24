@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { SharedService } from './shared.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -17,12 +18,14 @@ import { MatDialogModule } from '@angular/material/dialog';
   imports: [
     CommonModule,
     FormsModule,
-    MatDialogModule
+    MatDialogModule,
+    RouterModule 
   ],
   exports: [
     HeaderComponent,
     FooterComponent,    
-    DialogComponent 
+    DialogComponent,
+    RouterModule 
   ],
   //entryComponents: [DialogComponent],
   providers: [SharedService]

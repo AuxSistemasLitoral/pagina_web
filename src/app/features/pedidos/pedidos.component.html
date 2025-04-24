@@ -67,8 +67,7 @@
 
     <!-- Agregar al carrito solo si NO está en catálogo -->
     <div class="cantidad-container" *ngIf="!modoCatalogo">
-      <input type="number" min="1" class="cantidad-input" placeholder="Cantidad">
-      <button class="agregar-btn" (click)="agregarAlCarrito(producto)">🛒 Agregar</button>
+      <input type="number" min="1" class="cantidad-input" placeholder="Cantidad" #cantidadInput value=""> <button class="agregar-btn" (click)="agregarAlCarrito(producto, cantidadInput.value)">🛒 Agregar</button>
     </div>
   </div>
 </div>
