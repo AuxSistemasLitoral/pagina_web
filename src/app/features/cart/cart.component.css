@@ -1,9 +1,11 @@
-/* src/app/features/cart/cart.component.css */
-
 h2 {
     text-align: center;
     margin-bottom: 20px;
-    color: #333; /* Un color oscuro */
+    color: #333;
+}
+
+h2 span {
+    color: #05983d;
 }
 
 .empty-cart-message {
@@ -13,58 +15,67 @@ h2 {
     margin-top: 20px;
 }
 
-.cart-items-list {
+.cart-table-container {
     border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 15px;
+    overflow: hidden;
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
-.cart-item {
-    display: flex; /* Usa flexbox para poner info y controles en la misma fila */
-    justify-content: space-between; /* Espacia info y controles */
-    align-items: center; /* Alinea verticalmente al centro */
-    padding: 10px 0;
-    border-bottom: 1px solid #eee; /* Separador entre ítems */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.cart-item:last-child {
-    border-bottom: none; /* Elimina el borde del último ítem */
+.cart-table thead {
+    background-color: #f2f2f2;
 }
 
-.item-info {
-    display: flex;
-    align-items: center;
-    flex-grow: 1; /* Permite que la info ocupe el espacio disponible */
-    margin-right: 15px; /* Espacio entre info y controles */
-    flex-wrap: wrap; /* Permite que la info se envuelva en líneas si no cabe */
+.cart-table th,
+.cart-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
 }
 
-.item-name {
+.cart-table th {
     font-weight: bold;
-    color: #2c3e50;
-    margin-right: 10px;
-}
-
-.item-price {
-    color: #05983d; /* Color verde para el precio */
-    margin-right: 10px;
-}
-
-.item-factor {
+    color: #555;
+    text-transform: uppercase;
     font-size: 0.9em;
-    color: #777;
+    vertical-align: bottom; 
 }
 
-.item-controls {
-    display: flex; /* Usa flexbox para alinear input y botón */
-    align-items: center;
-    gap: 10px; /* Espacio entre el input y el botón */
+.text-right {
+    text-align: right;
 }
 
-.quantity-input {
-    width: 50px; /* Ancho del input */
+.text-center {
+    text-align: center;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.text-end {
+    text-align: end;
+}
+
+.item-name-cell {
+    font-weight: bold;
+    color: #333;
+}
+
+.item-price-cell,
+.item-subtotal-cell {
+    color: black;
+    font-weight: bold;
+}
+
+.item-quantity-cell .quantity-input {
+    width: 80px; 
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -72,44 +83,64 @@ h2 {
     font-size: 1em;
 }
 
-.remove-item-btn {
-    background-color: #e74c3c; /* Rojo para eliminar */
+.item-remove-cell {
+    /* text-align: center; */
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px 15px;
+  }
+
+  .remove-item-btn {
+    background-color: red;
     color: white;
     border: none;
-    padding: 6px 10px;
+    padding: 8px 12px; /* Nota: padding en un SVG styled like a button might behave differently than on a <button> */
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 0.9em; /* Irrelevant for SVG */
     transition: background-color 0.3s ease;
-}
-
+    display: inline-flex; /* Esto ayuda a que text-align: center funcione en el padre */
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+ }
 .remove-item-btn:hover {
-    background-color: #c0392b; /* Rojo más oscuro en hover */
+    background-color: #c0392b;
 }
 
-/* Estilos para el resumen del carrito */
+.remove-item-btn svg {
+    fill: red; 
+    margin-right: 5px; 
+    width: 20px;
+    height: 20px;
+    vertical-align: middle; 
+  }
+
+  .cart-table th.text-center{
+    text-align: center;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+  }
+
 .cart-summary {
-    margin-top: 20px;
-    text-align: right; /* Alinea el total a la derecha */
+    margin-top: 0;
+    padding: 15px;
+    text-align: right;
     font-size: 1.2em;
     font-weight: bold;
     border-top: 1px solid #ddd;
-    padding-top: 15px;
+    background-color: #f9f9f9;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
-.checkout-btn {
-    background-color: #3498db; /* Azul para el botón de checkout */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: bold;
-    margin-top: 15px;
-    transition: background-color 0.3s ease;
-}
-
-.checkout-btn:hover {
-    background-color: #2980b9; /* Azul más oscuro en hover */
+.cart-total-value {
+    color: #05983d;
 }

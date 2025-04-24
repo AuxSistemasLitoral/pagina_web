@@ -50,8 +50,9 @@ export class AuthService {
   }
 
   setDias(valor: number) {
-    console.log('Emitiendo valor de días:', valor); 
+    console.log('>>> Llamando setDias con valor:', valor); // Confirma que se llama
     this.diasSubject.next(valor);
+    console.log('>>> diasSubject emitió el valor:', valor); // Confirma la emisión
   }
 
  

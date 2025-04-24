@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs'; 
+import { AuthService } from 'src/app/core/auth.service';
 import { ShoppingCartService } from 'src/app/core/shopping-cart.service';
 import { ItemCarrito } from 'src/app/models/item-carrito';
 
@@ -13,13 +15,35 @@ export class CartComponent implements OnInit {
 
   cartItems$!: Observable<ItemCarrito[]>; 
   totalItems$!: Observable<number>;
+  dias: number = 0;
 
 
-  constructor(private cartService: ShoppingCartService) { }
+  constructor( 
+    private cartService: ShoppingCartService,
+    private authService: AuthService,
+     private router: Router
+  ) {
+    console.log('CarritoComponent constructor'); 
+   }
 
   ngOnInit(): void {   
+    console.log('CarritoComponent ngOnInit');
+   
     this.cartItems$ = this.cartService.cartItems$;    
     this.totalItems$ = this.cartService.totalItems$;
+
+    console.log('Suscribiéndose a dias$ en CarritoComponent');
+    this.authService.dias$.subscribe(dias => {
+      console.log('>>> Valor recibido en suscripción de dias$ en CarritoComponent:', dias); // MUY IMPORTANTE
+      this.dias = dias;
+      console.log('>>> this.dias en CarritoComponent ahora es:', this.dias); // Verifica el valor asignado
+    });
+    console.log('Valor inicial de this.dias en CarritoComponent ngOnInit:', this.dias); // Verifica el valor al inicio
+  }
+
+  irAPedidos() {
+    console.log('Navegando a /pedidos desde CarritoComponent');
+    this.router.navigate(['/pedidos']);
   }
 
  
