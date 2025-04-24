@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -149,6 +150,7 @@
     color: white;
     position: relative; 
     padding: 5px;
+    margin-right: 50px;
   }
   
   .mini-cart svg {
@@ -173,6 +175,19 @@
     border: 1px solid white; 
   }
 
+  .selected-branch-text label{
+    color: rgb(40, 167, 69);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: normal;
+    margin-right: 50px;
+}
+
+a img {
+    cursor: pointer;
+}
 
 @media screen and (max-width: 768px) { 
     .header { 
@@ -276,7 +291,8 @@
         font-size: 10px;
     }
 
-    .branch-selector select {
+    .branch-selector select,
+    .selected-branch-text label {
         font-size: 10px;
     }
 }
@@ -331,6 +347,18 @@
 
     .branch-selector {
         margin: 0 50px;
+    }
+
+    .mini-cart {
+        margin-right: 0;
+    }
+
+    .selected-branch-text {
+        margin-top: 10px;
+    }
+
+    .selected-branch-text label {
+        margin-right: 0;
     }
 
     .menu-icon {

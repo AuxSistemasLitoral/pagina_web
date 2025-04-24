@@ -1,12 +1,11 @@
-import { Component, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { SharedDataService } from '../../core/shared-data.service';
-import { environment } from 'src/environments/environments.prod';
-import { SharedService } from '../shared.service';
+import { environment } from 'src/environments/environments.prod'; 
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ShoppingCartService } from 'src/app/core/shopping-cart.service';
 
 @Component({
@@ -14,7 +13,7 @@ import { ShoppingCartService } from 'src/app/core/shopping-cart.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   private baseUrl = environment.apiBaseUrl;
   home = this.baseUrl + '/auth/home';
   usuario: any = {};
@@ -28,67 +27,56 @@ export class HeaderComponent implements OnInit {
   cupo: number | null = null;
   disponible: number = 0;
   totalItems$!: Observable<number>;
-
+  cartItemsSubscription!: Subscription;
+  mostrarSelectorSucursal: boolean = true;
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private sharedDataService: SharedDataService,
-    private cdRef: ChangeDetectorRef,
-    private sharedService: SharedService,
+    private sharedDataService: SharedDataService, 
     private dialog: MatDialog,
     private cartService: ShoppingCartService
   ) { }
-
-
-  ngOnInit() {
-    //  Escuchar cambios en el usuario y actualizar automáticamente
+ 
+  ngOnInit() { 
     this.authService.usuario$.subscribe(usuario => {
       this.usuario = usuario;
     });
-
-    // Escuchar cambios en las sucursales y actualizar automáticamente
+ 
     this.authService.sucursales$.subscribe(sucursales => {
       this.sucursales = sucursales;
-    });
-
-    //  Verificar si el usuario ya está autenticado (ejemplo: después de un refresh)
-    this.authService.obtenerUsuarioDesdeStorage();
-
+    }); 
+ 
+    this.authService.obtenerUsuarioDesdeStorage(); 
     this.verificarSesion();
     this.isHome = this.router.url === '/auth/home';
 
     this.router.events.subscribe(() => {
-      this.isLogin = this.router.url === '/auth/login';
-      this.cdRef.detectChanges();
+      this.isLogin = this.router.url === '/auth/login'; 
     });
 
-    // Mantener la sucursal seleccionada si ya había una en localStorage
-    this.selectedSucursal = localStorage.getItem('selectedSucursal')
+    this.selectedSucursal = localStorage.getItem('selectedSucursal') 
       ? JSON.parse(localStorage.getItem('selectedSucursal') as string)
       : null;
 
     this.authService.disponible$.subscribe(valor => {
-      this.disponible = valor;
-      console.log('Disponible en HeaderComponent:', valor);
+      this.disponible = valor; 
     });
 
     this.authService.dias$.subscribe(dias => {
-      console.log('Cambio en días:', dias);
-      if (dias === 0) {
+      if (dias === 0) { 
         this.authService.mostrarDialogo('NO PUEDES REALIZAR PEDIDOS EN ESTA SUCURSAL PORQUE LA CARTERA NO ESTA AL DÍA.');
         this.router.navigate(['/auth/home']);
       }
     });
 
-
-    this.authService.mostrarDialogo$.subscribe(mensaje => {
-      this.dialog.open(DialogComponent, {
+    this.authService.mostrarDialogo$.subscribe(mensaje => { 
+      this.dialog.open(DialogComponent, { 
         data: { message: mensaje },
         width: '400px',
         maxWidth: '90vw',
         position: {
-          top: '30vh',  
+          top: '30vh',
         },
         panelClass: 'alert-dialog-container',
         disableClose: true,
@@ -96,7 +84,21 @@ export class HeaderComponent implements OnInit {
       });
     });
 
-    this.totalItems$ = this.cartService.totalItems$;
+    this.totalItems$ = this.cartService.totalItems$; 
+    this.cartItemsSubscription = this.totalItems$.subscribe(totalItems => {
+      this.mostrarSelectorSucursal = totalItems === 0;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.cartItemsSubscription) {
+      this.cartItemsSubscription.unsubscribe();
+    }
+  }
+
+  get selectedSucursalNombre(): string | null {
+    const sucursal = this.sucursales.find(s => s.sucursal === this.selectedSucursal);
+    return sucursal ? `${sucursal.sucursal} - ${sucursal.nombre_sucursal}` : null;
   }
 
   obtenerSucursales() {
@@ -107,9 +109,7 @@ export class HeaderComponent implements OnInit {
       this.authService.getSucursales(nitParsed).subscribe({
         next: (data) => {
           this.sucursales = data;
-          console.log('✅ Sucursales obtenidas:', this.sucursales);
-          this.cdRef.detectChanges();
-        },
+        }, 
         error: (err) => {
           console.error('Error al obtener sucursales:', err);
         }
@@ -119,23 +119,14 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  obtenerUsuario() {
-    const usuarioStorage = localStorage.getItem('usuario');
-    if (usuarioStorage) {
-      this.usuario = JSON.parse(usuarioStorage);
-      this.cdRef.detectChanges();
-    }
-  }
-
-  verificarSesion() {
+  verificarSesion() { 
     const token = localStorage.getItem('token');
     if (!token) {
       this.router.navigate(['/auth/login']);
     }
   }
 
-
-  cerrarSesion() {
+  cerrarSesion() { 
     localStorage.removeItem('usuario');
     localStorage.removeItem('nit');
     localStorage.removeItem('selectedSucursal');
@@ -146,10 +137,8 @@ export class HeaderComponent implements OnInit {
     this.asesor = '';
     this.cupo = 0;
     this.router.navigate(['/auth/login']);
-    this.cdRef.detectChanges();
-  }
-
-
+  } 
+ 
   onSucursalChange() {
     if (this.selectedSucursal) {
       const selectedSucursalData = this.sucursales.find(suc => suc.sucursal === this.selectedSucursal);
@@ -174,5 +163,4 @@ export class HeaderComponent implements OnInit {
       this.router.navigate(['/auth/login'])
     }
   }
-
-}
+} 
