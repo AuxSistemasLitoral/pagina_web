@@ -22,7 +22,9 @@
 
 <!-- INDICADOR DE CARGA -->
 <div *ngIf="cargando" class="loading-container">
-  <span class="visually-hidden">CARGANDO PRODUCTOS...</span> 
+  <div class="spinner"></div>
+
+  <span class="loading-message">CARGANDO PRODUCTOS...</span>
 </div>
 
 <!-- LISTADO DE PRODUCTOS -->

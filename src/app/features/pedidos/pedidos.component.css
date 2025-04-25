@@ -19,48 +19,43 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.visually-hidden{
-  color: #000000;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
 .loading-container {
-  background-color: #05983d;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #05983d; 
+  border-radius: 50px; 
   box-shadow: 1px 10px 6px rgba(176, 239, 4, 0.1);
-  padding: 10px;
-  animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Spinner de carga */
-.loader-container {
+  padding: 20px; 
+  animation: fadeIn 1s ease-in-out; 
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 20px 0;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 15px;
+  width: fit-content; 
+  min-width: 200px; 
+  margin: 20px auto; 
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  width: 50px; 
+  height: 50px; 
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff; 
+  border-radius: 50%; 
+  animation: spin 1.5s linear infinite;
+}
+
+.loading-message {
+  color: black;
+  font-size: 1em; 
+  font-weight: bold;
+  text-align: center;
+  animation: none;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .proveedores-container {
@@ -78,7 +73,6 @@
   width: max-content;
   transition: transform 0.2s ease-out;
   will-change: transform;
-  /* animation: scrollProveedores 60s linear infinite;*/
 }
 
 .proveedores-container:active {
@@ -145,9 +139,8 @@
 }
 
 #botonIrArriba span {
-  font-size: 14px; /* Ajusta el tamaño de fuente según tu diseño */
-  font-weight: bold; /* Opcional: haz el texto negrita */
-  /* El texto ya es visible por defecto porque no tiene la clase visually-hidden */
+  font-size: 14px; 
+  font-weight: bold;
 }
 
 .proveedor-item {
@@ -210,6 +203,8 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   transform: translateY(-5px);
   cursor: pointer;
+  border: 3px solid #066bc9;
+  transform: scale(1.1);
 }
 
 .producto-card h3 {
@@ -239,6 +234,12 @@
 .producto-card.con-descuento {
   border: 3px solid #05983d;
 }
+
+.producto-card.con-descuento:hover {
+  border: 3px solid  #066bc9;
+  transform: scale(1.1);
+}
+
 
 .descuento-label {
   background-color: #05983d;
