@@ -1,4 +1,3 @@
-/* Estilos generales para el encabezado y el carrito vacío */
 h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -21,16 +20,13 @@ h2 span {
     font-size: 1.2em;
 }
 
-/* Contenedor principal del carrito */
 .cart-view-container {
-    /* max-width: 900px; */ /* Eliminamos el max-width para que ocupe más espacio */
-    margin: 20px auto;
-    padding: 0 20px; /* Añadimos el padding de 20px a los lados */
-    width: 100%; /* Aseguramos que ocupe el ancho disponible */
-    box-sizing: border-box; /* Incluir padding en el cálculo del ancho total */
+    /* margin: 20px auto; */
+    padding: 0 20px;
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
-/* Contenedor de la tabla */
 .cart-table-container {
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -38,26 +34,22 @@ h2 span {
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-bottom: 20px;
-    overflow-x: auto; /* Mantiene el scroll horizontal si la tabla es demasiado ancha */
-    /* min-width: 700px; */ /* Podemos ajustar o eliminar si usamos anchos en porcentaje */
-    width: 100%; /* Aseguramos que el contenedor de la tabla ocupe el 100% del contenedor padre */
+    overflow-x: auto;
+    width: 100%; 
 }
 
-/* Estilos de la tabla */
 .cart-table {
-    width: 100%; /* La tabla ocupará el 100% de su contenedor */
-    border-collapse: collapse; /* Combina los bordes de las celdas */
-    table-layout: fixed; /* Fija el layout de la tabla para respetar los anchos de columna */
+    width: 100%; 
+    border-collapse: collapse; 
+    table-layout: fixed;
 }
 
-/* Estilo para el encabezado de la tabla */
 .cart-table thead {
-    background-color: #f2f2f2; /* Color de fondo suave para el encabezado */
-    /* border-bottom: 2px solid #ccc; */ /* Opcional: un borde más grueso en la parte inferior del encabezado */
+    background-color: #f2f2f2;
+    border-bottom: 2px solid #ccc; 
 }
 
 
-/* Estilos de las cabeceras y celdas de la tabla */
 .cart-table th,
 .cart-table td {
     font-size: 0.9em;
@@ -69,49 +61,45 @@ h2 span {
     vertical-align: top;
 }
 
-/* Estilos de alineación de texto (basados en tus clases HTML) */
 .text-left { text-align: left; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 
 
-/* Definimos los anchos y estilos para cada columna usando selectores :nth-child */
-.cart-table th:nth-child(1), /* Columna PRODCUTO */
+.cart-table th:nth-child(1), 
 .cart-table td:nth-child(1) {
     width: 45%;
     font-weight: bold;
     color: black;
 }
 
-.cart-table th:nth-child(2), /* Columna CANTIDAD */
+.cart-table th:nth-child(2),
 .cart-table td:nth-child(2) {
     width: 10%;
 }
 
-.cart-table th:nth-child(3), /* Columna VLR UNITARIO */
+.cart-table th:nth-child(3), 
 .cart-table td:nth-child(3) {
     width: 15%;
     color: black;
     font-weight: bold;
 }
 
-.cart-table th:nth-child(4), /* Columna VALOR TOTAL */
+.cart-table th:nth-child(4), 
 .cart-table td:nth-child(4) {
     width: 15%;
     color: black;
     font-weight: bold;
 }
 
-.cart-table th:nth-child(5), /* Columna OPCIONES */
+.cart-table th:nth-child(5),
 .cart-table td:nth-child(5) {
     width: 15%;
     vertical-align: middle;
     text-align: center;
-    /* Los estilos de centrado del SVG vienen de la clase .remove-item-btn aplicada a la celda */
 }
 
 
-/* Estilos para el input de cantidad */
 .item-quantity-cell .quantity-input {
     width: 100%;
     box-sizing: border-box;
@@ -122,8 +110,7 @@ h2 span {
     font-size: 1em;
 }
 
-/* Estilos para el botón de eliminar (aplicados a la celda td que tiene esta clase) */
-.remove-item-btn {
+/* .remove-item-btn {
     background-color: red;
     color: white;
     border: none;
@@ -149,10 +136,32 @@ h2 span {
     width: 18px;
     height: 18px;
     flex-shrink: 0;
-    /* Si el SVG es el único contenido del botón/celda, no necesita margin-right */
+} */
+
+.icon-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
 }
 
-/* Estilo para Material Symbols (aunque no se usa directamente en tu HTML con esta clase) */
+.icon-button:hover {
+    background-color: #ff4d4d; 
+}
+
+.icon-button svg {
+    width: 24px;
+    height: 24px;
+    stroke: red;
+    stroke-width: 1.5;
+}
+
 .material-symbols-outlined {
     font-variation-settings:
     'FILL' 0,
@@ -161,7 +170,6 @@ h2 span {
     'opsz' 24
 }
 
-/* Estilos para el resumen del carrito */
 .cart-summary {
     margin-top: 0;
     padding: 15px;
@@ -178,12 +186,13 @@ h2 span {
     color: #05983d;
 }
 
-/* Estilos para el encabezado de sección del carrito (Tu carrito contiene...) */
 .cart-header-section {
+    background-color: #a1b798; 
+    padding: 15px 20px;
+    border-radius: 5px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    align-items: center;    
     flex-wrap: wrap;
 }
 
@@ -198,7 +207,6 @@ h2 span {
     color: #05983d;
 }
 
-/* Estilos para el botón "CONTINUAR COMPRANDO" */
 .continue-shopping-button {
     cursor: pointer;
     color: #007bff;
@@ -208,6 +216,8 @@ h2 span {
 }
 
 .continue-shopping-button h3 {
+    margin-top: 0;
+    margin-bottom: 0;
     margin: 0;
     font-size: 1em;
     font-weight: bold;
@@ -218,3 +228,4 @@ h2 span {
     color: #0056b3;
     text-decoration: underline;
 }
+

@@ -1,5 +1,23 @@
 <!-- CONTENEDOR DE PROVEEDORES -->
-<div class="contenedor-titulo"><p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p></div>
+<!-- <div class="contenedor-titulo"><p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p> </div> -->
+
+<div class="contenedor-secundario">
+  <div class="columna-izquierda">
+    <div class="contenedor-titulo">
+      <p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p>
+    </div>
+  </div>
+  <div class="columna-derecha">
+    <input type="text" id="buscarProducto" name="buscar_producto" placeholder="Búscar producto">
+  </div>
+</div>
+
+
+
+
+
+
+
 <div #scrollContainer class="proveedores-container">
   <div class="proveedores-scroll" [ngClass]="{'animar': animarProveedores}">
     <div class="proveedor-item"
@@ -13,6 +31,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- BANNER MODO CATÁLOGO -->
 <div *ngIf="modoCatalogo" class="catalogo-banner">
