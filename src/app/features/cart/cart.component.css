@@ -12,7 +12,19 @@ h2 span {
     text-align: center;
     color: #777;
     font-style: italic;
-    margin-top: 20px;
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 1.2em;
+}
+
+.cart-view-container {
+    /* margin: 20px auto; */
+    padding: 0 20px;
+    width: 100%; 
+    box-sizing: border-box; 
 }
 
 .cart-table-container {
@@ -22,60 +34,75 @@ h2 span {
     background-color: #fff;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     margin-bottom: 20px;
+    overflow-x: auto;
+    width: 100%; 
 }
 
 .cart-table {
-    width: 100%;
-    border-collapse: collapse;
+    width: 100%; 
+    border-collapse: collapse; 
+    table-layout: fixed;
 }
 
 .cart-table thead {
     background-color: #f2f2f2;
+    border-bottom: 2px solid #ccc; 
 }
+
 
 .cart-table th,
 .cart-table td {
+    font-size: 0.9em;
     padding: 12px 15px;
     border-bottom: 1px solid #ddd;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
 }
 
-.cart-table th {
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+
+.cart-table th:nth-child(1), 
+.cart-table td:nth-child(1) {
+    width: 45%;
     font-weight: bold;
-    color: #555;
-    text-transform: uppercase;
-    font-size: 0.9em;
-    vertical-align: bottom; 
+    color: black;
 }
 
-.text-right {
-    text-align: right;
+.cart-table th:nth-child(2),
+.cart-table td:nth-child(2) {
+    width: 10%;
 }
 
-.text-center {
-    text-align: center;
-}
-
-.text-left{
-    text-align: left;
-}
-
-.text-end {
-    text-align: end;
-}
-
-.item-name-cell {
-    font-weight: bold;
-    color: #333;
-}
-
-.item-price-cell,
-.item-subtotal-cell {
+.cart-table th:nth-child(3), 
+.cart-table td:nth-child(3) {
+    width: 15%;
     color: black;
     font-weight: bold;
 }
 
+.cart-table th:nth-child(4), 
+.cart-table td:nth-child(4) {
+    width: 15%;
+    color: black;
+    font-weight: bold;
+}
+
+.cart-table th:nth-child(5),
+.cart-table td:nth-child(5) {
+    width: 15%;
+    vertical-align: middle;
+    text-align: center;
+}
+
+
 .item-quantity-cell .quantity-input {
-    width: 80px; 
+    width: 100%;
+    box-sizing: border-box;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -83,51 +110,65 @@ h2 span {
     font-size: 1em;
 }
 
-.item-remove-cell {
-    /* text-align: center; */
-    text-align: center;
-    vertical-align: middle;
-    padding: 12px 15px;
-  }
-
-  .remove-item-btn {
+/* .remove-item-btn {
     background-color: red;
     color: white;
     border: none;
-    padding: 8px 12px; /* Nota: padding en un SVG styled like a button might behave differently than on a <button> */
+    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9em; /* Irrelevant for SVG */
+    font-size: 0.9em;
     transition: background-color 0.3s ease;
-    display: inline-flex; /* Esto ayuda a que text-align: center funcione en el padre */
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
- }
+    display: inline-flex;
+    align-items: center; 
+    justify-content: center; 
+
+}
+
+
 .remove-item-btn:hover {
     background-color: #c0392b;
 }
 
 .remove-item-btn svg {
-    fill: red; 
-    margin-right: 5px; 
-    width: 20px;
-    height: 20px;
-    vertical-align: middle; 
-  }
+    fill: none;
+    stroke: white;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+} */
 
-  .cart-table th.text-center{
-    text-align: center;
-  }
+.icon-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
 
-  .material-symbols-outlined {
+.icon-button:hover {
+    background-color: #ff4d4d; 
+}
+
+.icon-button svg {
+    width: 24px;
+    height: 24px;
+    stroke: red;
+    stroke-width: 1.5;
+}
+
+.material-symbols-outlined {
     font-variation-settings:
     'FILL' 0,
     'wght' 400,
     'GRAD' 0,
     'opsz' 24
-  }
+}
 
 .cart-summary {
     margin-top: 0;
@@ -144,3 +185,47 @@ h2 span {
 .cart-total-value {
     color: #05983d;
 }
+
+.cart-header-section {
+    background-color: #a1b798; 
+    padding: 15px 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;    
+    flex-wrap: wrap;
+}
+
+.cart-header-section h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.8em;
+    flex-shrink: 0;
+}
+
+.cart-header-section h2 span {
+    color: #05983d;
+}
+
+.continue-shopping-button {
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 15px;
+}
+
+.continue-shopping-button h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin: 0;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.continue-shopping-button:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+

@@ -19,48 +19,122 @@
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.visually-hidden{
-  color: #000000;
-  font-size: 1.2em;
-  font-weight: bold;
-}
-
 .loading-container {
-  background-color: #05983d;
-  border-radius: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #05983d; 
+  border-radius: 50px; 
   box-shadow: 1px 10px 6px rgba(176, 239, 4, 0.1);
-  padding: 10px;
-  animation: fadeIn 1s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Spinner de carga */
-.loader-container {
+  padding: 20px; 
+  animation: fadeIn 1s ease-in-out; 
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 20px 0;
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 15px;
+  width: fit-content; 
+  min-width: 200px; 
+  margin: 20px auto; 
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  width: 50px; 
+  height: 50px; 
+  border: 5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff; 
+  border-radius: 50%; 
+  animation: spin 1.5s linear infinite;
+}
+
+.loading-message {
+  color: black;
+  font-size: 1em; 
+  font-weight: bold;
+  text-align: center;
+  animation: none;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.contenedor-secundario {
+  background-color: #a1b798; 
+  padding: 15px 20px; 
+  margin-bottom: 20px;  
+  display: flex;
+  align-items: center;
+  gap: 20px;        
+  flex-wrap: wrap; 
+}
+
+.columna-izquierda {
+    flex-basis: 60%; /* Empieza ocupando el 60% del espacio */
+    flex-grow: 1;    /* Permite que crezca si hay espacio */
+    flex-shrink: 0;  /* Evita que se encoja más allá de su base */
+    min-width: 250px; /* Asegura un ancho mínimo para que el texto no se apriete */
+}
+
+/* Estilos para el div original del título (ahora DENTRO de la columna izquierda) */
+/* Mantenemos solo los estilos relacionados con el texto y su alineación interna */
+.contenedor-titulo {
+  text-align: center;    /* Alineación del texto dentro de este div */
+  color: #d10707;       /* Color del texto del antiguo contenedor */
+  font-weight: bold;     /* Negrita para el texto del antiguo contenedor */
+  /* NOTA: Eliminamos background-color, padding, border-radius, margin-bottom de aquí */
+  margin: 0; /* Aseguramos que no tenga márgenes externos propios */
+}
+
+/* Estilos para el párrafo dentro del div del título */
+.contenedor-titulo p {
+  margin: 0; /* Mantiene el margen 0 del párrafo */
+}
+
+/* Estilos para la columna derecha (buscador) */
+.columna-derecha {
+   /* Propiedades flex para controlar el ancho */
+   flex-basis: 40%; /* Empieza ocupando el 40% del espacio */
+   flex-grow: 1;    /* Permite que crezca */
+   flex-shrink: 0;  /* Evita que se encoja más allá de su base */
+   min-width: 180px; /* Asegura un ancho mínimo para el buscador */
+
+   /* Estilo para los elementos dentro de la columna derecha (label e input) */
+   display: flex;
+   flex-direction: column; /* Apila la etiqueta y el input verticalmente */
+   justify-content: center; /* Centra verticalmente el label/input si la columna es más alta */
+}
+
+.columna-derecha label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333; /* Puedes ajustar el color de la etiqueta si quieres que no sea rojo */
+}
+
+.columna-derecha input[type="text"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box; /* Incluye padding y borde en el cálculo del ancho */
+}
+
+/* Opcional: Media Query para apilar en pantallas pequeñas */
+@media (max-width: 700px) { /* Ajusta el breakpoint según necesites */
+  .contenedor-secundario {
+    flex-direction: column; /* Apila las columnas verticalmente */
+    align-items: stretch; /* Estira los elementos al ancho completo */
+  }
+  .columna-izquierda,
+  .columna-derecha {
+    flex-basis: 100%; /* Cada columna ocupa todo el ancho disponible */
+    min-width: auto; /* Elimina el min-width fijo cuando se apilan */
+  }
+   .columna-izquierda {
+       margin-bottom: 15px; /* Añade espacio entre el título y el buscador cuando están apilados */
+   }
+  .contenedor-titulo {
+      text-align: left; /* Quizás quieras alinear el texto a la izquierda cuando está apilado */
+  }
 }
 
 .proveedores-container {
@@ -78,7 +152,6 @@
   width: max-content;
   transition: transform 0.2s ease-out;
   will-change: transform;
-  /* animation: scrollProveedores 60s linear infinite;*/
 }
 
 .proveedores-container:active {
@@ -145,9 +218,8 @@
 }
 
 #botonIrArriba span {
-  font-size: 14px; /* Ajusta el tamaño de fuente según tu diseño */
-  font-weight: bold; /* Opcional: haz el texto negrita */
-  /* El texto ya es visible por defecto porque no tiene la clase visually-hidden */
+  font-size: 14px; 
+  font-weight: bold;
 }
 
 .proveedor-item {
@@ -211,6 +283,8 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   transform: translateY(-5px);
   cursor: pointer;
+  border: 3px solid #066bc9;
+  transform: scale(1.1);
 }
 
 .producto-card h3 {
@@ -240,6 +314,12 @@
 .producto-card.con-descuento {
   border: 3px solid #05983d;
 }
+
+.producto-card.con-descuento:hover {
+  border: 3px solid  #066bc9;
+  transform: scale(1.1);
+}
+
 
 .descuento-label {
   background-color: #05983d;
