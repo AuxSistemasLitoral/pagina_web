@@ -345,8 +345,9 @@ a img {
 
 @media screen and (max-width: 820px) and (min-width: 390px) {
 
-    .branch-selector {
-        margin: 0 50px;
+    .branch-selector, 
+    .selected-branch-text { 
+        margin: 0 50px; 
     }
 
     .mini-cart {
