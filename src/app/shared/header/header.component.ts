@@ -59,6 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       ? JSON.parse(localStorage.getItem('selectedSucursal') as string)
       : null;
 
+    this.asesor = localStorage.getItem('asesor') || ''; 
     this.authService.disponible$.subscribe(valor => {
       this.disponible = valor; 
     });
@@ -130,6 +131,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     localStorage.removeItem('usuario');
     localStorage.removeItem('nit');
     localStorage.removeItem('selectedSucursal');
+    localStorage.removeItem('asesor');
     localStorage.removeItem('token');
     this.usuario = {};
     this.sucursales = [];
@@ -150,7 +152,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.sharedDataService.setListaPrecio(selectedSucursalData.listaprecio);
         this.authService.setDisponible(selectedSucursalData.disponible);
         this.authService.setDias(selectedSucursalData.dias);
-        localStorage.setItem('selectedSucursal', JSON.stringify(this.selectedSucursal));
+        localStorage.setItem('selectedSucursal', JSON.stringify(this.selectedSucursal));  
+        localStorage.setItem('asesor', this.asesor); 
       }
     }
   }
