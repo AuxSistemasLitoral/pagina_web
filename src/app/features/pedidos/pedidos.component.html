@@ -1,94 +1,82 @@
 <!-- CONTENEDOR DE PROVEEDORES -->
-<!-- <div class="contenedor-titulo"><p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p> </div> -->
+<div class="contenedor-proveedores">
+  <div class="contenedor-titulo">
+    <p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p>
+  </div>
 
-<div class="contenedor-secundario">
-  <div class="columna-izquierda">
-    <div class="contenedor-titulo">
-      <p>¿Ya conoces a todos nuestros proveedores? ¡Descúbrelos!</p>
+
+  <div #scrollContainer class="proveedores-container">
+    <div class="proveedores-scroll" [ngClass]="{'animar': animarProveedores}">
+      <div class="proveedor-item" *ngFor="let proveedor of proveedoresDuplicados; trackBy: trackByProveedor"
+        (click)="filtrarPorProveedor(proveedor.proveedor)">
+        <img [src]="getProveedorImageUrl(proveedor.proveedor)" [alt]="proveedor.proveedor || 'Proveedor sin nombre'"
+          (error)="imagenError($event, proveedor.proveedor)" loading="lazy">
+      </div>
     </div>
   </div>
-  <div class="columna-derecha">
-    <input type="text" id="buscarProducto" name="buscar_producto" placeholder="Búscar producto">
+
+  <div class="contenedor-buscar">
+    <input type="text" id="buscarProducto" name="buscar_producto" placeholder="¿Qué buscas hoy?"
+      (input)="buscarProductoInput($event)">
+
   </div>
-</div>
 
 
-
-
-
-
-
-<div #scrollContainer class="proveedores-container">
-  <div class="proveedores-scroll" [ngClass]="{'animar': animarProveedores}">
-    <div class="proveedor-item"
-         *ngFor="let proveedor of proveedoresDuplicados; trackBy: trackByProveedor"
-         (click)="filtrarPorProveedor(proveedor.proveedor)">
-      <img 
-        [src]="getProveedorImageUrl(proveedor.proveedor)" 
-        [alt]="proveedor.proveedor || 'Proveedor sin nombre'"
-        (error)="imagenError($event, proveedor.proveedor)"
-        loading="lazy">
-    </div>
+  <!-- BANNER MODO CATÁLOGO -->
+  <div *ngIf="modoCatalogo" class="catalogo-banner">
+    <p>🔍 Para comprar ulguno de estos productos por favor comunícate con tu asesor.</p>
+    <button class="volver-btn" (click)="obtenerProductos()">Regresa a tu compra</button>
   </div>
-</div>
 
+  <!-- INDICADOR DE CARGA -->
+  <div *ngIf="cargando" class="loading-container">
+    <div class="spinner"></div>
 
-<!-- BANNER MODO CATÁLOGO -->
-<div *ngIf="modoCatalogo" class="catalogo-banner">
-  <p>🔍 Para comprar ulguno de estos productos por favor comunícate con tu asesor.</p>
-  <button class="volver-btn" (click)="obtenerProductos()">Regresa a tu compra</button>
-</div>
-
-<!-- INDICADOR DE CARGA -->
-<div *ngIf="cargando" class="loading-container">
-  <div class="spinner"></div>
-
-  <span class="loading-message">CARGANDO PRODUCTOS...</span>
-</div>
-
-<!-- LISTADO DE PRODUCTOS -->
-<button id="botonIrArriba" (click)="scrollToTop()"  *ngIf="showScrollButton">
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-    <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
-  </svg>
-  <span>VOLVER ARRIBA</span> 
-  <!-- <span class="visually-hidden-boton">VOLVER ARRIBA</span> -->
-</button>
-
-<div class="productos-container">
-  <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">   
-    
-    <!-- Imagen del producto -->
-    <img [src]="getProductImageUrl(producto.referencia)"    
-         [alt]="'Imagen de ' + producto.nombre"
-         class="producto-imagen"
-         (error)="handleProductImageError($event)"> 
-
-    <!-- Info básica -->
-    <h3>{{ producto.nombre }}</h3>
-    <p><strong>Referencia:</strong> {{ producto.referencia }}</p>
-    <p><strong>Unidades por empaque:</strong> {{ producto.factor }}</p>
-
-    <!-- MODO COMPRA -->
-    <div *ngIf="!modoCatalogo">
-      <p><strong>Precio:</strong> {{ producto.lista_precio[0].precio | currency }}</p>
-      <p><strong>Disponible:</strong> {{ producto.disponible }}</p>
-    </div>
-
-    <!-- MODO CATÁLOGO -->
-    <div *ngIf="modoCatalogo">
-      <p class="vista-previa-msg">🛈 Solo vista previa del producto</p>
-    </div>
-
-    <!-- Etiqueta de descuento -->
-    <div *ngIf="producto.descuento > 0" class="descuento-label">
-      🔥Producto con descuento, Valida con tu asesor.
-      <h5 class="terminos">Aplican términos y condiciones.</h5>
-    </div>
-
-    <!-- Agregar al carrito solo si NO está en catálogo -->
-    <div class="cantidad-container" *ngIf="!modoCatalogo">
-      <input type="number" min="1" class="cantidad-input" placeholder="Cantidad" #cantidadInput value=""> <button class="agregar-btn" (click)="agregarAlCarrito(producto, cantidadInput.value)">🛒 Agregar</button>
-    </div>
+    <span class="loading-message">CARGANDO PRODUCTOS...</span>
   </div>
-</div>
+
+  <!-- LISTADO DE PRODUCTOS -->
+  <button id="botonIrArriba" (click)="scrollToTop()" *ngIf="showScrollButton">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+      <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" />
+    </svg>
+    <span>VOLVER ARRIBA</span>
+    <!-- <span class="visually-hidden-boton">VOLVER ARRIBA</span> -->
+  </button>
+
+
+  <div class="productos-container">
+    <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">
+
+      <!-- Imagen del producto -->
+      <img [src]="getProductImageUrl(producto.referencia)" [alt]="'Imagen de ' + producto.nombre"
+        class="producto-imagen" (error)="handleProductImageError($event)">
+
+      <!-- Info básica -->
+      <h3>{{ producto.nombre }}</h3>
+      <p><strong>Referencia:</strong> {{ producto.referencia }}</p>
+      <p><strong>Unidades por empaque:</strong> {{ producto.factor }}</p>
+
+      <!-- MODO COMPRA -->
+      <div *ngIf="!modoCatalogo">
+        <p><strong>Precio:</strong> {{ producto.lista_precio[0].precio | currency }}</p>
+        <p><strong>Disponible:</strong> {{ producto.disponible }}</p>
+      </div>
+
+      <!-- MODO CATÁLOGO -->
+      <div *ngIf="modoCatalogo">
+        <p class="vista-previa-msg">🛈 Solo vista previa del producto</p>
+      </div>
+
+      <!-- Etiqueta de descuento -->
+      <div *ngIf="producto.descuento > 0" class="descuento-label">
+        🔥Producto con descuento, Valida con tu asesor.
+        <h5 class="terminos">Aplican términos y condiciones.</h5>
+      </div>
+
+      <!-- Agregar al carrito solo si NO está en catálogo -->
+      <div class="cantidad-container" *ngIf="!modoCatalogo">
+        <input type="number" min="1" class="cantidad-input" placeholder="Cantidad" #cantidadInput value=""> <button
+          class="agregar-btn" (click)="agregarAlCarrito(producto, cantidadInput.value)">🛒 Agregar</button>
+      </div>
+    </div>

@@ -3,23 +3,25 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ItemCarrito } from '../models/item-carrito';
 import { Producto } from '../models/producto';
 
+const STORAGE_KEY = 'shopping_cart';
+
 @Injectable({
   providedIn: 'root'
 })
-
 export class ShoppingCartService {
 
   private _cartItems = new BehaviorSubject<ItemCarrito[]>(this.getCartFromLocalStorage());
   public readonly cartItems$: Observable<ItemCarrito[]> = this._cartItems.asObservable();
 
   private _totalItems = new BehaviorSubject<number>(this.calculateTotalItems(this._cartItems.getValue()));
-  public readonly totalItems$: Observable<number> = this._totalItems.asObservable();
+  public readonly totalItems$: Observable<number> = this._totalItems.asObservable(); 
 
-  constructor() {
+  constructor( ) {
     this.cartItems$.subscribe(items => {
       this._totalItems.next(this.calculateTotalItems(items));
       this.saveCartToLocalStorage(items);
     });
+   // this.loadCartFromStorage();
   }
 
   addItem(producto: Producto, cantidad: number): void {
@@ -45,15 +47,20 @@ export class ShoppingCartService {
         descuento: producto.descuento,
       };
       currentItems.push(newItem);
+      console.log('item agregado', newItem);
     }
-
     this._cartItems.next([...currentItems]);
+    //localStorage.setItem('carrito', JSON.stringify(this._cartItems.getValue()));
+
   }
 
   removeItem(productId: string, bodega: string): void {
     const currentItems = this._cartItems.getValue();
     const updatedItems = currentItems.filter(item => !(item.product_id === productId && item.bodega === bodega));
     this._cartItems.next(updatedItems);
+    console.log(`item eliminado: ${productId} / ${bodega}`);
+    //localStorage.setItem('carrito', JSON.stringify(this._cartItems.getValue()));    
+
   }
 
   updateItemQuantity(productId: string, bodega: string, newCantidad: number): void {
@@ -65,6 +72,8 @@ export class ShoppingCartService {
         itemToUpdate.cantidad = newCantidad;
         itemToUpdate.subtotal = itemToUpdate.cantidad * itemToUpdate.precio;
         this._cartItems.next([...currentItems]);
+        console.log('cantidad modificada', itemToUpdate);
+        // localStorage.setItem('carrito', JSON.stringify(this._cartItems.getValue()));    
       } else {
         this.removeItem(productId, bodega);
       }
@@ -73,10 +82,17 @@ export class ShoppingCartService {
 
   clearCart(): void {
     this._cartItems.next([]);
+    localStorage.removeItem(STORAGE_KEY);
+    console.log('carrito limpiado');
+    //localStorage.removeItem('carrito');
+
   }
 
   getItems(): ItemCarrito[] {
-    return this._cartItems.getValue();
+    const value = this._cartItems.getValue();
+    console.log('getItems() devuelve:', value);
+    return value;
+    //return this._cartItems.getValue();
   }
 
   private calculateTotalItems(items: ItemCarrito[]): number {
@@ -85,19 +101,48 @@ export class ShoppingCartService {
 
   private saveCartToLocalStorage(items: ItemCarrito[]): void {
     try {
-      localStorage.setItem('shopping_cart', JSON.stringify(items));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch (e) {
-      console.error('Error guardando en el carrito de compras', e);
+      console.error('Error guardando en localStorage', e);
     }
   }
 
   private getCartFromLocalStorage(): ItemCarrito[] {
     try {
-      const savedCart = localStorage.getItem('shopping_cart');
+      const savedCart = localStorage.getItem(STORAGE_KEY);
       return savedCart ? JSON.parse(savedCart) : [];
     } catch (e) {
-      console.error('Error leyendo el carrito de compras', e);
+      console.error('Error leyendo localStorage', e);
       return [];
     }
   }
+
+  // private saveCartToLocalStorage(items: ItemCarrito[]): void {
+  //   try {
+  //     localStorage.setItem('shopping_cart', JSON.stringify(items));
+  //   } catch (e) {
+  //     console.error('Error guardando en el carrito de compras', e);
+  //   }
+  // }
+
+  // private getCartFromLocalStorage(): ItemCarrito[] {
+  //   try {
+  //     const savedCart = localStorage.getItem('shopping_cart');
+  //     return savedCart ? JSON.parse(savedCart) : [];
+  //   } catch (e) {
+  //     console.error('Error leyendo el carrito de compras', e);
+  //     return [];
+  //   }
+  // }
+
+  // loadCartFromStorage(): void {
+  //   const storedCart = localStorage.getItem('shopping_cart');
+  //   if (storedCart) {
+  //     const items: ItemCarrito[] = JSON.parse(storedCart);
+  //     this._cartItems.next(items);
+  //   }
+  // }
+  
+  
+  
 }
