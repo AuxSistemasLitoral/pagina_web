@@ -90,14 +90,13 @@ export class AuthService {
             if (sucursales.length > 0) {
                 const sucursalSelect = sucursales[0];
                 this.setDisponible(sucursalSelect.disponible); 
+                localStorage.setItem('selectedSucursal', JSON.stringify(sucursalSelect));
                 console.log('disponible en el servicio obtenerUsuario', sucursalSelect.disponible);
 
             }
         });
     }
 }
-
-
 
   guardarSesion(token: string, usuario: Usuario) {
     localStorage.setItem('token', token);
@@ -120,6 +119,11 @@ export class AuthService {
       return null;
     }
   }
+
+  getSucursalSeleccionada(): Sucursal | null {
+  const data = localStorage.getItem('selectedSucursal');
+  return data ? JSON.parse(data) : null;
+}
 
 
   private getTokenExpiration(): number | null{

@@ -55,6 +55,14 @@
       </table>
 
       <div class="cart-summary">
+
+        <div class="observaciones-container">
+          <label for="observaciones">Observaciones:</label>
+          <textarea id="observaciones" maxlength="200" [(ngModel)]="observaciones"></textarea>
+          <small class="char-limit-msg">Te quedan {{ observaciones.length }}/200 caracteres</small>
+        </div>
+
+
         <button type="button" class="send-order-btn" (click)="enviarPedido()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />

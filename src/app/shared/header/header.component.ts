@@ -140,23 +140,43 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.cupo = 0;
     this.router.navigate(['/auth/login']);
   } 
- 
-  onSucursalChange() {
-    if (this.selectedSucursal) {
-      const selectedSucursalData = this.sucursales.find(suc => suc.sucursal === this.selectedSucursal);
 
-      if (selectedSucursalData) {
-        this.asesor = selectedSucursalData.asesor;
-        this.id = selectedSucursalData.id_cliente;
-        this.sharedDataService.setUsuario(selectedSucursalData.usuario);
-        this.sharedDataService.setListaPrecio(selectedSucursalData.listaprecio);
-        this.authService.setDisponible(selectedSucursalData.disponible);
-        this.authService.setDias(selectedSucursalData.dias);
-        localStorage.setItem('selectedSucursal', JSON.stringify(this.selectedSucursal));  
-        localStorage.setItem('asesor', this.asesor); 
-      }
+  onSucursalChange() {
+  if (this.selectedSucursal) {
+    const selectedSucursalData = this.sucursales.find(
+      suc => suc.sucursal === this.selectedSucursal
+    );
+
+    if (selectedSucursalData) {
+      this.asesor = selectedSucursalData.asesor;
+      this.id = selectedSucursalData.id_cliente;
+      this.sharedDataService.setUsuario(selectedSucursalData.usuario);
+      this.sharedDataService.setListaPrecio(selectedSucursalData.listaprecio);
+      this.authService.setDisponible(selectedSucursalData.disponible);
+      this.authService.setDias(selectedSucursalData.dias);
+      localStorage.setItem('selectedSucursal', JSON.stringify(selectedSucursalData));  
+      localStorage.setItem('asesor', this.asesor); 
     }
   }
+}
+
+ 
+  // onSucursalChange() {
+  //   if (this.selectedSucursal) {
+  //     const selectedSucursalData = this.sucursales.find(suc => suc.sucursal === this.selectedSucursal);
+
+  //     if (selectedSucursalData) {
+  //       this.asesor = selectedSucursalData.asesor;
+  //       this.id = selectedSucursalData.id_cliente;
+  //       this.sharedDataService.setUsuario(selectedSucursalData.usuario);
+  //       this.sharedDataService.setListaPrecio(selectedSucursalData.listaprecio);
+  //       this.authService.setDisponible(selectedSucursalData.disponible);
+  //       this.authService.setDias(selectedSucursalData.dias);
+  //       localStorage.setItem('selectedSucursal', JSON.stringify(this.selectedSucursal));  
+  //       localStorage.setItem('asesor', this.asesor); 
+  //     }
+  //   }
+  // }
 
   goToHome() {
     const usuario = localStorage.getItem('usuario');

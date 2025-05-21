@@ -6,6 +6,7 @@ import { ShoppingCartService } from 'src/app/core/shopping-cart.service';
 import { ItemCarrito } from 'src/app/models/item-carrito';
 import { DetallePedido, Pedido } from 'src/app/models/pedido';
 import { PedidoService } from '../../core/pedido.service';
+import { Sucursal } from '../../models/sucursal';
 
 @Component({
   selector: 'app-cart', 
@@ -103,14 +104,15 @@ async enviarPedido(): Promise<void> {
     }));
 
     const ubicacion = await this.getGeolocation();
+    const sucursal = JSON.parse(localStorage.getItem('selectedSucursal') || '{}');
 
     const pedido: Pedido = {
       EncabezadoPedido: {
         id_app: 0,
-        Vendedor_cedula: JSON.parse(localStorage.getItem('usuario') || '{}').cedula || '',
+        Vendedor_cedula: JSON.parse(localStorage.getItem('selectedSucursal') || '{}').usuario || '',
         Fecha: new Date().toISOString().slice(0, 19).replace('T', ' '), 
         cliente_nit: JSON.parse(localStorage.getItem('nit') || '""'),
-        cliente_sucursal: JSON.parse(localStorage.getItem('selectedSucursal') || '""'),
+        cliente_sucursal: sucursal.sucursal,
         observaciones: this.observaciones || '',
         Latitud: ubicacion?.latitude.toString() || '',
         Longitud: ubicacion?.longitude.toString() || ''
