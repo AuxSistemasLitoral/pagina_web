@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { environment } from 'src/environments/environments.prod';
 import { Pedido } from '../models/pedido';
 import { Proveedor } from '../models/proveedor';
@@ -32,9 +32,13 @@ export class PedidoService {
     return this.http.post(this.getUrl(this.endpoinds.productos), body, { headers });
   }
 
-  enviarPedido(pedido:Pedido){
-   // return this.
-  }
+  searchProducts(usuario: string, listaprecio: string, busqueda: string):Observable<any>{
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const body = JSON.stringify({ usuario, listaprecio, busqueda});
+
+    return this.http.post(this.getUrl(this.endpoinds.productos), body, { headers });
+
+  } 
 
   getProveedores(): Observable<Proveedor[]> {
     const url = this.getUrl(this.endpoinds.proveedores);
@@ -48,6 +52,14 @@ export class PedidoService {
     const body = { proveedor }; 
     return this.http.post<Producto[]>(url, body); 
   }
-  
+
+  async enviarPedidoback(pedido: Pedido): Promise<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    const url = this.getUrl(this.endpoinds.pedidos);
+    console.log("Enviando pedido al endpoint:", url);
+    console.log("Cuerpo del pedido a enviar:", pedido);
+    
+    return await firstValueFrom(this.http.post<any>(url, pedido, { headers }));
+  }
   
 }

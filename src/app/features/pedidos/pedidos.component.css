@@ -46,7 +46,7 @@
 }
 
 .loading-message {
-  color: black;
+  color: rgb(2, 47, 2);
   font-size: 1em; 
   font-weight: bold;
   text-align: center;
@@ -68,46 +68,113 @@
   flex-wrap: wrap; 
 }
 
-.columna-izquierda {
-    flex-basis: 60%; /* Empieza ocupando el 60% del espacio */
-    flex-grow: 1;    /* Permite que crezca si hay espacio */
-    flex-shrink: 0;  /* Evita que se encoja más allá de su base */
-    min-width: 250px; /* Asegura un ancho mínimo para que el texto no se apriete */
-}
-
-/* Estilos para el div original del título (ahora DENTRO de la columna izquierda) */
-/* Mantenemos solo los estilos relacionados con el texto y su alineación interna */
 .contenedor-titulo {
-  text-align: center;    /* Alineación del texto dentro de este div */
-  color: #d10707;       /* Color del texto del antiguo contenedor */
-  font-weight: bold;     /* Negrita para el texto del antiguo contenedor */
-  /* NOTA: Eliminamos background-color, padding, border-radius, margin-bottom de aquí */
-  margin: 0; /* Aseguramos que no tenga márgenes externos propios */
+  background-color: #a1b798; 
+  padding: 15px 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center; 
+  color: #d10707;
+  font-weight: bold;
 }
-
-/* Estilos para el párrafo dentro del div del título */
 .contenedor-titulo p {
-  margin: 0; /* Mantiene el margen 0 del párrafo */
+  margin: 0;
 }
 
-/* Estilos para la columna derecha (buscador) */
-.columna-derecha {
-   /* Propiedades flex para controlar el ancho */
-   flex-basis: 40%; /* Empieza ocupando el 40% del espacio */
-   flex-grow: 1;    /* Permite que crezca */
-   flex-shrink: 0;  /* Evita que se encoja más allá de su base */
-   min-width: 180px; /* Asegura un ancho mínimo para el buscador */
 
-   /* Estilo para los elementos dentro de la columna derecha (label e input) */
+.contenedor-buscar {
+  background-color: #a1b798;
+  padding: 15px 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  display: flex;         
+  align-items: center;    
+  justify-content: center; 
+  color: black;
+  font-weight: bold;
+}
+
+
+.contenedor-buscar input[type="text"] {
+  padding: 8px 12px 8px 40px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  width: 250px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23999" viewBox="0 0 24 24"><path d="M10 2a8 8 0 105.29 14.29l5.39 5.39a1 1 0 001.42-1.42l-5.39-5.39A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z"/></svg>');
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 10px center;
+  opacity: 0;
+  transform: translateY(-20px); 
+  animation: slideInInput 0.6s ease-out forwards;
+} 
+
+@keyframes slideInInput  {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contenedor-buscar input[type="text"]:focus {
+  width: 300px;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+.sin-resultados {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #555;
+}
+
+
+
+@media (max-width: 600px) {
+  .contenedor-buscar input[type="text"] {
+    width: 100%; 
+    background-position: 10px center;
+    font-size: 15px;
+  }
+  
+  .contenedor-buscar {
+    padding: 10px;
+  }
+}
+
+.columna-izquierda {
+    flex-basis: 60%;
+    flex-grow: 1;  
+    flex-shrink: 0;  
+    min-width: 250px;
+}
+
+.contenedor-titulo {
+  text-align: center;   
+  color: #d10707;      
+  font-weight: bold; 
+  margin: 0; 
+}
+
+
+.columna-derecha {
+   flex-basis: 40%; 
+   flex-grow: 1;  
+   flex-shrink: 0;
+   min-width: 180px;
    display: flex;
-   flex-direction: column; /* Apila la etiqueta y el input verticalmente */
-   justify-content: center; /* Centra verticalmente el label/input si la columna es más alta */
+   flex-direction: column; 
+   justify-content: center; 
 }
 
 .columna-derecha label {
   font-weight: bold;
   margin-bottom: 5px;
-  color: #333; /* Puedes ajustar el color de la etiqueta si quieres que no sea rojo */
+  color: #333; 
 }
 
 .columna-derecha input[type="text"] {
@@ -115,25 +182,25 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
-  box-sizing: border-box; /* Incluye padding y borde en el cálculo del ancho */
+  box-sizing: border-box; 
 }
 
-/* Opcional: Media Query para apilar en pantallas pequeñas */
-@media (max-width: 700px) { /* Ajusta el breakpoint según necesites */
+
+@media (max-width: 700px) { 
   .contenedor-secundario {
-    flex-direction: column; /* Apila las columnas verticalmente */
-    align-items: stretch; /* Estira los elementos al ancho completo */
+    flex-direction: column; 
+    align-items: stretch; 
   }
   .columna-izquierda,
   .columna-derecha {
-    flex-basis: 100%; /* Cada columna ocupa todo el ancho disponible */
-    min-width: auto; /* Elimina el min-width fijo cuando se apilan */
+    flex-basis: 100%;
+    min-width: auto;
   }
    .columna-izquierda {
-       margin-bottom: 15px; /* Añade espacio entre el título y el buscador cuando están apilados */
+       margin-bottom: 15px;
    }
   .contenedor-titulo {
-      text-align: left; /* Quizás quieras alinear el texto a la izquierda cuando está apilado */
+      text-align: left;
   }
 }
 
@@ -175,18 +242,6 @@
   animation-play-state: paused;
 }
 
-.contenedor-titulo {
-  background-color: #a1b798; 
-  padding: 15px 20px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  text-align: center; 
-  color: #d10707;
-  font-weight: bold;
-}
-.contenedor-titulo p {
-  margin: 0;
-}
 
 #botonIrArriba {
   position: fixed;

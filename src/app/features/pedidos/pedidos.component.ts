@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Renderer2, HostListener } from '@angular/core';
 import { PedidoService } from '../../core/pedido.service';
 import { SharedDataService } from 'src/app/core/shared-data.service';
-import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subject, Subscription, switchMap } from 'rxjs';
 import { Producto } from 'src/app/models/producto';
 import { Proveedor } from 'src/app/models/proveedor';
 import Swal from 'sweetalert2';
@@ -31,6 +31,8 @@ export class PedidosComponent implements OnInit, OnDestroy {
   scrollSpeed = 0.3;
   interval: any;
   animarProveedores = true;
+  private searchSubject = new Subject<string>();
+  sinResultados: boolean = false;
 
   modoCatalogo: boolean = false;
   showScrollButton: boolean = false;
@@ -62,7 +64,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
       this.showScrollButton = true; 
        console.log('Scroll >', scrollThreshold, '- show button'); 
     } else {
-      this.showScrollButton = false; // Oculta el botón
+      this.showScrollButton = false;
        console.log('Scroll <=', scrollThreshold, '- hide button'); 
     }
   }
@@ -82,6 +84,58 @@ export class PedidosComponent implements OnInit, OnDestroy {
         this.onWindowScroll();
       }
     });
+
+    this.searchSubject.pipe(
+      debounceTime(400),   
+      distinctUntilChanged(),  
+      switchMap(busqueda => {  
+        return this.pedidoService.searchProducts(this.usuario, this.listaprecio, busqueda);
+      })
+    ).subscribe(
+      (response: any[]) => {
+        this.productos = response.map(producto => ({
+          ...producto,
+          proveedor: producto.proveedor || 'Desconocido',
+          descuento: Number(producto.descuento) || 0,
+          lista_precio: Array.isArray(producto.lista_precio)
+            ? producto.lista_precio
+            : JSON.parse(producto.lista_precio || '[]')
+        }));
+
+        this.productos.sort((a, b) => b.descuento - a.descuento);
+
+        if (this.productos.length === 0) {
+          this.sinResultados = true;
+          Swal.fire({
+            title: 'Sin resultados',
+            text: 'No se encontraron productos para tu búsqueda.',
+            confirmButtonColor: '#05983d'
+          }).then(() => {
+            const inputBuscar = document.getElementById('buscarProducto') as HTMLInputElement;
+            if (inputBuscar) {
+              inputBuscar.value = '';
+            }
+            this.obtenerProductos();
+          });
+        } else {
+          this.sinResultados = false;
+        }
+
+        this.cargando = false;
+      },
+      (error: any) => {
+        this.cargando = false;
+        console.error('Error buscando productos', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un problema al buscar los productos.',
+          confirmButtonColor: '#e65c00'
+        });
+      }
+    );
+
+
   }
 
   ngAfterViewInit() {
@@ -188,6 +242,122 @@ export class PedidosComponent implements OnInit, OnDestroy {
     }
   }
 
+  // buscarProducto(termino: string): void {
+  //   this.modoCatalogo = false;
+  //   this.animarProveedores = false;
+  
+  //   if (!this.usuario || !this.listaprecio) {
+  //     console.warn('Para buscar productos debes elegir una sucursal');
+  //     return;
+  //   }
+  
+  //   if (termino.trim() === '') {
+  //     this.obtenerProductos();
+  //     return;
+  //   }
+  
+  //   this.cargando = true;
+  //   this.pedidoService.searchProducts(this.usuario, this.listaprecio, termino).subscribe(
+  //     (response: any[]) => {
+  //       this.productos = response.map(producto => ({
+  //         ...producto,
+  //         proveedor: producto.proveedor || 'Desconocido',
+  //         descuento: Number(producto.descuento) || 0,
+  //         lista_precio: Array.isArray(producto.lista_precio)
+  //           ? producto.lista_precio
+  //           : JSON.parse(producto.lista_precio || '[]')
+  //       }));
+  //       this.productos.sort((a, b) => b.descuento - a.descuento);  
+       
+  //       if (this.productos.length === 0) {
+  //         Swal.fire({
+  //           icon: 'info',
+  //           title: 'Sin resultados',
+  //           text: 'No se encontraron productos para tu búsqueda en esta sucursal.',
+  //           confirmButtonColor: '#05983d'
+  //         }).then(()=>{
+  //           const inputBuscar = document.getElementById('buscarProducto') as HTMLInputElement;
+  //           if (inputBuscar) {
+  //             inputBuscar.value = ''; 
+  //           }
+  //           this.obtenerProductos();
+  //         });
+  //       }
+  
+  //       this.cargando = false;
+  //     },
+  //     (error) => {
+  //       this.cargando = false;
+  //       console.error('Error buscando productos', error);
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Error',
+  //         text: 'Hubo un problema al buscar los productos.',
+  //         confirmButtonColor: '#e65c00'
+  //       });
+  //     }
+  //   );
+  // }
+
+  buscarProducto(termino: string): void {
+    this.sinResultados = false;
+    if (termino.length >= 3) {
+      this.cargando = true;
+      this.pedidoService.searchProducts(this.usuario, this.listaprecio, termino).subscribe(
+        (response: any[]) => {
+          this.productos = response.map(producto => ({
+            ...producto,
+            proveedor: producto.proveedor || 'Desconocido',
+            descuento: Number(producto.descuento) || 0,
+            lista_precio: Array.isArray(producto.lista_precio)
+              ? producto.lista_precio
+              : JSON.parse(producto.lista_precio || '[]')
+          }));
+  
+          this.productos.sort((a, b) => b.descuento - a.descuento);
+  
+          if (this.productos.length === 0) {
+            this.sinResultados = true;
+            Swal.fire({
+              title: 'Sin resultados',
+              text: 'No se encontraron productos para tu búsqueda.',
+              confirmButtonColor: '#05983d'
+            }).then(() => {
+              const inputBuscar = document.getElementById('buscarProducto') as HTMLInputElement;
+              if (inputBuscar) {
+                inputBuscar.value = '';
+              }
+              this.obtenerProductos();
+            });
+          }
+          this.cargando = false;
+        },
+        (error) => {
+          this.cargando = false;
+          console.error('Error buscando productos', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un problema al buscar los productos.',
+            confirmButtonColor: '#e65c00'
+          });
+        }
+      );
+    } else if (termino.length === 0) {
+      this.obtenerProductos();
+    }
+  }
+  
+  
+  
+
+  buscarProductoInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const termino = input.value;
+    this.buscarProducto(termino);
+  }
+  
+
 
   obtenerProveedores() {
     this.animarProveedores = false;
@@ -283,29 +453,41 @@ export class PedidosComponent implements OnInit, OnDestroy {
 
   private erroresImagenReportados = new Set<string>();
 
-  agregarAlCarrito(producto: Producto, cantidadInput: string) {
-    const cantidad = parseInt(cantidadInput, 10); 
-    
-    if (isNaN(cantidad) || cantidad <= 0) {
-      Swal.fire({
-        icon: 'warning', 
-        title: 'Cantidad Inválida',
-        text: 'Por favor, ingresa una cantidad válida mayor a 0.',
-        confirmButtonColor: '#3498db' 
-      });
-      return;
-    }
-    this.cartService.addItem(producto, cantidad);
+ agregarAlCarrito(producto: Producto, cantidadInput: string) {
+  const cantidad = parseInt(cantidadInput, 10);
+  const disponible = parseInt(producto.disponible as any, 10);
+
+  if (isNaN(cantidad) || cantidad <= 0) {
     Swal.fire({
-      icon: 'success',
-      title: '¡Agregado!',
-      text: `Se agregó ${cantidad} unidad(es) de ${producto.nombre} al carrito.`,
-      timer: 2000, 
-      timerProgressBar: true,
-      showConfirmButton: false 
+      icon: 'warning',
+      title: 'Cantidad Inválida',
+      text: 'Por favor, ingresa una cantidad válida mayor a 0.',
+      confirmButtonColor: '#3498db'
     });
-   
+    return;
   }
+
+  if (cantidad > disponible) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Stock insuficiente',
+      text: `Solo hay ${disponible} unidad(es) disponibles de ${producto.nombre}.`,
+      confirmButtonColor: '#e74c3c'
+    });
+    return;
+  }
+
+  this.cartService.addItem(producto, cantidad);
+  Swal.fire({
+    icon: 'success',
+    title: '¡Agregado!',
+    text: `Se agregó ${cantidad} unidad(es) de ${producto.nombre} al carrito.`,
+    timer: 2000,
+    timerProgressBar: true,
+    showConfirmButton: false
+  });
+}
+
 
 }
 
