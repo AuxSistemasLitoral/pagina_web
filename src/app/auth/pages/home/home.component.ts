@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.authService.dias$.subscribe(dias => {
-      console.log('Días actualizado en Home:', dias);
+     // console.log('Días actualizado en Home:', dias);
       this.dias = dias;
     });
   }  

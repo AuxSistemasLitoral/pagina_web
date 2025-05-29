@@ -1,2 +1,116 @@
+<div *ngIf="loading">Cargando cartera...</div>
 
-<p>Cartera works!</p>
+<div *ngIf="cartera.length > 0" class="resumen-cartera">
+    <p><strong>CUPO:</strong> {{ cartera[0].cupo | currency:'$ ':'symbol':'1.0-0' }}</p>
+
+    <p *ngIf="totalAdeudado > 0">
+        <strong>TOTAL ADEUDADO:</strong> {{ totalAdeudado | currency:'$ ':'symbol':'1.0-0' }}
+    </p>
+
+    <div *ngIf="sobreCupo > 0" class="alerta-sobrecupo">
+        <strong>ADVERTENCIA:</strong> Tienes un sobre cupo por {{ sobreCupo | number:'1.2-2' }}.
+    </div>
+
+    <div>    
+      <h3 class="alerta-sobrecupo"><strong> Ten en cuenta que la actualización de saldos se realizará dentro de las 24 horas siguientes a su pago </strong></h3>
+    </div>
+</div>
+
+
+
+<div *ngIf="!loading && cartera.length > 0 && !isMobile" class="tabla-facturas">
+
+    <table class="facturas-table">
+        <thead>
+            <tr>
+                <th>ELEGIR</th>
+                <th>FACTURA</th>
+                <th>FECHA</th>
+                <th>VENCE</th>
+                <th>VALOR FACTURA</th>
+                <th>ABONO</th>
+                <th>SALDO</th>
+                <th>ESTADO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of cartera">
+                <td>
+                    <input type="checkbox" [checked]="selectedFacturas.includes(item)" (change)="toggleFactura(item)" />
+                </td>
+                <td>{{ item.factura }}</td>
+                <td>{{ item.fecha }}</td>
+                <td>{{ item.vence }}</td>
+                <td>{{ item.debito | currency:'$ ':'symbol':'1.0-0' }}</td>
+                <td>{{ item.credito | currency:'$ ':'symbol':'1.0-0' }}</td>
+                <td>
+                    <input *ngIf="selectedFacturas.includes(item)" type="number" [(ngModel)]="item.saldoAEditar"
+                        [placeholder]="item.saldo" class="saldo-input" />
+                    <span *ngIf="!selectedFacturas.includes(item)">
+                        {{ item.saldo | currency:'$ ':'symbol':'1.0-0' }}
+                    </span>
+                </td>
+                <td [ngClass]="{ 'verde': item.dias <= 0, 'rojo': item.dias > 0 }">
+                    {{ item.dias <= 0 ? (item.dias | number:'1.0-0') + ' días restantes' : item.dias + ' días vencido'
+                        }} </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="total-pagar">
+        <strong>Total a pagar:</strong> {{ totalAPagar | currency:'$ ':'symbol':'1.2-2' }}
+        <button class="boton-pago" [disabled]="selectedFacturas.length === 0" (click)="generarPago()">
+            Pagar ahora {{ totalAPagar | currency:'$ ' }}
+        </button>
+
+    </div>
+</div>
+
+<div *ngIf="!loading && cartera.length > 0 && isMobile">
+    <div class="factura-card" *ngFor="let item of cartera">
+        <div class="factura-header">
+            <input type="checkbox" [checked]="selectedFacturas.includes(item)" (change)="toggleFactura(item)" />
+            <strong>Factura #{{ item.factura }}</strong>
+        </div>
+
+        <div class="factura-info">
+            <div><strong>FECHA:</strong> {{ item.fecha }}</div>
+            <div><strong>VENCE:</strong> {{ item.vence }}</div>
+            <div><strong>VALOR FACTURA:</strong> {{ item.debito | currency:'$ ':'symbol':'1.0-0' }}</div>
+            <div><strong>ABONO</strong>{{ item.credito | currency:'$ ':'symbol':'1.0-0' }}</div>
+            <div>
+                <strong>SALDO</strong>
+                <input *ngIf="selectedFacturas.includes(item)" type="number" [(ngModel)]="item.saldoAEditar"
+                    [placeholder]="item.saldo" />
+                <span *ngIf="!selectedFacturas.includes(item)">
+                    {{ item.saldo | currency:'$ ':'symbol':'1.0-0' }}
+                </span>
+            </div>
+            <div [ngClass]="{ 'verde': item.dias <= 0, 'rojo': item.dias > 0 }">
+                <strong>Estado:</strong>
+                {{ item.dias <= 0 ? (item.dias | number:'1.0-0') + ' días restantes' : item.dias + ' días vencido' }}
+                    </div>
+            </div>
+        </div>
+
+        <div class="total-pagar-movil" *ngIf="selectedFacturas.length > 0">
+            <strong>Total a pagar:</strong> {{ totalAPagar | currency:'COP':'symbol':'1.0-0' }}
+
+            <button class="boton-pago" [disabled]="selectedFacturas.length === 0" (click)="generarPago()">
+                Pagar ahora {{ totalAPagar | currency:'$ ' }}
+            </button>
+        </div>
+
+        <div *ngIf="isRedirecting" class="spinner-overlay">
+            <div class="spinner"></div>
+            <p>Redirigiendo a la pasarela de pagos...</p>
+        </div>
+
+
+
+    </div>
+
+
+    <div *ngIf="!loading && cartera.length === 0">
+        No hay datos de cartera pendientes.
+    </div>

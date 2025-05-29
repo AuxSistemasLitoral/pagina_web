@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CarteraRoutingModule } from './cartera-routing.module';
 import { CarteraComponent } from './cartera.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,7 +14,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     CarteraRoutingModule,
-    SharedModule
+    SharedModule,
+    FormsModule
   ]
 })
 export class CarteraModule { }
+ 

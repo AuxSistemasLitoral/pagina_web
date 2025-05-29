@@ -52,7 +52,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
         this.obtenerProveedores();
         this.obtenerProductos();
       } else {
-        console.warn('⏳ Datos aún no listos, esperando...');
+       // console.warn('⏳ Datos aún no listos, esperando...');
       }
     });
   }
@@ -62,10 +62,10 @@ export class PedidosComponent implements OnInit, OnDestroy {
     const scrollThreshold = 200;
     if (window.scrollY > scrollThreshold) {
       this.showScrollButton = true; 
-       console.log('Scroll >', scrollThreshold, '- show button'); 
+      // console.log('Scroll >', scrollThreshold, '- show button'); 
     } else {
       this.showScrollButton = false;
-       console.log('Scroll <=', scrollThreshold, '- hide button'); 
+       //console.log('Scroll <=', scrollThreshold, '- hide button'); 
     }
   }
 
@@ -125,7 +125,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
       },
       (error: any) => {
         this.cargando = false;
-        console.error('Error buscando productos', error);
+       // console.error('Error buscando productos', error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -228,7 +228,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
         },
         (error) => {
           this.cargando = false;
-          console.error('Error obteniendo los productos', error);
+        //  console.error('Error obteniendo los productos', error);
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -242,63 +242,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
     }
   }
 
-  // buscarProducto(termino: string): void {
-  //   this.modoCatalogo = false;
-  //   this.animarProveedores = false;
-  
-  //   if (!this.usuario || !this.listaprecio) {
-  //     console.warn('Para buscar productos debes elegir una sucursal');
-  //     return;
-  //   }
-  
-  //   if (termino.trim() === '') {
-  //     this.obtenerProductos();
-  //     return;
-  //   }
-  
-  //   this.cargando = true;
-  //   this.pedidoService.searchProducts(this.usuario, this.listaprecio, termino).subscribe(
-  //     (response: any[]) => {
-  //       this.productos = response.map(producto => ({
-  //         ...producto,
-  //         proveedor: producto.proveedor || 'Desconocido',
-  //         descuento: Number(producto.descuento) || 0,
-  //         lista_precio: Array.isArray(producto.lista_precio)
-  //           ? producto.lista_precio
-  //           : JSON.parse(producto.lista_precio || '[]')
-  //       }));
-  //       this.productos.sort((a, b) => b.descuento - a.descuento);  
-       
-  //       if (this.productos.length === 0) {
-  //         Swal.fire({
-  //           icon: 'info',
-  //           title: 'Sin resultados',
-  //           text: 'No se encontraron productos para tu búsqueda en esta sucursal.',
-  //           confirmButtonColor: '#05983d'
-  //         }).then(()=>{
-  //           const inputBuscar = document.getElementById('buscarProducto') as HTMLInputElement;
-  //           if (inputBuscar) {
-  //             inputBuscar.value = ''; 
-  //           }
-  //           this.obtenerProductos();
-  //         });
-  //       }
-  
-  //       this.cargando = false;
-  //     },
-  //     (error) => {
-  //       this.cargando = false;
-  //       console.error('Error buscando productos', error);
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'Hubo un problema al buscar los productos.',
-  //         confirmButtonColor: '#e65c00'
-  //       });
-  //     }
-  //   );
-  // }
-
+ 
   buscarProducto(termino: string): void {
     this.sinResultados = false;
     if (termino.length >= 3) {
@@ -334,7 +278,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
         },
         (error) => {
           this.cargando = false;
-          console.error('Error buscando productos', error);
+        //  console.error('Error buscando productos', error);
           Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -346,8 +290,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
     } else if (termino.length === 0) {
       this.obtenerProductos();
     }
-  }
-  
+  } 
   
   
 
@@ -365,7 +308,7 @@ export class PedidosComponent implements OnInit, OnDestroy {
       next: (data) => {
         this.proveedores = data;
         this.proveedoresDuplicados = [...this.proveedores, ...this.proveedores];
-        console.log('Proveedores obtenidos:', this.proveedores);
+       // console.log('Proveedores obtenidos:', this.proveedores);
       },
       error: (err) => console.error('Error obteniendo proveedores', err)
     });

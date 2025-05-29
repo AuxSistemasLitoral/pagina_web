@@ -42,7 +42,7 @@ export class PedidoService {
 
   getProveedores(): Observable<Proveedor[]> {
     const url = this.getUrl(this.endpoinds.proveedores);
-    console.log('URL de proveedores:', url);
+    //console.log('URL de proveedores:', url);
     return this.http.post<Proveedor[]>(url, {}); 
   }
   
@@ -56,8 +56,8 @@ export class PedidoService {
   async enviarPedidoback(pedido: Pedido): Promise<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = this.getUrl(this.endpoinds.pedidos);
-    console.log("Enviando pedido al endpoint:", url);
-    console.log("Cuerpo del pedido a enviar:", pedido);
+    //console.log("Enviando pedido al endpoint:", url);
+    //console.log("Cuerpo del pedido a enviar:", pedido);
     
     return await firstValueFrom(this.http.post<any>(url, pedido, { headers }));
   }

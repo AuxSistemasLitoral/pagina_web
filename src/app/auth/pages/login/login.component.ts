@@ -17,7 +17,7 @@ export class LoginComponent {
   login() {
     this.authService.login(this.usuario, this.clave).subscribe({
       next: (response) => {
-        console.log('Respuesta del servidor:', response);
+        //console.log('Respuesta del servidor:', response);
 
         if (response.success) {
           Swal.fire({

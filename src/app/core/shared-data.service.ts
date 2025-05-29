@@ -40,4 +40,13 @@ export class SharedDataService {
       this.dataReady.next(true);
     }
   }
+  
+  private sucursalChangeSubject = new BehaviorSubject<any>(null);
+  sucursalChanged$ = this.sucursalChangeSubject.asObservable();
+
+  emitSucursalChange(sucursal: any) {
+    this.sucursalChangeSubject.next(sucursal);
+  }
+
+
 }
