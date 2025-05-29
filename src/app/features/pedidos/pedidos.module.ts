@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PedidosRoutingModule } from './pedidos-routing.module';
 import { PedidosComponent } from './pedidos.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   imports: [
     CommonModule,
     PedidosRoutingModule,
-    SharedModule
+    SharedModule,
+    InfiniteScrollModule
   ]
 })
 export class PedidosModule { }

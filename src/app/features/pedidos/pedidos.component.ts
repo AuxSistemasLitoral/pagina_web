@@ -16,6 +16,10 @@ export class PedidosComponent implements OnInit, OnDestroy {
 
   @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
   productos: Producto[] = [];
+  limit: number = 100;
+  offset: number = 0;
+  masProductos: boolean= false;
+  sinMasProductos: boolean = false;
   proveedores: Proveedor[] = [];
   productosFiltrados: any[] = [];
   cargando: boolean = false;
@@ -200,47 +204,110 @@ export class PedidosComponent implements OnInit, OnDestroy {
     if (this.dataSubscription) this.dataSubscription.unsubscribe();
   }
 
-  obtenerProductos() {
+  obtenerProductos(mas: boolean = false) {
+  if (!this.usuario || !this.listaprecio) {
+    console.warn('Para visualizar los productos debes elegir una sucursal');
+    return;
+  }
+  if (!mas) {
     this.modoCatalogo = false;
     this.animarProveedores = false;
-    if (this.usuario && this.listaprecio) {
-      this.cargando = true;
-      this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
-        (response: any[]) => {
-          this.productos = response.map(producto => ({
-            ...producto,
-            proveedor: producto.proveedor || 'Desconocido',
-            descuento: Number(producto.descuento) || 0,
-            lista_precio: Array.isArray(producto.lista_precio)
-              ? producto.lista_precio
-              : JSON.parse(producto.lista_precio || '[]')
-          }));
-          this.productos.sort((a, b) => b.descuento - a.descuento);
-          if (this.productos.length === 0) {
-            Swal.fire({
-              icon: 'info',
-              title: 'Sin productos',
-              text: 'No hay productos disponibles en esta sucursal.',
-              confirmButtonColor: '#05983d'
-            });
-          }
-          this.cargando = false;
-        },
-        (error) => {
-          this.cargando = false;
-        //  console.error('Error obteniendo los productos', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Hubo un problema al obtener los productos.',
-            confirmButtonColor: '#e65c00'
-          });
-        }
-      );
-    } else {
-      console.warn('Para visualizar los productos debes elegir una sucursal');
-    }
+    this.offset = 0;
+    this.productos = [];
+    this.sinMasProductos = false; 
   }
+
+  this.masProductos = true;
+
+  this.pedidoService.getProducts(this.usuario, this.listaprecio, this.limit, this.offset).subscribe(
+    (response: any[]) => {
+      const productosNuevos = response.map(producto => ({
+        ...producto,
+        proveedor: producto.proveedor || 'Desconocido',
+        descuento: Number(producto.descuento) || 0,
+        lista_precio: Array.isArray(producto.lista_precio)
+          ? producto.lista_precio
+          : JSON.parse(producto.lista_precio || '[]')
+      }));
+      this.productos = [...this.productos, ...productosNuevos];
+
+      
+      this.productos.sort((a, b) => b.descuento - a.descuento);
+      if (productosNuevos.length < this.limit) {
+        this.sinMasProductos = true;
+      } else {
+        this.offset += this.limit;
+      }
+      if (!mas && this.productos.length === 0) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Sin productos',
+          text: 'No hay productos disponibles en esta sucursal.',
+          confirmButtonColor: '#05983d'
+        });
+      }
+
+      this.masProductos = false;
+    },
+    (error) => {
+      this.masProductos = false;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al obtener los productos.',
+        confirmButtonColor: '#e65c00'
+      });
+    }
+  );
+}
+
+onScroll() {
+  if (!this.masProductos && !this.sinMasProductos) {
+    this.obtenerProductos(true);
+  }
+}
+
+  // obtenerProductos() {
+  //   this.modoCatalogo = false;
+  //   this.animarProveedores = false;
+  //   if (this.usuario && this.listaprecio) {
+  //     this.cargando = true;
+  //     this.pedidoService.getProducts(this.usuario, this.listaprecio).subscribe(
+  //       (response: any[]) => {
+  //         this.productos = response.map(producto => ({
+  //           ...producto,
+  //           proveedor: producto.proveedor || 'Desconocido',
+  //           descuento: Number(producto.descuento) || 0,
+  //           lista_precio: Array.isArray(producto.lista_precio)
+  //             ? producto.lista_precio
+  //             : JSON.parse(producto.lista_precio || '[]')
+  //         }));
+  //         this.productos.sort((a, b) => b.descuento - a.descuento);
+  //         if (this.productos.length === 0) {
+  //           Swal.fire({
+  //             icon: 'info',
+  //             title: 'Sin productos',
+  //             text: 'No hay productos disponibles en esta sucursal.',
+  //             confirmButtonColor: '#05983d'
+  //           });
+  //         }
+  //         this.cargando = false;
+  //       },
+  //       (error) => {
+  //         this.cargando = false;
+  //       //  console.error('Error obteniendo los productos', error);
+  //         Swal.fire({
+  //           icon: 'error',
+  //           title: 'Error',
+  //           text: 'Hubo un problema al obtener los productos.',
+  //           confirmButtonColor: '#e65c00'
+  //         });
+  //       }
+  //     );
+  //   } else {
+  //     console.warn('Para visualizar los productos debes elegir una sucursal');
+  //   }
+  // }
 
  
   buscarProducto(termino: string): void {

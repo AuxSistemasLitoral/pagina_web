@@ -25,12 +25,19 @@ export class PedidoService {
     return `${this.baseUrl}${endpoint}`;
   }
 
-  getProducts(usuario: string, listaprecio: string): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const body = JSON.stringify({ usuario, listaprecio });
+ getProducts(usuario: string, listaprecio: string, limit: number = 100, offset: number = 0): Observable<any> {
+  const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  // Asegúrate de que los nombres de las propiedades coincidan con lo que esperas en PHP
+  const body = JSON.stringify({ usuario, listaprecio, limit, offset });
+  return this.http.post(this.getUrl(this.endpoinds.productos), body, { headers });
+}
+
+  // getProducts(usuario: string, listaprecio: string): Observable<any> {
+  //   const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  //   const body = JSON.stringify({ usuario, listaprecio });
   
-    return this.http.post(this.getUrl(this.endpoinds.productos), body, { headers });
-  }
+  //   return this.http.post(this.getUrl(this.endpoinds.productos), body, { headers });
+  // }
 
   searchProducts(usuario: string, listaprecio: string, busqueda: string):Observable<any>{
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });

@@ -10,6 +10,7 @@ import { RutaVendedoresComponent } from './features/ruta-vendedores/ruta-vendedo
 import { SeguimientoPedidosComponent } from './features/seguimiento-pedidos/seguimiento-pedidos.component';
 import { MatCardModule } from '@angular/material/card';
 import { CartModule } from './features/cart/cart.module';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +27,7 @@ import { CartModule } from './features/cart/cart.module';
     RouterModule,
     MatCardModule,
     CartModule,    
+    InfiniteScrollModule
   ],
   providers: [],
   bootstrap: [AppComponent]

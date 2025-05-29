@@ -45,7 +45,12 @@
   </button>
 
 
-  <div class="productos-container">
+  <div class="productos-container" 
+  infiniteScroll
+     [infiniteScrollDistance]="2"
+     [infiniteScrollThrottle]="150"
+     (scrolled)="onScroll()"  
+  >
     <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">
 
       <!-- Imagen del producto -->
