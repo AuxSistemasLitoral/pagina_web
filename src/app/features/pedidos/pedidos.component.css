@@ -53,6 +53,44 @@
   animation: none;
 }
 
+.no-more-products-footer {
+  margin: 30px auto; /* Centra el contenedor y le da espacio arriba y abajo */
+  padding: 15px 25px; /* Espaciado interno */
+  background-color: #f0f0f0; /* Un fondo claro para que destaque, pero no demasiado */
+  border: 1px solid #ddd; /* Un borde sutil */
+  border-radius: 8px; /* Bordes ligeramente redondeados */
+  text-align: center; /* Centra el texto dentro del contenedor */
+  max-width: 500px; /* Ancho máximo para que no se extienda demasiado en pantallas grandes */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave para darle profundidad */
+  animation: fadeIn 0.8s ease-out; /* Misma animación de entrada que el loading-container */
+}
+
+.no-more-products-message {
+  font-size: 1.1em; /* Un tamaño de fuente un poco más grande para que sea legible */
+  color: #555; /* Un color de texto que contraste bien */
+  font-weight: 500; /* Un peso de fuente medio */
+  line-height: 1.5; /* Espaciado entre líneas para mejor lectura */
+}
+
+/* Opcional: Estilos para un mensaje de error persistente si eliges esa opción */
+.error-message-footer {
+  margin: 30px auto;
+  padding: 15px 25px;
+  background-color: #ffe0e0; /* Fondo rojizo claro para errores */
+  border: 1px solid #ff9999; /* Borde rojo */
+  border-radius: 8px;
+  text-align: center;
+  max-width: 500px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.8s ease-out;
+}
+
+.error-message-footer span {
+  font-size: 1.1em;
+  color: #cc0000; /* Color de texto rojo más oscuro */
+  font-weight: 600;
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -133,19 +171,6 @@
 }
 
 
-
-@media (max-width: 600px) {
-  .contenedor-buscar input[type="text"] {
-    width: 100%; 
-    background-position: 10px center;
-    font-size: 15px;
-  }
-  
-  .contenedor-buscar {
-    padding: 10px;
-  }
-}
-
 .columna-izquierda {
     flex-basis: 60%;
     flex-grow: 1;  
@@ -183,25 +208,6 @@
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box; 
-}
-
-
-@media (max-width: 700px) { 
-  .contenedor-secundario {
-    flex-direction: column; 
-    align-items: stretch; 
-  }
-  .columna-izquierda,
-  .columna-derecha {
-    flex-basis: 100%;
-    min-width: auto;
-  }
-   .columna-izquierda {
-       margin-bottom: 15px;
-   }
-  .contenedor-titulo {
-      text-align: left;
-  }
 }
 
 .proveedores-container {
@@ -467,4 +473,34 @@
   color: #999;
   font-style: italic;
   font-size: 14px;
+}
+
+@media (max-width: 700px) { 
+  .contenedor-secundario {
+    flex-direction: column; 
+    align-items: stretch; 
+  }
+  .columna-izquierda,
+  .columna-derecha {
+    flex-basis: 100%;
+    min-width: auto;
+  }
+   .columna-izquierda {
+       margin-bottom: 15px;
+   }
+  .contenedor-titulo {
+      text-align: left;
+  }
+}
+
+@media (max-width: 600px) {
+  .contenedor-buscar input[type="text"] {
+    width: 100%; 
+    background-position: 10px center;
+    font-size: 15px;
+  }
+  
+  .contenedor-buscar {
+    padding: 10px;
+  }
 }

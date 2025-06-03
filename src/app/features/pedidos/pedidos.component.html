@@ -44,6 +44,10 @@
     <!-- <span class="visually-hidden-boton">VOLVER ARRIBA</span> -->
   </button>
 
+  <div *ngIf="cargando || masProductos" class="loading-container">
+    <div class="spinner"></div>
+    <span class="loading-message">{{ mensajeCarga }}</span>
+</div>
 
   <div class="productos-container" 
   infiniteScroll
@@ -51,6 +55,11 @@
      [infiniteScrollThrottle]="150"
      (scrolled)="onScroll()"  
   >
+
+  <div *ngIf="sinMasProductos && !cargando && !masProductos" class="no-more-products-footer">
+    <span class="no-more-products-message">{{ mensajeCarga }}</span>
+</div>
+
     <div class="producto-card" *ngFor="let producto of productos" [class.con-descuento]="producto.descuento > 0">
 
       <!-- Imagen del producto -->

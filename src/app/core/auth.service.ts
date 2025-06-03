@@ -55,11 +55,12 @@ export class AuthService {
     //console.log('>>> diasSubject emitió el valor:', valor); // Confirma la emisión
   }
 
- 
+
 
   constructor(private http: HttpClient, private router: Router) {
     this.detectarActividad();
     this.startTokenValidation();
+    this.obtenerUsuarioDesdeStorage();
   }
 
   private getUrl(endpoint: string): string {
@@ -68,35 +69,53 @@ export class AuthService {
 
   login(usuario: string, clave: string): Observable<{ success: boolean; usuario: Usuario; token: string }> {
     return this.http.post<{ success: boolean; usuario: Usuario; token: string }>(
-      this.getUrl(this.endpoints.login), 
+      this.getUrl(this.endpoints.login),
       { usuario, clave }
     );
   }
 
   getSucursales(nit: string): Observable<Sucursal[]> {
     return this.http.post<Sucursal[]>(this.getUrl(this.endpoints.sucursal), { nit });
-  } 
+  }
 
 
   obtenerUsuarioDesdeStorage() {
     const usuarioStorage = localStorage.getItem('usuario');
     if (usuarioStorage) {
-        const usuario = JSON.parse(usuarioStorage);
-        this.usuarioSubject.next(usuario); 
-        this.getSucursales(usuario.cedula.toString()).subscribe(sucursales => {             
-            this.sucursalesSubject.next(sucursales);
-           // console.log('sucursales obtenidas', sucursales);
+      const usuario = JSON.parse(usuarioStorage);
+      this.usuarioSubject.next(usuario);
+      this.getSucursales(usuario.cedula.toString()).subscribe(sucursales => {
+        this.sucursalesSubject.next(sucursales);
+        // console.log('sucursales obtenidas', sucursales);
 
-            if (sucursales.length > 0) {
-                const sucursalSelect = sucursales[0];
-                this.setDisponible(sucursalSelect.disponible); 
-                localStorage.setItem('selectedSucursal', JSON.stringify(sucursalSelect));
-                //console.log('disponible en el servicio obtenerUsuario', sucursalSelect.disponible);
+        if (sucursales.length > 0) {
+          const sucursalSelect = sucursales[0];
+          this.setDisponible(sucursalSelect.disponible);
+          localStorage.setItem('selectedSucursal', JSON.stringify(sucursalSelect));
+          //console.log('disponible en el servicio obtenerUsuario', sucursalSelect.disponible);
 
-            }
-        });
+        }
+      });
     }
-}
+  }
+
+  esUsuarioConPerfil(perfilRequerido: string | string[]): boolean {
+    const perfilActual = this.getPerfilUsuario();
+    if (!perfilActual) {
+      return false; 
+    }
+
+    if (Array.isArray(perfilRequerido)) {
+      return perfilRequerido.includes(perfilActual);
+    } else {
+      return perfilActual === perfilRequerido;
+    }
+  }
+
+  getPerfilUsuario(): string | null {
+    const usuario = this.usuarioSubject.getValue();
+    return usuario ? usuario.perfil_id : null;
+  }
 
   guardarSesion(token: string, usuario: Usuario) {
     localStorage.setItem('token', token);
@@ -115,57 +134,57 @@ export class AuthService {
     try {
       return jwtDecode(token);
     } catch (error) {
-    //  console.log('Error al decodificar el token', error);
+      //  console.log('Error al decodificar el token', error);
       return null;
     }
   }
 
   getSucursalSeleccionada(): Sucursal | null {
-  const data = localStorage.getItem('selectedSucursal');
-  return data ? JSON.parse(data) : null;
-}
+    const data = localStorage.getItem('selectedSucursal');
+    return data ? JSON.parse(data) : null;
+  }
 
 
-  private getTokenExpiration(): number | null{
+  private getTokenExpiration(): number | null {
     const tokenDecodificado = this.decodificarToken();
     return tokenDecodificado ? tokenDecodificado.exp * 1000 : null;
   }
 
   esTokenValido(): boolean {
     const exp = this.getTokenExpiration();
-   // console.log('Verificando validez del token, expira en:', exp ? (exp - Date.now()) / 1000 : 'Token no válido');
-    return exp ?  Date.now() < exp : false;
-}
+    // console.log('Verificando validez del token, expira en:', exp ? (exp - Date.now()) / 1000 : 'Token no válido');
+    return exp ? Date.now() < exp : false;
+  }
 
 
   refrescarToken(): Observable<any> {
     const token = localStorage.getItem('token');
     if (!token) {
-    //  console.log("No hay token en localStorage, cerrando sesión...");
+      //  console.log("No hay token en localStorage, cerrando sesión...");
       this.logout();
       return of(null);
     }
 
-  //  console.log("Enviando solicitud para refrescar token a:", this.getUrl(this.endpoints.refresh));
-  //  console.log("Token enviado:", localStorage.getItem('token'));
+    //  console.log("Enviando solicitud para refrescar token a:", this.getUrl(this.endpoints.refresh));
+    //  console.log("Token enviado:", localStorage.getItem('token'));
 
     return this.http.get(this.getUrl(this.endpoints.refresh), {
       headers: { Authorization: `Bearer ${token}` }
     }).pipe(
       map((response: any) => {
-     //   console.log("Respuesta de refresco de token:", response);
+        //   console.log("Respuesta de refresco de token:", response);
         if (response.success && response.token) {
           localStorage.setItem('token', response.token);
           this.lastActivity = Date.now();
           return response;
         } else {
-      //    console.log("No se recibió un nuevo token, cerrando sesión...");
+          //    console.log("No se recibió un nuevo token, cerrando sesión...");
           this.logout();
           return null;
         }
       }),
       catchError((error) => {
-      //  console.error('Error al refrescar token:', error);
+        //  console.error('Error al refrescar token:', error);
         this.logout();
         return of(null);
       })
@@ -175,7 +194,7 @@ export class AuthService {
 
   startTokenValidation() {
     if (this.tokenValidationSubscription) {
-      this.tokenValidationSubscription.unsubscribe(); 
+      this.tokenValidationSubscription.unsubscribe();
     }
 
     this.tokenValidationSubscription = interval(this.tokenCheckInterval).subscribe(() => {
@@ -189,16 +208,16 @@ export class AuthService {
       const timeLeft = tokenExpiration ? tokenExpiration - Date.now() : 0;
 
 
-     // console.log(`Tiempo inactivo: ${inactiveTime / 1000} segundos, Tiempo restante del token: ${timeLeft/1000} segundos`);
+      // console.log(`Tiempo inactivo: ${inactiveTime / 1000} segundos, Tiempo restante del token: ${timeLeft/1000} segundos`);
 
       if (inactiveTime > this.inactivityTime || (timeLeft > 0 && timeLeft < 5 * 60 * 1000) || !this.esTokenValido()) { // 5 minutos de anticipación
-       //   console.log('Refrescando token por inactividad o proximidad a expiración');
-          this.refrescarToken().subscribe(response => {
-              if (!response || !this.esTokenValido()) {
-         //         console.log('No se pudo refrescar el token o sigue inválido, cerrando sesión');
-                  this.logout();
-              }
-          });
+        //   console.log('Refrescando token por inactividad o proximidad a expiración');
+        this.refrescarToken().subscribe(response => {
+          if (!response || !this.esTokenValido()) {
+            //         console.log('No se pudo refrescar el token o sigue inválido, cerrando sesión');
+            this.logout();
+          }
+        });
       } else {
         //  console.log('No es necesario refrescar el token aún.');
       }
@@ -226,7 +245,7 @@ export class AuthService {
     this.stopTokenValidation();
     localStorage.clear();
     this.router.navigate(['/login']);
-  } 
-   
+  }
+
 }
 

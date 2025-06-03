@@ -26,7 +26,7 @@
         <p>Accede a reportes detallados de ventas y clientes.</p>
     </div>
 
-    <div class="card" routerLink="/ruta-vendedores">
+    <div class="card" *ngIf="authService.esUsuarioConPerfil(['VENDEDOR', 'SUPERVISOR'])" routerLink="/ruta-vendedores">
         <h3>Ruta Vendedores</h3>
         <img src="../../../../assets/icons/ruta_vendedores.jpg" alt="Ruta Vendedores">
         <p>Visualiza la ruta de vendedores en campo.</p>

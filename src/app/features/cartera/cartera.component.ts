@@ -13,10 +13,17 @@ export class CarteraComponent implements OnInit {
   loading = true;
   private subscription!: Subscription;
   totalAdeudado: number = 0;
+  venc15: number = 0;
+  venc30: number = 0;
+  venc45: number = 0;
+  venceM: number = 0;
+  saldoCorriente: number = 0;
+  totalVencido: number = 0;
   selectedFacturas: any[] = [];
   sobreCupo: number = 0;
   isMobile: boolean = false;
   isRedirecting: boolean = false;
+
 
   constructor(
     private carteraService: CarteraService,
@@ -53,12 +60,36 @@ export class CarteraComponent implements OnInit {
       next: (data) => {
         this.cartera = data;
         this.loading = false;
+        this.totalAdeudado = 0;
+        this.venc15 = 0;
+        this.venc30 = 0;
+        this.venc45 = 0;
+        this.venceM = 0;
+        this.saldoCorriente = 0;
 
         this.totalAdeudado = this.cartera.reduce((sum, item) => {
-          return sum + Number(item.saldo);
-        }, 0);
+          const saldo = Number(item.saldo);
+          const dias = Number(item.dias);
 
-        this.sobreCupo = this.totalAdeudado - this.cartera[0].cupo
+          if (saldo > 0) {
+            if (dias <= 0) {
+              this.saldoCorriente += saldo;
+            } else if (dias <= 15) {
+              this.venc15 += saldo;
+            } else if (dias <= 30) {
+              this.venc30 += saldo;
+            } else if (dias <= 45) {
+              this.venc45 += saldo;
+            } else {
+              this.venceM += saldo;
+            }
+          }
+
+          return sum + saldo;
+        }, 0);
+        const valores = [this.venc15, this.venc30, this.venc45, this.venceM];
+        this.totalVencido = valores.filter(v => v > 0).reduce((sum, v) => sum + v, 0);
+        this.sobreCupo = this.totalAdeudado - this.cartera[0].cupo;
       },
 
       error: (err) => {
@@ -67,6 +98,7 @@ export class CarteraComponent implements OnInit {
       }
     });
   }
+
 
   ngOnDestroy(): void {
     this.subscription?.unsubscribe();
@@ -90,79 +122,6 @@ export class CarteraComponent implements OnInit {
       this.selectedFacturas.push(item);
     }
   }
-
-//   async generarPago(): Promise<void> {
-//   if (this.selectedFacturas.length === 0) {
-//     alert('Debes seleccionar al menos una factura');
-//     return;
-//   }
-
-//   const cliente = localStorage.getItem('id_cliente');
-//   if (!cliente) {
-//     alert('Cliente no definido');
-//     return;
-//   }
-
-//   const payload = {
-//     cliente: cliente,
-//     facturas: this.selectedFacturas.map(f => {
-//       const [tipo, num] = f.factura.split('-');
-//       return {
-//         Factura: `${tipo}-${num}`,
-//         pagoparcial: parseFloat(f.saldoAEditar || f.saldo)
-//       };
-//     })
-//   };
-
-//   console.log('Payload enviado a TransacPagoCartera:', payload);
-
-//   try {
-//     // Paso 1: registrar transacción
-//     const resp1: any = await this.carteraService.registrarPagoCartera(payload).toPromise();
-
-//     if (!resp1 || !resp1.pagoid || !resp1.idcarterapago) {
-//       console.error('No se pudo registrar la transacción:', resp1);
-//       alert('Ocurrió un error al registrar el pago');
-//       return;
-//     }
-
-//     const pagoid = resp1.pagoid;
-//     const idcarterapago = resp1.idcarterapago;
-//     const total = this.totalAPagar;
-
-//     // Paso 2: generar enlace de pasarela
-//     const resp2: any = await this.carteraService.generarLinkPasarela(pagoid, total).toPromise();
-//     console.log('Respuesta cruda de generarLinkPasarela:', resp2);
-
-//     let parsed;
-//     try {
-//       parsed = JSON.parse(resp2);
-//       console.log('Respuesta parseada:', parsed);
-//     } catch (e) {
-//       console.error('Error al parsear JSON:', e);
-//       alert('La respuesta del servidor no es JSON válido');
-//       return;
-//     }
-
-//     if (!parsed.formUrl || !parsed.orderId) {
-//       console.error('No se recibió formUrl o orderId:', parsed);
-//       alert(parsed.errorMessage || 'Error al generar el enlace de pago');
-//       return;
-//     }
-
-//     // Paso 3: actualizar la tabla con orderId y estado
-//     await this.carteraService.updateCarteraPago(idcarterapago, parsed.orderId).toPromise();
-
-//     // Paso 4: redirigir al formulario de pago
-//     this.isRedirecting = true;
-//     window.location.href = parsed.formUrl;
-
-//   } catch (err) {
-//     console.error('Error durante el proceso de pago:', err);
-//     alert('Error inesperado');
-//   }
-// }
-
 
   async generarPago(): Promise<void> {
     if (this.selectedFacturas.length === 0) {
@@ -222,8 +181,8 @@ export class CarteraComponent implements OnInit {
         return;
       }
 
-    await this.carteraService.updateCarteraPago(resp1.pagoid, parsed.orderId).toPromise();
-     alert('echo');
+      await this.carteraService.updateCarteraPago(resp1.pagoid, parsed.orderId).toPromise();
+      alert('echo');
       this.isRedirecting = true;
       window.location.href = parsed.formUrl;
 

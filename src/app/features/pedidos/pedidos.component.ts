@@ -20,6 +20,8 @@ export class PedidosComponent implements OnInit, OnDestroy {
   offset: number = 0;
   masProductos: boolean= false;
   sinMasProductos: boolean = false;
+  mensajeCarga: string = ''
+  private mensajeTimeout: any; 
   proveedores: Proveedor[] = [];
   productosFiltrados: any[] = [];
   cargando: boolean = false;
@@ -202,6 +204,9 @@ export class PedidosComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.diasSubscription) this.diasSubscription.unsubscribe();
     if (this.dataSubscription) this.dataSubscription.unsubscribe();
+    if (this.mensajeTimeout) {
+    clearTimeout(this.mensajeTimeout);
+  }
   }
 
   obtenerProductos(mas: boolean = false) {
@@ -209,15 +214,26 @@ export class PedidosComponent implements OnInit, OnDestroy {
     console.warn('Para visualizar los productos debes elegir una sucursal');
     return;
   }
+  if (this.mensajeTimeout) {
+    clearTimeout(this.mensajeTimeout);
+    this.mensajeTimeout = null;
+  }
+  this.mensajeCarga = '';
+
   if (!mas) {
     this.modoCatalogo = false;
     this.animarProveedores = false;
     this.offset = 0;
     this.productos = [];
     this.sinMasProductos = false; 
+    this.cargando = true;
+    this.mensajeCarga = 'CARGANDO PRODUCTOS...'
+  }else{
+    this.masProductos = true;
+  this.mensajeCarga = 'CARGANDO MÁS PRODUCTOS...';
   }
 
-  this.masProductos = true;
+  
 
   this.pedidoService.getProducts(this.usuario, this.listaprecio, this.limit, this.offset).subscribe(
     (response: any[]) => {
@@ -229,14 +245,19 @@ export class PedidosComponent implements OnInit, OnDestroy {
           ? producto.lista_precio
           : JSON.parse(producto.lista_precio || '[]')
       }));
-      this.productos = [...this.productos, ...productosNuevos];
-
-      
+      this.productos = [...this.productos, ...productosNuevos];      
       this.productos.sort((a, b) => b.descuento - a.descuento);
+      this.cargando = false;
       if (productosNuevos.length < this.limit) {
         this.sinMasProductos = true;
+        this.mensajeCarga = 'NO HAY MÁS PRODUCTOS DISPONIBLES'; 
+        this.mensajeTimeout = setTimeout(()=>{
+          this.mensajeCarga = '';
+        },3000)
       } else {
         this.offset += this.limit;
+         this.sinMasProductos = false; 
+          this.mensajeCarga = ''; 
       }
       if (!mas && this.productos.length === 0) {
         Swal.fire({
@@ -245,12 +266,18 @@ export class PedidosComponent implements OnInit, OnDestroy {
           text: 'No hay productos disponibles en esta sucursal.',
           confirmButtonColor: '#05983d'
         });
+         this.sinMasProductos = true;
+         this.mensajeCarga = 'NO HAY PRODUCTOS DISPONIBLES EN ESTA SUCURSAL.'; 
+         this.mensajeTimeout = setTimeout(() => {
+          this.mensajeCarga = '';
+        }, 8000);
       }
-
       this.masProductos = false;
     },
     (error) => {
+      this.cargando = false;
       this.masProductos = false;
+      this.mensajeCarga= 'ERROR AL CARGAR PRODUCTOS'
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -266,6 +293,8 @@ onScroll() {
     this.obtenerProductos(true);
   }
 }
+
+
 
   // obtenerProductos() {
   //   this.modoCatalogo = false;
