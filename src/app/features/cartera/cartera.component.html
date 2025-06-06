@@ -1,7 +1,10 @@
-<div *ngIf="loading">Cargando cartera...</div> 
-<div>    
-      <h3 class="alerta-sobrecupo"><strong> Ten en cuenta que la actualización de saldos se realizará dentro de las 24 horas siguientes a su pago </strong></h3>
-    </div>
+<div *ngIf="loading">Cargando cartera...</div>
+
+<div class="encabezado">
+<div>
+    <h3 class="alerta-envio"><strong> Ten en cuenta que la actualización de saldos se realizará dentro de las 24
+            horas siguientes a su pago </strong></h3>
+</div>
 
 <div *ngIf="cartera.length > 0" class="resumen-cartera">
     <p><strong>CUPO:</strong> {{ cartera[0].cupo | currency:'$ ':'symbol':'1.0-0' }}</p>
@@ -13,31 +16,31 @@
     <div *ngIf="sobreCupo > 0" class="alerta-sobrecupo">
         <strong>ADVERTENCIA:</strong> Tienes un sobre cupo por {{ sobreCupo | number:'1.2-2' }}.
     </div>
-
-   
+</div>
 </div>
 
+
 <div *ngIf="!loading && cartera.length > 0" class="resumen-kpi-container">
-  <div class="resumen-kpi">
-    <div class="card-kpi" *ngIf="saldoCorriente > 0">
-      <strong>Saldo corriente:</strong><br />{{ saldoCorriente | currency:'$ ':'symbol':'1.0-0' }}
+    <div class="resumen-kpi">
+        <div class="card-kpi" *ngIf="saldoCorriente > 0">
+            <strong>Saldo corriente:</strong><br />{{ saldoCorriente | currency:'$ ':'symbol':'1.0-0' }}
+        </div>
+        <div class="card-kpi" *ngIf="venc15 > 0">
+            <strong>1-15 días vencido:</strong><br />{{ venc15 | currency:'$ ':'symbol':'1.0-0' }}
+        </div>
+        <div class="card-kpi" *ngIf="venc30 > 0">
+            <strong>16-30 días vencido:</strong><br />{{ venc30 | currency:'$ ':'symbol':'1.0-0' }}
+        </div>
+        <div class="card-kpi" *ngIf="venc45 > 0">
+            <strong>31-45 días vencido:</strong><br />{{ venc45 | currency:'$ ':'symbol':'1.0-0' }}
+        </div>
+        <div class="card-kpi" *ngIf="venceM > 0">
+            <strong>+45 días vencido:</strong><br />{{ venceM | currency:'$ ':'symbol':'1.0-0' }}
+        </div>
+        <div class="card-kpi">
+            <strong>Total Vencido:</strong><br />{{ totalVencido | currency:'$ ':'symbol':'1.0-0' }}
+        </div>
     </div>
-    <div class="card-kpi" *ngIf="venc15 > 0">
-      <strong>1-15 días vencido:</strong><br />{{ venc15 | currency:'$ ':'symbol':'1.0-0' }}
-    </div>
-    <div class="card-kpi" *ngIf="venc30 > 0">
-      <strong>16-30 días vencido:</strong><br />{{ venc30 | currency:'$ ':'symbol':'1.0-0' }}
-    </div>
-    <div class="card-kpi" *ngIf="venc45 > 0">
-      <strong>31-45 días vencido:</strong><br />{{ venc45 | currency:'$ ':'symbol':'1.0-0' }}
-    </div>
-    <div class="card-kpi" *ngIf="venceM > 0">
-      <strong>+45 días vencido:</strong><br />{{ venceM | currency:'$ ':'symbol':'1.0-0' }}
-    </div>
-    <div class="card-kpi">
-      <strong>Total Vencido:</strong><br />{{ totalVencido | currency:'$ ':'symbol':'1.0-0' }}
-    </div>
-  </div>
 </div>
 
 
@@ -60,7 +63,8 @@
         <tbody>
             <tr *ngFor="let item of cartera">
                 <td>
-                    <input type="checkbox" [checked]="selectedFacturas.includes(item)" (change)="toggleFactura(item)" [disabled]="item.saldo < 0" />
+                    <input type="checkbox" [checked]="selectedFacturas.includes(item)" (change)="toggleFactura(item)"
+                        [disabled]="item.saldo < 0" />
                 </td>
                 <td>{{ item.factura }}</td>
                 <td>{{ item.fecha }}</td>
@@ -93,7 +97,8 @@
 <div *ngIf="!loading && cartera.length > 0 && isMobile">
     <div class="factura-card" *ngFor="let item of cartera">
         <div class="factura-header">
-            <input type="checkbox" [checked]="selectedFacturas.includes(item)" (change)="toggleFactura(item)"  [disabled]="item.saldo < 0"/>
+            <input type="checkbox" [checked]="selectedFacturas.includes(item)" (change)="toggleFactura(item)"
+                [disabled]="item.saldo < 0" />
             <strong>Factura #{{ item.factura }}</strong>
         </div>
 

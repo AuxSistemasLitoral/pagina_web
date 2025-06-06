@@ -1,20 +1,45 @@
+
+.alerta-envio {
+  color: #1b8c17;
+  background-color: #fff8e1;
+  padding: 0 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #cac5b6;
+  font-size: 1rem;
+  line-height: 1.4;
+  
+}
+
 .resumen-cartera {
+   color: #856404;
+  background-color: #fffcf3;
+  border: 1px solid #ffeeba;
   display: flex;
-  gap: 2rem;
-  align-items: center;
   flex-wrap: wrap;
+  gap: 1rem 2rem;
   margin-bottom: 1rem;
-  padding: 0 2rem;
-  color: black;
-  font-weight: bold;
+  padding: 0 1.5rem;
+  color: #000;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.encabezado {
+  padding: 1.5rem 1rem;
+  margin: 0;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
 }
 
 .alerta-sobrecupo {
   color: #856404;
-  background-color: #fff3cd;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+  background-color: #fff8e1;
+  padding: 0 1.5rem;
+  border-radius: 6px;
   border: 1px solid #ffeeba;
+  font-size: 1rem;
+  line-height: 1.4;
+  
 }
 
 .tabla-facturas {
@@ -202,11 +227,11 @@
  font-size: 16px;
  color: #333;
  background-color: #f9f9f9;
- box-shadow: 0 4px 8px rgba(0, 0, 0, 0.)
+ box-shadow: 0 4px 8px rgba(0, 0, 0, 0.) 
 }
 
 .resumen-kpi-container {
-  /* margin-bottom: 1rem; */
+  margin-bottom: 0rem;
   padding: 30px;
 }
 
@@ -227,11 +252,25 @@
   font-size: 14px;
   line-height: 1.4;
 }
-
+ 
 
 
 @media (max-width: 768px) {
   .tabla-container {
     padding: 0 1rem;
+  }
+
+  .resumen-cartera {
+    flex-direction: column;
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .alerta-sobrecupo {
+    font-size: 0.9rem;
+  }
+
+  .encabezado {
+    padding: 1rem;
   }
 }

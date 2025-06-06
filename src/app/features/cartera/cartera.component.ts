@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { CarteraService } from 'src/app/core/cartera.service';
 import { SharedDataService } from 'src/app/core/shared-data.service';
 

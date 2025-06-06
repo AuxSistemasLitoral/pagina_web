@@ -1,1 +1,41 @@
-<p>ruta vededodres works!</p>
+<div *ngIf="loading" class="loading-text">Cargando ruta de vendedores...</div>
+
+<div *ngIf="!loading && vendedores.length === 0" class="no-data">
+    No hay vendedores asignados con ruta.
+</div>
+
+<div *ngIf="!loading && vendedores.length > 0">
+    <div class="filtro-contenedor">
+        <select id="filtroZona" [(ngModel)]="zonaSeleccionada" (ngModelChange)="onZonaSeleccionada($event)">
+            <option [ngValue]="''">SELECCIONE UNA ZONA</option>
+            <option *ngFor="let item of zonasUnicas" [ngValue]="item.zona">
+                {{ item.zona }} -{{ item.nombre }} - Canal: {{ item.canal }} - Línea: {{ item.linea }}
+            </option>
+        </select>
+
+        <input type="date" [(ngModel)]="fechaSeleccionada" (change)="onFechaSeleccionada()" class="fecha-picker" />
+        <button class="search" (click)="getTrackingRoute()" [disabled]="!zonaSeleccionada || !fechaSeleccionada">
+            Consultar
+        </button>
+    </div>
+
+    <div class="contenedor-datos-mapa" *ngIf="clientesAVisitar || clientesVisitados">
+        <!-- Columna izquierda (datos) -->
+        <div class="columna-datos">
+            <h3>Resumen de Visitas</h3>
+            <p><strong>Clientes a Visitar:</strong> {{ clientesAVisitar }}</p>
+            <p><strong>Clientes Visitados:</strong> {{ clientesVisitados }}</p>
+            <p><strong>Total Venta:</strong> {{ totalVentas | currency:'$ ':'symbol':'1.0-0' }}</p>
+            <p *ngIf="horaInicioRuta"><strong>Inicio de Ruta:</strong> {{ horaInicioRuta }}</p>
+            <p *ngIf="horaFinRuta"><strong>Fin de Ruta:</strong> {{ horaFinRuta }}</p>
+
+        </div>
+
+
+        <!-- Columna derecha (mapa - lo puedes integrar después aquí) -->
+        <div class="columna-mapa">
+            <!-- Aquí colocarás el mapa más adelante -->
+            <p>Aquí irá el mapa 📍</p>
+        </div>
+    </div>
+</div>

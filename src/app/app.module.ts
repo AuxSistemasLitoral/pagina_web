@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { HomeComponent } from './auth/pages/home/home.component';
 import { RouterModule } from '@angular/router';
-import { RutaVendedoresComponent } from './features/ruta-vendedores/ruta-vendedores.component';
+//import { RutaVendedoresComponent } from './features/ruta-vendedores/ruta-vendedores.component';
 import { SeguimientoPedidosComponent } from './features/seguimiento-pedidos/seguimiento-pedidos.component';
 import { MatCardModule } from '@angular/material/card';
 import { CartModule } from './features/cart/cart.module';
@@ -15,7 +15,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
   declarations: [
     AppComponent,
     HomeComponent,
-    RutaVendedoresComponent,
+   // RutaVendedoresComponent,
     SeguimientoPedidosComponent,
     
   ],
