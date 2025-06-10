@@ -1,36 +1,69 @@
-
 <div class="container">
-    
-    <div *ngIf="dias === 1" class="card" (click)="irAPedidos()">
-        <h3>Pedidos</h3>
-        <img src="../../../../assets/icons/shopping-cart.jpg" alt="Pedidos">
-        <p>Revisa y administra los pedidos realizados.</p>
-      </div>     
-
-
-    <div class="card" routerLink="/cartera">
-        <h3>Cartera</h3>
-        <img src="../../../../assets/icons/credit-card.png" alt="Cartera">        
-        <p>Realiza pagos, consulta tu crédito aprobado y gestiona la cartera.</p>
-    </div>    
-
-    <div class="card" routerLink="/seguimiento-pedidos">
-        <h3>Seguimiento de pedidos</h3>
-        <img src="../../../../assets/icons/seguimiento_pedido.jpg" alt="Seguimiento">
-        <p>Monitorea el estado de los pedidos en tiempo real.</p>
+    <div class="profile-cards" *ngIf="authService.esUsuarioConPerfil(['CLIENTE'])">
+        <div class="card" (click)="irAPedidos()">
+            <h3>Pedidos</h3>
+            <img src="../../../../assets/icons/shopping-cart.jpg" alt="Pedidos">
+            <p>Revisa y administra los pedidos realizados.</p>
+        </div>
+        <div class="card" routerLink="/cartera">
+            <h3>Cartera</h3>
+            <img src="../../../../assets/icons/credit-card.png" alt="Cartera">
+            <p>Realiza pagos, consulta tu crédito aprobado y gestiona la cartera.</p>
+        </div>
     </div>
 
-    <div class="card" routerLink="/informes">
-        <h3>Informes</h3>
-        <img src="../../../../assets/icons/reporte_ventas.jpg" alt="Informes">
-        <p>Accede a reportes detallados de ventas y clientes.</p>
-    </div>
-
-    <div class="card" *ngIf="authService.esUsuarioConPerfil(['VENDEDOR', 'SUPERVISOR'])" routerLink="/ruta-vendedores">
-        <h3>Ruta Vendedores</h3>
-        <img src="../../../../assets/icons/ruta_vendedores.jpg" alt="Ruta Vendedores">
-        <p>Visualiza la ruta de vendedores en campo.</p>
+    <div class="profile-cards" *ngIf="authService.esUsuarioConPerfil(['VENDEDOR', 'SUPERVISOR'])">
+        <div class="card" routerLink="/informes">
+            <h3>Informes</h3>
+            <img src="../../../../assets/icons/reporte_ventas.jpg" alt="Informes">
+            <p>Accede a reportes detallados de ventas por vendedor.</p>
+        </div>
+        <div class="card" routerLink="/ruta-vendedores">
+            <h3>Ruta Vendedores</h3>
+            <img src="../../../../assets/icons/ruta_vendedores.jpg" alt="Ruta Vendedores">
+            <p>Visualiza la ruta de vendedores en campo.</p>
+        </div>
     </div>
 </div>
 
 
+<!-- <div class="container">
+    <div *ngIf="authService.esUsuarioConPerfil(['CLIENTE'])">
+
+        <div *ngIf="dias === 1" class="card" (click)="irAPedidos()">
+            <h3>Pedidos</h3>
+            <img src="../../../../assets/icons/shopping-cart.jpg" alt="Pedidos">
+            <p>Revisa y administra los pedidos realizados.</p>
+        </div>
+
+
+        <div class="card" *ngIf="authService.esUsuarioConPerfil(['CLIENTE'])" routerLink="/cartera">
+            <h3>Cartera</h3>
+            <img src="../../../../assets/icons/credit-card.png" alt="Cartera">
+            <p>Realiza pagos, consulta tu crédito aprobado y gestiona la cartera.</p>
+        </div>
+    </div> -->
+
+    <!-- <div class="card" routerLink="/seguimiento-pedidos">
+        <h3>Seguimiento de pedidos</h3>
+        <img src="../../../../assets/icons/seguimiento_pedido.jpg" alt="Seguimiento">
+        <p>Monitorea el estado de los pedidos en tiempo real.</p>
+    </div> -->
+<!--     
+    <div *ngIf="authService.esUsuarioConPerfil(['VENDEDOR', 'SUPERVISOR'])">
+        <div class="card" routerLink="/informes">
+            <h3>Informes</h3>
+            <img src="../../../../assets/icons/reporte_ventas.jpg" alt="Informes">
+            <p>Accede a reportes detallados de ventas por vendedor.</p>
+        </div>
+
+        <div class="card" routerLink="/ruta-vendedores">
+            <h3>Ruta Vendedores</h3>
+            <img src="../../../../assets/icons/ruta_vendedores.jpg" alt="Ruta Vendedores">
+            <p>Visualiza la ruta de vendedores en campo.</p>
+        </div>
+
+    </div>
+
+
+</div> -->
