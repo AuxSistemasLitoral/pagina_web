@@ -79,7 +79,7 @@
         flex-wrap: nowrap;
         justify-content: center;
         align-items: center;
-        gap: 40px; 
+        gap: 150px; 
     }
 
     .card {
@@ -168,7 +168,7 @@
     }
 }
 
-@media (min-width: 996px) {
+/* @media (min-width: 996px) {
     footer {
         position: fixed;
         bottom: 0;
@@ -178,7 +178,7 @@
         padding: 10px 0;
         box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
     }
-}
+} */
 
 
 /* .container { 

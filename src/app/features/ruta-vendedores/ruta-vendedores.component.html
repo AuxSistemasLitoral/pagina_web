@@ -16,7 +16,7 @@
     <input type="date" [(ngModel)]="fechaSeleccionada" (change)="onFechaSeleccionada()" class="fecha-picker" />
     <button class="search" (click)="getTrackingRoute()" [disabled]="!zonaSeleccionada || !fechaSeleccionada">
       Consultar
-    </button>
+    </button> 
   </div>
 
   <div class="contenedor-datos-mapa" *ngIf="clientesAVisitar || clientesVisitados">

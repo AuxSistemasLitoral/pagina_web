@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
   dias: number = 0;
 
   constructor(
-    public authService: AuthService,
+    public authService: AuthService, 
     private router: Router
   ) {}
 

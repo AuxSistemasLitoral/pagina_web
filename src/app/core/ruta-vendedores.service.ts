@@ -14,7 +14,7 @@ export class RutaVendedoresService {
     routeTracking : '/seguimiento_ruta.php'
   };
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { } 
 
 listSales(usuario: string): Observable<any[]> {
   const body = new HttpParams().set('usu', usuario);

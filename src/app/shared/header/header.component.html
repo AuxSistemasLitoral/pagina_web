@@ -1,13 +1,13 @@
-<header class="header"> 
-  
-  <div class="brand-section"> 
+<header class="header">
+
+  <div class="brand-section">
     <a (click)="goToHome()">
       <img src="../../../assets/icons/icon.png" alt="Ubicación" class="app-logo">
     </a>
-    <div class="divider" *ngIf="!isLogin"></div>
-  </div> 
- 
-  <div class="user-info-section" *ngIf="!isLogin"> 
+    <div class="divider" *ngIf="isLoggedInAuth$ | async"></div>
+  </div>
+
+  <div class="user-info-section" *ngIf="isLoggedInAuth$ | async">
     <div class="user-details">
       <div class="user-header">
         <div class="user-header">{{ usuario.nombre }}</div>
@@ -23,37 +23,41 @@
         </div>
       </div>
     </div>
-  </div> 
- 
-  <div class="mini-cart" routerLink="/carrito" *ngIf="!isLogin">
+  </div>
+
+  <div class="mini-cart" routerLink="/carrito" *ngIf="shouldShowCart()">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-      <path d="M6 6l1.7 10.2c.1.6.7 1 1.3 1H18v-2H9.5l-.7-4.2c0-.2.2-.4.4-.4h9.8c.4 0 .7-.3.7-.7s-.3-.7-.7-.7H8.4c-.2 0-.4.2-.4.4L7 6H6zm2 13a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+      <path
+        d="M6 6l1.7 10.2c.1.6.7 1 1.3 1H18v-2H9.5l-.7-4.2c0-.2.2-.4.4-.4h9.8c.4 0 .7-.3.7-.7s-.3-.7-.7-.7H8.4c-.2 0-.4.2-.4.4L7 6H6zm2 13a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm10 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
     </svg>
 
     <span class="item-count">
       {{ totalItems$ | async }}
     </span>
   </div>
- 
-  <div class="branch-selector" *ngIf="!isLogin && mostrarSelectorSucursal">
+
+  <div class="branch-selector" *ngIf="(isLoggedInAuth$ | async) && mostrarSelectorSucursal">
     <select id="sucursal" (change)="onSucursalChange()" [(ngModel)]="selectedSucursal">
       <option [ngValue]="null" disabled>Seleccionar sucursal</option>
       <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.sucursal">
         {{ sucursal.sucursal }} - {{ sucursal.nombre_sucursal }} - {{ sucursal.asesor }}
       </option>
     </select>
-  </div> 
+  </div>
 
-  <div *ngIf="!mostrarSelectorSucursal && selectedSucursal" class="selected-branch-text">
-    <label>
-      {{ selectedSucursalNombre }}
-    </label>
-  </div> 
- 
-  <input type="checkbox" id="menu-toggle" class="menu-toggle" *ngIf="!isLogin"> 
-  <label for="menu-toggle" class="menu-icon" *ngIf="!isLogin">&#9776;</label> 
- 
-  <nav class="nav-menu" *ngIf="!isLogin" [ngClass]="{ 'hidden': isLogin }"> 
+  <div *ngIf="!(isLoggedInAuth$ | async) && selectedSucursal" class="selected-branch-text">
+      <div *ngIf="(isLoggedInAuth$ | async) && !mostrarSelectorSucursal && selectedSucursal" class="selected-branch-text">
+        <label>
+            {{ selectedSucursalNombre }}
+        </label>
+    </div>
+  </div>
+
+
+  <input type="checkbox" id="menu-toggle" class="menu-toggle" *ngIf="isLoggedInAuth$ | async">
+  <label for="menu-toggle" class="menu-icon" *ngIf="isLoggedInAuth$ | async">&#9776;</label>
+
+  <nav class="nav-menu" *ngIf="isLoggedInAuth$ | async">
     <ul>
       <li class="menu-item hamburger-disponible" *ngIf="selectedSucursal && disponible !== null">
         <i></i>
@@ -66,6 +70,6 @@
         <span class="logout-text" (click)="cerrarSesion()">CERRAR</span>
       </li>
     </ul>
-  </nav> 
+  </nav>
 
 </header>

@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isHome: boolean = false;
   selectedSucursal: any | null = null;
   asesor: string = '';
-  isLogin: boolean = false;
+ // isLogin: boolean = false;
   dias: number = 0;
   id: string = '';
   cupo: number | null = null;
@@ -29,50 +29,59 @@ export class HeaderComponent implements OnInit, OnDestroy {
   totalItems$!: Observable<number>;
   cartItemsSubscription!: Subscription;
   mostrarSelectorSucursal: boolean = true;
+  isLoggedInAuth$: Observable<boolean>;
 
   constructor(
     private router: Router,
-    private authService: AuthService,
+    public authService: AuthService,
     private sharedDataService: SharedDataService, 
     private dialog: MatDialog,
     private cartService: ShoppingCartService
-  ) { }
+  ) {
+     this.isLoggedInAuth$ = this.authService.isLoggedIn$; 
+   }
  
-  ngOnInit() { 
+  ngOnInit() {
+    console.log('HeaderComponent ngOnInit');
+
+    // Suscribirse a los cambios de isLoggedInAuth$ para loguear info
+    this.isLoggedInAuth$.subscribe(loggedIn => {
+      console.log('Header - isLoggedInAuth$ updated by AuthService:', loggedIn);
+      this.logCartVisibilityInfo(); // Llama a la función de log cuando el estado de login cambia
+    });
+
     this.authService.usuario$.subscribe(usuario => {
       this.usuario = usuario;
     });
- 
+
     this.authService.sucursales$.subscribe(sucursales => {
       this.sucursales = sucursales;
-    }); 
- 
-    this.authService.obtenerUsuarioDesdeStorage(); 
+    });
+
+    // authService.initAuthFromStorage() es llamado en el constructor de AuthService.
+    // No es necesario llamarlo aquí de nuevo.
+
     this.verificarSesion();
     this.isHome = this.router.url === '/auth/home';
 
-    this.router.events.subscribe(() => {
-      this.isLogin = this.router.url === '/auth/login'; 
-    });
-
-    this.selectedSucursal = localStorage.getItem('selectedSucursal') 
+    this.selectedSucursal = localStorage.getItem('selectedSucursal')
       ? JSON.parse(localStorage.getItem('selectedSucursal') as string)
       : null;
 
-    this.asesor = localStorage.getItem('asesor') || ''; 
+    this.asesor = localStorage.getItem('asesor') || '';
     this.authService.disponible$.subscribe(valor => {
-      this.disponible = valor; 
+      this.disponible = valor;
     });
 
     this.authService.dias$.subscribe(dias => {
-      if (dias === 0) { 
+      if (dias === 0) {
         this.authService.mostrarDialogo('NO PUEDES REALIZAR PEDIDOS EN ESTA SUCURSAL PORQUE LA CARTERA NO ESTA AL DÍA.');
         this.router.navigate(['/auth/home']);
       }
     });
 
-    this.authService.mostrarDialogo$.subscribe(mensaje => { 
-      this.dialog.open(DialogComponent, { 
+    this.authService.mostrarDialogo$.subscribe(mensaje => {
+      this.dialog.open(DialogComponent, {
         data: { message: mensaje },
         width: '400px',
         maxWidth: '90vw',
@@ -85,12 +94,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.totalItems$ = this.cartService.totalItems$; 
+    this.totalItems$ = this.cartService.totalItems$; // Asegúrate de que getTotalItems es el método que retorna Observable
     this.cartItemsSubscription = this.totalItems$.subscribe(totalItems => {
       this.mostrarSelectorSucursal = totalItems === 0;
     });
   }
-
   ngOnDestroy(): void {
     if (this.cartItemsSubscription) {
       this.cartItemsSubscription.unsubscribe();
@@ -170,4 +178,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.router.navigate(['/auth/login'])
     }
   }
+
+   shouldShowCart(): boolean {
+   const isNotVendorOrSupervisor = !this.authService.esUsuarioConPerfil(['VENDEDOR', 'SUPERVISOR']);
+    const isCurrentlyLoggedIn = this.authService['_isLoggedIn'].getValue();
+    return isCurrentlyLoggedIn && isNotVendorOrSupervisor;
+  }
+ 
+   logCartVisibilityInfo(): void {
+    const perfilActual = this.authService.getPerfilUsuario();
+    const isVendorOrSupervisor = this.authService.esUsuarioConPerfil(['VENDEDOR', 'SUPERVISOR']);
+    const currentIsLogin = this.authService['_isLoggedIn'].getValue(); // <-- Obtiene el valor real de _isLoggedIn
+
+    console.log('--- Carrito Visibilidad Info ---');
+    console.log('isLogin (from AuthService):', currentIsLogin); // Cambiado para aclarar la fuente
+    console.log('Perfil Actual:', perfilActual);
+    console.log('Es Vendedor/Supervisor:', isVendorOrSupervisor);
+    console.log('Resultado shouldShowCart():', this.shouldShowCart());
+    console.log('------------------------------');
+  }
+
 } 

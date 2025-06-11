@@ -1,2 +1,102 @@
+<div *ngIf="loading" class="loading-text">Cargando datos...</div>
 
-<p>informes works!</p>
+<div *ngIf="!loading && vendedores.length === 0" class="no-data">
+    No hay datos disponibles para mostrar.
+</div>
+
+<div *ngIf="!loading && vendedores.length > 0">
+    <div class="filtro-contenedor">
+        <select id="filtroZona" [(ngModel)]="zonaSeleccionada">
+            <option [ngValue]="''">SELECCIONE UNA ZONA</option>
+            <option *ngFor="let item of zonasUnicas" [ngValue]="item.zona">
+                {{ item.zona }} - {{ item.nombre }} - Canal: {{ item.canal }} - Línea: {{ item.linea }}
+            </option>
+        </select>
+
+        <select id="filterYear" [(ngModel)]="yearSelected" class="fecha-picker">
+            <option [ngValue]="null">SELECCIONE AÑO</option>
+            <option *ngFor="let year of yearAvailabe" [ngValue]="year">
+                {{ year }}
+            </option>
+        </select>
+
+        <select id="filtroMes" [(ngModel)]="mesSeleccionado" class="fecha-picker">
+            <option [ngValue]="null">SELECCIONE MES</option>
+            <option *ngFor="let mes of mesesDisponibles" [ngValue]="mes.numero">
+                {{ mes.nombre }}
+            </option>
+        </select>
+
+        <button class="search" (click)="consultarPresupuestoVentas()"
+            [disabled]="!zonaSeleccionada || !yearSelected || !mesSeleccionado">
+            Consultar
+        </button>
+    </div>
+
+    <div *ngIf="!loading && (presupuestoTotal !== null || ventasTotales !== null || ventasPorProveedor.length > 0)" class="resultados-resumen">
+    <h2>Informe de Ventas vs. Presupuesto por Vendedor</h2>
+
+    <div class="metas-ventas-resumen">
+        <div class="card-resumen presupuesto">
+            <h3>Presupuesto (Meta)</h3>
+            <p class="valor" *ngIf="presupuestoTotal !== null">
+                {{ presupuestoTotal | currency:'USD':'symbol':'1.0-0' }}
+            </p>
+            <p class="valor" *ngIf="presupuestoTotal === null">
+                -
+            </p>
+        </div>
+        <div class="card-resumen ventas">
+            <h3>Ventas Realizadas</h3>
+            <p class="valor">{{ ventasTotales | currency:'USD':'symbol':'1.0-0' }}</p>
+        </div>
+        <div class="card-resumen logro">
+            <h3>% de Logro</h3>
+            <p class="valor">{{ calcularPorcentajeLogro() | number:'1.2-2' }}%</p>
+            <div class="barra-progreso" [style.width.%]="getPorcentajeLogroNumerico()"></div>
+        </div>
+    </div>
+
+    <div *ngIf="ventasPorProveedor.length > 0" class="detalle-ventas detalle-ventas-tabla-desktop">
+        <h3>Detalle de Ventas por Proveedor</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Proveedor</th>
+                    <th>Ventas NETO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of ventasPorProveedor">
+                    <td>{{ item.Proveedor }}</td>
+                    <td>{{ item.NETO | currency:'USD':'symbol':'1.0-0' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="ventasPorProveedor.length > 0" class="detalle-ventas detalle-ventas-cards-mobile">
+        <h3>Detalle de Ventas por Proveedor</h3>
+        <div class="cards-proveedor-grid">
+            <div class="card-proveedor-item" *ngFor="let item of ventasPorProveedor">
+                <div class="card-proveedor-header">
+                    <h4>{{ item.Proveedor }}</h4>
+                </div>
+                <div class="card-proveedor-body">
+                    <span class="label">Ventas NETO:</span>
+                    <span class="value">{{ item.NETO | currency:'USD':'symbol':'1.0-0' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="ventasPorProveedor.length === 0 && (presupuestoTotal !== null || ventasTotales !== null)" class="no-data">
+        No se encontraron ventas para la zona y periodo seleccionados.
+    </div>
+
+</div> <div *ngIf="!loading && (presupuestoTotal === null && ventasTotales === null && ventasPorProveedor.length === 0) && zonaSeleccionada && yearSelected && mesSeleccionado"
+    class="no-data">
+    No se encontraron datos de presupuesto o ventas para la zona y periodo seleccionados.
+</div>
+
+   
