@@ -501,7 +501,8 @@ onScroll() {
       icon: 'warning',
       title: 'Cantidad Inválida',
       text: 'Por favor, ingresa una cantidad válida mayor a 0.',
-      confirmButtonColor: '#3498db'
+      confirmButtonColor: '#3498db',
+      customClass: { popup: 'swal-custom-warning-popup' }
     });
     return;
   }
@@ -511,7 +512,8 @@ onScroll() {
       icon: 'error',
       title: 'Stock insuficiente',
       text: `Solo hay ${disponible} unidad(es) disponibles de ${producto.nombre}.`,
-      confirmButtonColor: '#e74c3c'
+      confirmButtonColor: '#3498db',
+      customClass: { popup: 'swal-custom-error-popup' }
     });
     return;
   }
@@ -523,11 +525,14 @@ onScroll() {
     text: `Se agregó ${cantidad} unidad(es) de ${producto.nombre} al carrito.`,
     timer: 2000,
     timerProgressBar: true,
-    showConfirmButton: false
+    showConfirmButton: false,
+    customClass: { popup: 'swal-custom-success-popup' }
   });
 }
 
 
-}
+
+
+} 
 
 

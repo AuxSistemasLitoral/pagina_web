@@ -21,7 +21,7 @@ h2 span {
 }
 
 .cart-view-container {
-    padding: 0 20px;
+    padding: 29px 20px 0 20px;
     width: 100%; 
     box-sizing: border-box; 
 }
@@ -93,6 +93,11 @@ h2 span {
 
 .cart-table th:nth-child(5),
 .cart-table td:nth-child(5) {
+    display: none;
+}
+
+.cart-table th:nth-child(6),
+.cart-table td:nth-child(6) {
     width: 15%;
     vertical-align: middle;
     text-align: center;
@@ -279,9 +284,7 @@ h2 span {
     margin-top: 4px;
 }
 
-
-
-
+ 
 /* Responsive Styles */
 @media screen and (max-width: 819px) {
 
@@ -334,12 +337,17 @@ h2 span {
     
     .cart-table th:nth-child(5),
     .cart-table td:nth-child(5) {
+        display: table-cell;
         width: 12.5%;
         vertical-align: middle;
         text-align: center;
-        margin-left: 5px;
+        /* margin-left: 5px; /* Los márgenes no son confiables en celdas de tabla */
     }
 
+    .cart-table th:nth-child(6),
+    .cart-table td:nth-child(6) {
+        display: none;
+    }
 
     .icon-button {
         height: 17px;
@@ -378,5 +386,15 @@ h2 span {
     }
     .observaciones-container {
         width: 100%;
+    }
+}
+
+/* Estilos para dispositivos sin capacidad de hover (ej. pantallas táctiles) */
+@media (hover: none) {
+    .continue-shopping-button h3 {
+        color: #0056b3;
+        text-decoration: underline;
+        font-weight: normal;
+        text-transform: none;
     }
 }
